@@ -1,0 +1,250 @@
+
+-- Base simple: tp1s.db
+
+-- 1
+select drinker
+from visits
+where bar='Cheers';
+
+-- 2
+select drinker
+from likes
+where beer='Yes';
+
+-- 3
+select bar
+from serves
+where beer='Yes';
+
+-- 4
+select l.drinker
+from likes l, visits v
+-- where l.drinker=v.drinker and beer='Yes' and bar='Cheers';
+
+-- 5
+select drinker
+from visits v, serves s
+where v.bar=s.bar and  s.beer='No' ;
+
+-- 6
+select bar
+from visits v
+where v.drinker='Paul' or v.drinker='Mary';
+
+-- 7
+select l.drinker
+from likes l, visits v, serves s
+where l.beer='Yes' and l.drinker=v.drinker and s.beer='Yes' and v.bar=s.bar;
+
+-- 8
+select v.bar, l.drinker
+from likes l, visits v, serves s
+where l.drinker = v.drinker and v.bar = s.bar and l.beer = 'Yes' and s.beer = 'Yes'
+order by s.bar ;
+
+-- 9
+select drinker 
+from likes 
+where beer = 'No' and drinker not in (select drinker from visits where bar = 'California') ;
+-- or
+select l.drinker
+from likes l, visits v
+where l.drinker = v.drinker and l.beer = 'No' and v.bar <> 'California' ;
+
+
+-- Base moins simple: tp1d.db
+
+-- 1
+select distinct l.drinker 
+from likes l, visits v, serves s
+where l.drinker = v.drinker and v.bar=s.bar and s.beer = l.beer ;
+
+-- 2
+select distinct l.drinker 
+from likes l, visits v, serves s
+where l.drinker = v.drinker and v.bar=s.bar and s.beer <> l.beer ;
+
+-- 3
+-- pour chaque personne, les bar visité sont uniquement ceux qui servent au moins une bière préféréé
+select distinct l.drinker 
+from likes l 
+where exists
+(select v.bar from visits v where v.drinker = l.drinker
+INTERSECT
+select visits.bar from likes,visits, serves
+where l.drinker = likes.drinker and likes.drinker=visits.drinker and visits.bar=serves.bar and serves.beer = likes.beer) ;
+
+-- 4
+select distinct l.drinker 
+from likes l 
+where not exists
+(select v.bar from visits v where v.drinker = l.drinker
+INTERSECT
+select visits.bar from likes,visits, serves
+where l.drinker = likes.drinker and likes.drinker=visits.drinker and visits.bar=serves.bar and serves.beer = likes.beer) ;
+
+-- 5
+select distinct l.drinker 
+from likes l where 
+not exists
+(select visits.bar from likes,visits, serves
+where l.drinker=likes.drinker and likes.drinker=visits.drinker and visits.bar=serves.bar and serves.beer <> likes.beer) ;
+
+
+-- Base difficile: tp1dd.db
+
+-- 1
+select FirstName, LastName, Address, City, Region 
+from Employees  ;
+
+-- 2 
+select LastName, C.CompanyName 
+from Employees E, Orders O, Customers C, Shippers S 
+where E.EmployeeID = O.EmployeeID and O.CustomerID = C.CustomerID and O.ShipVia = S.ShipperID 
+and C.City = 'Bruxelles' and S.CompanyName = 'Speedy Express' ;
+
+-- 3
+select distinct Title, FirstName, LastName 
+from Employees E, Orders O, [Order Details] D, Products P 
+where E.EmployeeID = O.EmployeeID and O.OrderID = D.OrderID and D.ProductID = P.ProductID 
+and (P.ProductName = 'Gravad Lax' or P.ProductName = 'Mishi Kobe Niku') ;
+
+-- 4
+select E.LastName, E.Title, M.LastName Manager, M.Title [Manager Title]
+from Employees E, Employees M 
+where E.ReportsTo = M.EmployeeID 
+union
+select LastName, Title, NULL, NULL 
+from Employees
+where ReportsTo IS NULL ;
+
+-- 6
+-- avec union
+select P.ProductName
+from Employees E, Orders O, [Order Details] D, Products P 
+where E.EmployeeID = O.EmployeeID and O.OrderID = D.OrderID and D.ProductID = P.ProductID and E.City = 'London' 
+union 
+select P.ProductName 
+from Customers C, Orders O, [Order Details] D, Products P 
+where C.CustomerID = O.CustomerID and O.OrderID = D.OrderID and D.ProductID = P.ProductID and C.City = 'London' ;
+-- avec in
+select P.ProductName 
+from Products P 
+where P.ProductID in 
+(select D.ProductID 
+	from Employees E, Orders O, [Order Details] D 
+	where E.EmployeeID = O.EmployeeID and O.OrderID = D.OrderID and E.City = 'London') 
+or P.ProductID in 
+(select D.ProductID 
+	from Customers C, Orders O, [Order Details] D 
+	where C.CustomerID = O.CustomerID and O.OrderID = D.OrderID and C.City = 'London') ;
+-- avec jointure
+select distinct P.ProductName 
+from Employees E, Orders O, [Order Details] D, Products P, Customers C 
+where E.EmployeeID = O.EmployeeID and C.CustomerID = O.CustomerID and O.OrderID = D.OrderID and D.ProductID = P.ProductID 
+and (E.City = 'London' or C.City = 'London') ;	
+
+-- 7a
+-- ne fonctionne pas sur sqlite...
+select E1.FirstName, E1.LastName 
+from Employees E1 
+where E1.BirthDate < any (select E2.BirthDate from Employees E2 where E2.City = 'London') ;
+-- solution alternative
+select E1.FirstName, E1.LastName 
+from Employees E1 
+where exists (select * from Employees E2 where E2.City = 'London' and E2.BirthDate > E1.BirthDate) ;
+
+-- 7b
+-- ne fonctionne pas sur sqlite...
+select E1.FirstName, E1.LastName 
+from Employees E1 
+where E1.BirthDate < all (select E2.BirthDate from Employees E2 where E2.City = 'London') ;
+-- solution alternative
+select E1.FirstName, E1.LastName 
+from Employees E1 
+where E1.BirthDate < (select E2.BirthDate from Employees E2 where E2.City = 'London') ;
+
+-- 9 
+-- avec jointure
+select distinct E.LastName, E.City 
+from Employees E, Orders O, Customers C 
+where E.EmployeeID = O.EmployeeID and O.CustomerID = C.CustomerID and E.City = C.City ;
+-- avec in	
+select E.FirstName, E.LastName 
+from Employees E 
+where E.EmployeeID in 
+(select O.EmployeeID 
+from Orders O, Customers C 
+where E.EmployeeID = O.EmployeeID and O.CustomerID = C.CustomerID and E.City = C.City) ;
+-- avec exists
+select E.LastName, E.City 
+from Employees E 
+where exists 
+(select * 
+from Orders O, Customers C 
+where E.EmployeeID = O.EmployeeID and O.CustomerID = C.CustomerID and E.City = C.City) ;
+		
+-- 10
+-- avec not exists
+select C.CompanyName 
+from Customers C 
+where not exists 
+(select * 
+from Orders O 
+where C.CustomerID = O.CustomerID ) ;
+-- avec not in
+select C.CompanyName 
+from Customers C 
+where C.CustomerID not in 
+(select O.CustomerID from Orders O ) ;
+
+-- 11
+select distinct C.CompanyName 
+from Customers C, Orders O, [Order Details] D, Products P 
+where C.CustomerID = O.CustomerID and O.OrderID = D.OrderID and D.ProductID = P.ProductID and P.UnitPrice < 5 
+group by C.CompanyName 
+having count(distinct D.ProductID) = (select count(*) from Products P2 where UnitPrice < 5 ) ;
+
+-- 12
+select P.ProductName 
+from Products P 
+where not exists 
+(select * 
+from Employees E 
+where not exists 
+(select * from 
+Orders O, [Order Details] D 
+where E.EmployeeID = O.EmployeeID and O.OrderID = D.OrderID and P.ProductID = D.ProductID)) ;
+
+-- 15
+select CategoryID, avg(UnitPrice) [Average Price]
+from Products 
+group by CategoryID ;
+
+-- 16
+select C.CategoryName, avg(P.UnitPrice) [Average Price]
+from Products P, Categories C 
+where P.CategoryID = C.CategoryID 
+group by C.CategoryName ;
+
+-- 17
+select S.SupplierID, S.CompanyName 
+from Suppliers S, Products P 
+where S.SupplierID = P.SupplierID 
+group by S.SupplierID, S.CompanyName 
+having count(*) > 3 ;
+
+-- 18
+select E.EmployeeID, E.LastName, sum(D.UnitPrice*D.Quantity-D.Discount) 
+from Employees E, Orders O, [Order Details] D 
+where E.EmployeeID = O.EmployeeID and O.OrderID = D.OrderID 
+group by E.EmployeeID
+order by E.EmployeeID ;
+
+-- 19
+select E.EmployeeID, E.LastName, sum(D.UnitPrice*D.Quantity-D.Discount) 
+from Employees E, Orders O, [Order Details] D 
+where E.EmployeeID = O.EmployeeID and O.OrderID = D.OrderID 
+group by E.EmployeeID
+having count(distinct D.ProductID) > 70 
+order by E.EmployeeID ;
