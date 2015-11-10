@@ -1,0 +1,6 @@
+How to install flask: 
+http://flask.pocoo.org/docs/0.10/installation/
+
+$ python hello.py
+ * Running on http://127.0.0.1:5000/
+
