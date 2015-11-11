@@ -1,4 +1,12 @@
-
+/*!
+ * @copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2015
+ * @version 1.5.2
+ *
+ * An extended checkbox plugin for bootstrap with three states and additional styles.
+ *
+ * For more JQuery/Bootstrap plugins and demos visit http://plugins.krajee.com
+ * For more Yii related demos visit http://demos.krajee.com
+ */
 (function ($) {
     "use strict";
     var CheckboxX = function (element, options) {

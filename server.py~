@@ -53,7 +53,7 @@ def accueil():
 @app.route('/accueil', methods=['POST'])
 def chercher():
 	
-
+	else:
 		return redirect(url_for('page_authent'))
 
 		
