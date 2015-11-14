@@ -1,0 +1,79 @@
+database web_db;
+tables Album,Music,avis,users;
+
+
+
+CREATE TABLE users (
+email VARCHAR(30) NOT NULL,
+password VARCHAR(30) NOT NULL,
+pseudo VARCHAR(30),
+imagePath VARCHAR(2083),
+PRIMARY KEY (email)
+)ENGINE=InnoDB 
+
+
+CREATE TABLE Album (
+nomAlbum VARCHAR(30) NOT NULL,
+nomArtist VARCHAR(30) NOT NULL,
+Annee year(4) DEFAULT NULL,
+Label SMALLINT(5) UNSIGNED,
+imagePath VARCHAR(120),
+)ENGINE=InnoDB 
+
+CREATE TABLE Music (
+idMusic int(10) unsigned NOT NULL AUTO_INCREMENT,
+Titre varchar(30) DEFAULT NULL,
+nomAlbum VARCHAR(30) NOT NULL,
+Caract longtext,
+musicPath longtext,
+dateAjout date,
+PRIMARY KEY (idMusic)
+)ENGINE=InnoDB 
+
+CREATE TABLE avis (
+id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+useremail varchar(30) DEFAULT NULL,
+idmusic int(10) NOT NULL,
+note smallint(5) unsigned ,
+humeur longtext,
+PRIMARY KEY (id)
+)ENGINE=InnoDB 
+
+INSERT INTO Music(compositeur,titre,musicPath) VALUES
+('The Subways', 'Lost Boy','/static/musiques/The Subways - Lost Boy.mp3'),
+('Coeur De Pirate', 'Comme Des Enfants','/static/musiques/Coeur De Pirate - Comme Des Enfants.mp3'),
+('Blue Foundation', 'Bonfires','/static/musiques/Blue Foundation - Bonfires.mp3'),
+('Bombay Bicycle Club', 'Ghost','/static/musiques/Bombay Bicycle Club - Ghost.mp3'),
+('Bombay Bicycle Club', 'How Are We','/static/musiques/Bombay Bicycle Club - How Are We.mp3'),
+('Kid cudi', 'heart of lion','/static/musiques/Kid cudi - heart of lion.mp3'),
+('Linkin Park', 'In The End','/static/musiques/Linkin Park - In The End.mp3'),
+('Linkin Park', 'My December','/static/musiques/Linkin Park - My December.mp3'),
+('Linkink Park', 'What I ve done','/static/musiques/Linkink Park - What I ve done.mp3'),
+('Shaka Ponk', 'Fonk me','/static/musiques/Shaka Ponk - Fonk me.mp3'),
+('Shaka Ponk', 'French touch puta madre','/static/musiques/Shaka Ponk - French touch puta madre.mp3'),
+('The xx', 'Crystalised','/static/musiques/The xx - Crystalised.mp3'),
+('The Temper Trap', 'Science Of Fear','/static/musiques/The Temper Trap - Science Of Fear.mp3'),
+('The Ting Tings', 'We Walk','/static/musiques/The Ting Tings - We Walk.mp3'),
+('Edward Sharpe & The Magnetic Zeros', 'Home','/static/musiques/Edward Sharpe & The Magnetic Zeros - Home.mp3'),
+('Red Hot Chili Peppers', 'Fortune Faded','/static/musiques/Red Hot Chili Peppers - Fortune Faded.mp3');
+
+INSERT INTO Album(nomArtist,nomAlbum,Annee,Label,imagePath) VALUES
+('The xx','XX',NULL,NULL,'/static/images/album/The xx/XX.jpg'),
+('Rone','Creatures',NULL,NULL,'/static/images/album/Rone/Creatures.jpg'),
+('The Subways','All or Nothing',NULL,NULL,'/static/images/album/The Subways/All or Nothing.jpg'),
+('Coeur De Pirate','Comme Des Enfants',NULL,NULL,'/static/images/album/Coeur De Pirate/Comme Des Enfants.jpg'),
+('Kid cudi','Man on the Moon: The End of Day',NULL,NULL,'/static/images/album/Kid cudi/Man on the Moon: The End of Day.jpg'),
+('Red Hot Chili Peppers','Live in Hyde Park',NULL,NULL,'/static/images/album/Red Hot Chili Peppers/Live in Hyde Park.jpg'),
+('My December','Linkin Park','Hybrid Theory',NULL,NULL,'/static/images/album/Linkin Park/Hybrid Theory.jpg'),
+('Linkin Park','Hybrid Theory',NULL,NULL,'/static/images/album/Linkin Park/Hybrid Theory.jpg'),
+('Linkin Park','Minutes to Midnight',NULL,NULL,'/static/images/album/Linkin Park/Minutes to Midnight.jpg'),
+('Shaka Ponk','Loco con da Frenchy Talkin',NULL,NULL,'/static/images/album/Shaka Ponk/Loco con da Frenchy Talkin.jpg'),
+('Shaka Ponk','Bad Porn Movie Trax',NULL,NULL,'/static/images/album/Shaka Ponk/Bad Porn Movie Trax.jpg'),
+('The Temper Trap','Conditions',NULL,NULL,'/static/images/album/The Temper Trap/Conditions.jpg'),
+('The Ting Tings','We Started Nothing',NULL,NULL,'/static/images/album/The Ting Tings/We Started Nothing.jpg'),
+('Blue Foundation','Sweep of Days',NULL,NULL,'/static/images/album/Blue Foundation/Sweep of Days.jpg'),
+('Bombay Bicycle Club','How We Are',NULL,NULL,'/static/images/album/Bombay Bicycle Club/How We Are.jpg'),
+('Bombay Bicycle Club','How We Are',NULL,NULL,'/static/images/album/Bombay Bicycle Club/How We Are.jpg');
+
+
+

@@ -300,9 +300,14 @@
                          src="http://www.google.fr/url?source=imglanding&ct=img&q=http://www.campusidea.com/images/male_profile.gif&sa=X&ei=1vxRVfrRE8fzUO7GgPgJ&ved=0CAkQ8wc&usg=AFQjCNHSDzqakl83UvKxx_4ttMkkYy95Sg"
                          alt="">
 
-                    <form action="/login" method="POST" class="form-register">
-
+                    
+                    <form role="form" action="/register" method="POST" class="form-register">
                         <div class="form-group">
+			    <label class="control-label" for="input-username">Username</label>	
+			    <input type="text" name="pseudo" id="pseudo" class="form-control " placeholder="Pseudo" tabindex="3">
+			</div>
+			
+			<div class="form-group">
                             <label class="control-label" for="input-email">Email address</label>
                             <input class="form-control" type="email" id="input-email" name="email" placeholder="Email" required autofocus>
                         </div>
