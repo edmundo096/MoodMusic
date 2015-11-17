@@ -56,16 +56,16 @@
   border-color: #bbb;
   background-color: #ddd;
 }
-/* styles of checkmark (if enabled / disabled) */
+/* styles de la coche (si cochée/désactivée) */
 [type="checkbox"]:disabled:checked + label:after {
   color: #999;
 }
-/*  */
+/* on style aussi le label quand désactivé */
 [type="checkbox"]:disabled + label {
   color: #aaa;
 }
  
-/* appearance of an element in focus */
+/* aspect au focus de l'élément */
 [type="checkbox"]:checked:focus + label:before,
 [type="checkbox"]:not(:checked):focus + label:before {
   border: 1px dotted blue;
