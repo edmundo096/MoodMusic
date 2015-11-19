@@ -1,3 +1,5 @@
+
+/*Script to submit a Picture */
 function submitPicture(){
 
 	select = document.getElementById("submit_picture");

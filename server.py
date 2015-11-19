@@ -1,3 +1,6 @@
+'''LTU SE M7011E Project Music Mood '''  
+
+
 from flask import *
 from werkzeug import secure_filename
 import os
@@ -5,26 +8,35 @@ import DbFunct
 
 app = Flask(__name__)
 
+'''The key for the application'''
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RTTEaSDFQ'
+
 UPLOAD_FOLDER = './static/images/userprofile'
 ALLOWED_EXTENSIONS = set([ 'png','jpg', 'jpeg', 'gif'])
 
+'''app configuration*****'''
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
 	return '.' in filename and \
 		filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
+'''  starting route '''
 
 @app.route('/')
 def start():
 	session['playlist']=[]
 	return redirect(url_for('accueil'))
 	
+'''Get the Registration page '''
+
 @app.route('/register', methods=['GET'])
 def register():
 	return render_template('register.html')
 	
+
+
+'''Route to Post the user Information in the DB (making call to the insertUser function ) and redirect to the authentication page'''
 @app.route('/register', methods=['POST'])
 def register_post():
 	first_name = escape(request.form['pseudo'])
@@ -36,15 +48,25 @@ def register_post():
 		return redirect('/authent')
 	else:
 		return render_template('register.html')
+
+
+
+'''Route to Get the list of Top Music for a user according to the email , return top.html page'''
 @app.route('/top_music')
 def top_music():
 	email = session['email']
 	liste = DbFunct.listTopMusicAll()
 	return render_template('top.html', list_music = liste, pseudo=session['pseudo'])
+
+'''Route to Get the last music list, return last.html'''
 @app.route('/last_music')
 def last_music():
 	liste = DbFunct.lastMusic()
 	return render_template('last.html', list_music = liste, pseudo=session['pseudo'])
+
+
+
+'''authentication route for all users '''
 @app.route('/authent')
 def page_authent():
 	if 'email' in session:
@@ -52,6 +74,8 @@ def page_authent():
 	else:
 		return render_template('authent.html')
 
+
+'''route to submit the new password   '''
 @app.route('/submit_password', methods=['POST'])
 def submit_psswd():
 	if not request.json:
@@ -62,6 +86,8 @@ def submit_psswd():
 	return jsonify({'succes':1})
 
 
+
+'''login route to the application '''
 @app.route('/login',methods=['POST'])
 def login():
 	user=DbFunct.recupUtilisateur(escape(request.form['email']),escape(request.form['password']))
@@ -74,7 +100,9 @@ def login():
 		session['playlist']=[]
 		return redirect(url_for('accueil'))
 		
-		
+
+
+'''Main route that makes call to the recupMusic function and return the home page if the email is in the session    ''' 		
 @app.route('/accueil', methods=['GET'])
 def accueil():
 	if 'pseudo' in session:
@@ -90,6 +118,8 @@ def accueil():
 	else:
 		return redirect(url_for('page_authent'))
 
+
+'''API getMusic route makes a post to get the Music from the DB''' 
 @app.route('/api/getMusic', methods=['POST'])
 def getMusic():
 	if not request.json:
@@ -97,6 +127,9 @@ def getMusic():
 	music = DbFunct.recupMusique(request.json['music'].split(" - ")[0], request.json['music'].split(" - ")[1], request.json['music'].split(" - ")[2])
 	return jsonify({'Artist':music.nomArtist, 'Album': music.nomAlbum, 'Titre': music.titre, 'Annee': music.Annee, 'Label': music.Label, 'musicPath': music.musicPath, 'imagePath': music.imagePath})
 
+
+
+'''route to get the Home page of the application in case where a mood is set by the user '''
 @app.route('/accueil', methods=['POST'])
 def chercher():
 	if 'pseudo' in session:
@@ -125,6 +158,9 @@ def chercher():
 			return redirect("/accueil") 
 	else:
 		return redirect(url_for('page_authent'))
+
+
+'''API note to set a note for a song '''
 @app.route('/api/note', methods=['POST'])
 def rating():
 	if not request.json:
@@ -134,10 +170,18 @@ def rating():
 	note=request.json['note']
 	DbFunct.insererNote(email,music,note)
 	return jsonify({'succes':1})		
+
+
+
+
+'''route to logout from the application '''
 @app.route('/logout')
 def logout():
 	session.clear()
 	return redirect(url_for('page_authent'))
+
+
+''' route to the user profile '''
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
 	liste = []
@@ -157,7 +201,8 @@ def profile():
 		filename=  app.config['UPLOAD_FOLDER'].split(".")[1]+'/'+filename
 		DbFunct.updateUserImage(filename, session['email'])
 		return render_template('profil.html', email=session['email'], pseudo=session['pseudo'], list_music = liste, image=filename)
-		
+
+'''route to post a mood to song '''		
 @app.route('/api/humeur', methods=['POST'])
 def setHumeur():
 	if not request.json:

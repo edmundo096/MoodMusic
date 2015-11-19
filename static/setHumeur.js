@@ -1,4 +1,4 @@
-
+/*Script to set a mood */
 function setHumeur(){
 
 	select = document.getElementById("comboselect");

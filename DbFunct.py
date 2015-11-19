@@ -1,24 +1,31 @@
+''' useful set of functions for the server '''
+
+
 from sqlalchemy import *
 from sqlalchemy.sql import *
 
-
+'''Create the engine and connect to the DB'''
 def init():
 	engine = create_engine('mysql+pymysql://root:lok@localhost/web_db?charset=utf8', echo=False)
 	metadata = MetaData(engine)
 	connection = engine.connect()
         return connection
 
+'''insert the User using his username, email address and password '''
 
 def insertUser(pseudo_u, email_u, password_u):
 	connection = init()
 	sql="INSERT INTO users set email='"+email_u.encode("utf-8")+"', password='"+password_u.encode("utf-8")+"', pseudo='"+pseudo_u.encode("utf-8")+"'"
 	connection.execute(sql)
 
+'''set a new profile image for a user '''
 def updateUserImage(image, email):
 	connection = init()
 	sql = "UPDATE users SET imagePath='"+image.encode("utf-8")+"' WHERE users.email='"+email.encode("utf-8")+"'" 
 	connection.execute(sql)
 
+
+'''get a User from the users table'''
 def recupUtilisateur(email, mdp):
 	connection=init()
 	users=[]
@@ -30,7 +37,7 @@ def recupUtilisateur(email, mdp):
 	for user in connection.execute(sql):
 		users.append(user)
 	return user
-	
+'''Returns the list of Music  '''	
 def listeMusique():
 	connection=init()
 	liste=[]
@@ -40,17 +47,20 @@ def listeMusique():
 		liste.append(music)
 	return liste
 
+'''get songs from the DB'''
 def recupMusique(compositeur, album, titre):
 	connection=init()
 	liste=[]
 	for music in connection.execute("SELECT Music.idmusic, Music.titre, Music.musicPath, Album.nomAlbum, Album.Label, Album.Annee, Album.nomArtist, Album.imagePath FROM Music, Album WHERE Album.nomAlbum = Music.nomAlbum AND Music.titre='"+titre.encode("utf-8")+"' and Album.nomArtist='"+compositeur.encode("utf-8")+"' and Music.nomAlbum='"+album.encode("utf-8")+"'"):
 		liste.append(music)
 	return music
+'''Update the user password '''	
 def updatePassword(password, email):
 	connection = init()
 	sql = "UPDATE users SET password='"+password.encode("utf-8")+"' WHERE users.email='"+email.encode("utf-8")+"'"
 	connection.execute(sql)
 
+'''return the list of last songs '''
 def lastMusic():
 	connection = init()
 	liste = []
@@ -62,6 +72,8 @@ def lastMusic():
 		liste.append(m)
 		i += 1
 	return liste
+
+'''return the list of top Music ordred by note of users '''	
 def listTopMusicAll():
 	connection = init()
 	liste = []
@@ -73,6 +85,9 @@ def listTopMusicAll():
 		liste.append(m)
 		i += 1
 	return liste
+
+'''function that gets music according to a specific mood '''
+
 def algoMatch(listeHumeur,email):
 	connection=init()
 	listeCaract=[]
@@ -114,6 +129,7 @@ def algoMatch(listeHumeur,email):
 		k-=1
 	return playlist
 
+'''insert a mood to a song '''
 def insererHumeur(email, music, humeur):
 	connection = init()
 	avis = []
@@ -126,6 +142,8 @@ def insererHumeur(email, music, humeur):
 	else:
 		sql = "UPDATE avis set humeur='"+humeur.encode("utf-8")+"' where id="+str(avis[0].id) 
 		connection.execute(sql)
+
+'''Music search '''
 def chercherMusique(listeMotCle):
 	connection=init()
 	listeMusiques=[]
@@ -138,6 +156,8 @@ def chercherMusique(listeMotCle):
 				print music
 				listeMusiques.append(music)
 	return listeMusiques
+
+'''insert a note to a song '''
 def insererNote(email,music,note):
 	connection=init()
 	avis=[]
@@ -150,6 +170,8 @@ def insererNote(email,music,note):
 	else:
 		sql="UPDATE avis SET note="+note+" WHERE id="+str(avis[0].id)
 		connection.execute(sql)
+
+'''user favorite songs '''
 def listTopMusicUser(email):
 	connection = init()
 	i = 0
@@ -161,6 +183,8 @@ def listTopMusicUser(email):
 		liste.append(m)
 		i += 1
 	return liste
+
+'''get the user image '''	
 def getUserImage(email):
 	connection = init()
 	sql = "SELECT imagePath FROM users WHERE users.email='"+email.encode("utf-8")+"'"
