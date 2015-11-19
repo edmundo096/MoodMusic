@@ -149,7 +149,7 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `email` varchar(30) NOT NULL,
-  `password` varchar(30) NOT NULL,
+  `password` varchar(120) NOT NULL,
   `pseudo` varchar(30) DEFAULT NULL,
   `imagePath` varchar(2083) DEFAULT NULL,
   PRIMARY KEY (`email`)
