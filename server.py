@@ -5,6 +5,7 @@ from flask import *
 from werkzeug import secure_filename
 import os
 import DbFunct
+import hashlib
 
 app = Flask(__name__)
 
@@ -17,6 +18,12 @@ ALLOWED_EXTENSIONS = set([ 'png','jpg', 'jpeg', 'gif'])
 '''app configuration*****'''
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# Enable HTTPS
+import ssl
+appPath = os.path.dirname(os.path.realpath(__file__))
+context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+context.load_cert_chain(appPath + '/ssl.crt', appPath + '/ssl.key')
+
 def allowed_file(filename):
 	return '.' in filename and \
 		filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
@@ -27,13 +34,13 @@ def allowed_file(filename):
 def start():
 	session['playlist']=[]
 	return redirect(url_for('accueil'))
-	
+
 '''Get the Registration page '''
 
 @app.route('/register', methods=['GET'])
 def register():
 	return render_template('register.html')
-	
+
 
 
 '''Route to Post the user Information in the DB (making call to the insertUser function ) and redirect to the authentication page'''
@@ -42,6 +49,8 @@ def register_post():
 	first_name = escape(request.form['pseudo'])
 	email = escape(request.form['email'])
 	password = escape(request.form['password'])
+	# Encrypt password.
+	password = hashlib.sha224(password).hexdigest()
 	user=DbFunct.recupUtilisateur(email, None)
 	if user is None:
 		DbFunct.insertUser(first_name, email, password)
@@ -90,7 +99,9 @@ def submit_psswd():
 '''login route to the application '''
 @app.route('/login',methods=['POST'])
 def login():
-	user=DbFunct.recupUtilisateur(escape(request.form['email']),escape(request.form['password']))
+	# Encrypt password.
+	password = hashlib.sha224(escape(request.form['password'])).hexdigest()
+	user=DbFunct.recupUtilisateur(escape(request.form['email']), password)
 	if user is None:
 		return redirect(url_for('page_authent'))
 	else:
@@ -99,7 +110,7 @@ def login():
 		session['password']=user['password']
 		session['playlist']=[]
 		return redirect(url_for('accueil'))
-		
+
 
 
 '''Main route that makes call to the recupMusic function and return the home page if the email is in the session    ''' 		
@@ -191,7 +202,7 @@ def profile():
 	print img
 	if request.method == 'GET':
 		return render_template('profil.html', email=session['email'], pseudo=session['pseudo'], list_music = liste, image = img[0])
-	
+
 	file = request.files['file']
 	if file and allowed_file(file.filename):
 		filename = secure_filename(file.filename)
@@ -212,8 +223,8 @@ def setHumeur():
 	humeur = request.json['humeur']
 	DbFunct.insererHumeur(email, music, humeur)
 	return jsonify({'succes':1})
-		
-		
+
+
 
 if __name__ == '__main__':
-  app.run(debug=True) 
+	app.run(debug=True, ssl_context=context)
