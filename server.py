@@ -104,15 +104,17 @@ def accueil():
     if 'pseudo' in session:
         # Get a playlist from DB if client does NOT has one.
         if not session['playlist']:
-            for music in DbFunct.listeMusique():
+            for music in DbFunct.listeMusiqueYoutube():
                 session['playlist'].append(json.dumps(music.nomArtist+" - "+music.nomAlbum+" - "+music.titre).replace('"',"" ))
 
         liste = session['playlist']
+        print "accueil liste: {liste}".format(liste = liste)
 
+        # TODO seems to be broken.. Get the first song from the list, or from the request arguments.
         if (request.args.get('compositeur') or request.args.get('titre')) is None:
-            music=DbFunct.recupMusique(liste[0].split(" - ")[0], liste[0].split(" - ")[1],liste[0].split(" - ")[2])
+            music=DbFunct.recupMusiqueYoutube(liste[0].split(" - ")[0], liste[0].split(" - ")[1],liste[0].split(" - ")[2])
         else:
-            music=DbFunct.recupMusique(request.args.get('compositeur'), request.args.get('album'), request.args.get('titre'))
+            music=DbFunct.recupMusiqueYoutube(request.args.get('compositeur'), request.args.get('album'), request.args.get('titre'))
 
         return render_template('accueil.html', music=music, musiqueliste=liste, pseudo=session['pseudo'])
 
@@ -124,26 +126,37 @@ def accueil():
 @app.route('/accueil', methods=['POST'])
 def chercher():
     if 'pseudo' in session:
+        # Check if there was any search.
         if request.form['search'] is not None:
-            recherche=escape(request.form['search']).encode("utf-8")
+            recherche = escape(request.form['search']).encode("utf-8")
             print recherche
-            listeMotCle=recherche.split()
-            session['playlist']=[]
+
+            listeMotCle = recherche.split()
+            session['playlist'] = []
+
+            # Check if search was empty, redirect to home.
             if not listeMotCle:
                 return redirect("/accueil")
-            if (listeMotCle[0]!="humeur:"):
-                listMusic=DbFunct.chercherMusique(listeMotCle)
+
+            # Search music by arguments, or by a Mood (set by the same user).
+            if (listeMotCle[0] != "humeur:"):
+                listMusic = DbFunct.chercherMusiqueYoutube(listeMotCle)
             else:
-                listMusic=DbFunct.algoMatch(listeMotCle[1:],session['email'])
+                listMusic = DbFunct.algoMatchYoutube(listeMotCle[1:],session['email'])
+
+            # Cerate playlist.
             for music in listMusic:
                 session['playlist'].append(json.dumps(music.nomArtist+" - "+music.nomAlbum+" - "+music.titre).replace('"',"" ))
                 print session['playlist']
-            listeMusiques=session['playlist']
+
+            # Get music from the playlist and the DB
+            listeMusiques = session['playlist']
             if not listeMusiques:
                 return redirect("/accueil")
             else:
-                music=None
-                music=DbFunct.recupMusique(listeMusiques[0].split(" - ")[0], listeMusiques[0].split(" - ")[1],listeMusiques[0].split(" - ")[2])
+                music = None
+                # (Not used)
+                music = DbFunct.recupMusiqueYoutube(listeMusiques[0].split(" - ")[0], listeMusiques[0].split(" - ")[1],listeMusiques[0].split(" - ")[2])
                 return render_template('accueil.html', music=music, musiqueliste=listeMusiques, pseudo=session['pseudo'])
         else:
             return redirect("/accueil")
@@ -172,7 +185,7 @@ def last_music():
 def getMusic():
     if not request.json:
         abort(300)
-    music = DbFunct.recupMusique(request.json['music'].split(" - ")[0], request.json['music'].split(" - ")[1], request.json['music'].split(" - ")[2])
+    music = DbFunct.recupMusiqueYoutube(request.json['music'].split(" - ")[0], request.json['music'].split(" - ")[1], request.json['music'].split(" - ")[2])
     return jsonify({'Artist':music.nomArtist, 'Album': music.nomAlbum, 'Titre': music.titre, 'Annee': music.Annee, 'Label': music.Label, 'musicPath': music.musicPath, 'imagePath': music.imagePath})
 
 
