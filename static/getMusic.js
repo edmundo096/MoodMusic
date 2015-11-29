@@ -8,7 +8,7 @@ function getMusic(item) {
     console.log(item.target.innerHTML.split("> ")[1].substring(0, item.target.innerHTML.split("> ")[1].length - 1));
 
     $.ajax({
-        type: 'POST',
+        type: 'GET',
         url: '/api/getMusic',
         data: JSON.stringify(info_send),
         dataType: 'json',
@@ -42,7 +42,7 @@ function getMusic(item) {
 
         },
         error: function (data) {
-            console.log("erreur");
+            console.log("Error: " + data);
         }
     });
 }

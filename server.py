@@ -112,9 +112,9 @@ def accueil():
 
         # TODO seems to be broken.. Get the first song from the list, or from the request arguments.
         if (request.args.get('compositeur') or request.args.get('titre')) is None:
-            music=DbFunct.recupMusiqueYoutube(liste[0].split(" - ")[0], liste[0].split(" - ")[1],liste[0].split(" - ")[2])
+            music = DbFunct.recupMusiqueYoutube(liste[0].split(" - ")[0], liste[0].split(" - ")[1],liste[0].split(" - ")[2])
         else:
-            music=DbFunct.recupMusiqueYoutube(request.args.get('compositeur'), request.args.get('album'), request.args.get('titre'))
+            music = DbFunct.recupMusiqueYoutube(request.args.get('compositeur'), request.args.get('album'), request.args.get('titre'))
 
         return render_template('accueil.html', music=music, musiqueliste=liste, pseudo=session['pseudo'])
 
@@ -181,7 +181,7 @@ def last_music():
 
 
 '''API getMusic route makes a post to get the Music from the DB'''
-@app.route('/api/getMusic', methods=['POST'])
+@app.route('/api/getMusic', methods=['GET'])
 def getMusic():
     if not request.json:
         abort(300)
