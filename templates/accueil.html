@@ -241,7 +241,14 @@
                                 <source id=audiosrc src="{{ music.musicPath }}" type="audio/mpeg"/>
                             </audio>
 
-                            <div class="col-sm-6 col-md-12">
+                            <!-- Youtube player
+                            TODO Put dynamically the YT player along the audio contorls, and just hidde and show seach depenign a custom source attribute -->
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <div id="yt-player"></div>
+                            </div>
+
+
+                            <div class="col-sm-12">
                                 <h7>What makes you feel ?</h7>
 
                                 <div class="rating" id="global">
@@ -280,11 +287,6 @@
                                         </select>
                                     </div>
                                 </form>
-
-                                <!-- Youtube player -->
-                                <div class="embed-responsive embed-responsive-16by9">
-                                    <div id="yt-player"></div>
-                                </div>
 
                             </div>
                         </div>

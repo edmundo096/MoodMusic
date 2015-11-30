@@ -3,7 +3,7 @@ var ytPlayer;
 function getMusic(element) {
     element = $(element);
     var info_send = {
-        method: 'info',   //'id'
+        //method: 'info',   // TODO possible method to get the song data: song 'info' or song 'id'
         artist: element.data('artist'),
         album: element.data('album'),
         title: element.data('title')
@@ -16,7 +16,7 @@ function getMusic(element) {
         url: '/api/getMusic',
         data: info_send,
         dataType: 'json',
-        //contentType: 'application/json; charset=utf-8',
+        //contentType: 'application/json; charset=utf-8', // Used only when POSTing data.
         success: function (data) {
             // TODO This call is made to a not yet created Player object.
             Player.pause();
