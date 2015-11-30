@@ -184,18 +184,22 @@ def last_music():
 
 @app.route('/api/getMusic', methods=['GET'])
 def getMusic():
-    """API getMusic route makes a GET to get the Music from the DB"""
-    if not request.json:
-        abort(300)
-    music = DbFunct.get_song_data(request.json['music'].split(" - ")[0], request.json['music'].split(" - ")[1],
-                                  request.json['music'].split(" - ")[2])
-    return jsonify({'Artist': music.compositeur, 'Album': music.nomAlbum, 'Titre': music.titre, 'Annee': music.Annee,
-                    'Label': music.Label, 'musicPath': music.musicPath, 'imagePath': music.imagePath})
+    """API getMusic route makes a GET to get the Music from the DB
+    Returns JSON object.
+    """
+
+    music = DbFunct.get_song_data(request.args.get('artist'), request.args.get('album'), request.args.get('title'))
+    print "api getMusic() music: "
+    print music
+    return jsonify({'Artist': music.compositeur, 'Album': music.nomAlbum, 'Titre': music.titre, 'Annee': music.annee,
+                    'Label': music.label, 'musicPath': music.musicPath, 'imagePath': music.imagePath})
 
 
 @app.route('/api/note', methods=['POST'])
 def rating():
-    """API note to set a note for a song """
+    """API note to set a note for a song
+    Returns JSON object.
+    """
     if not request.json:
         abort(300)
     email = session['email']

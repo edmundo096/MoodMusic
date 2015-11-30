@@ -1,19 +1,24 @@
 var ytPlayer;
 
-function getMusic(item) {
+function getMusic(element) {
+    element = $(element);
     var info_send = {
-        'music': item.target.innerHTML.split("> ")[1].substring(0, item.target.innerHTML.split("> ")[1].length - 1)
+        method: 'info',   //'id'
+        artist: element.data('artist'),
+        album: element.data('album'),
+        title: element.data('title')
     };
 
-    console.log(item.target.innerHTML.split("> ")[1].substring(0, item.target.innerHTML.split("> ")[1].length - 1));
+    console.log(info_send);
 
     $.ajax({
         type: 'GET',
         url: '/api/getMusic',
-        data: JSON.stringify(info_send),
+        data: info_send,
         dataType: 'json',
-        contentType: 'application/json; charset=utf-8',
+        //contentType: 'application/json; charset=utf-8',
         success: function (data) {
+            // TODO This call is made to a not yet created Player object.
             Player.pause();
 
             // Get the music path if locally (not used any more), or a Youtube video ID.
@@ -42,7 +47,8 @@ function getMusic(item) {
 
         },
         error: function (data) {
-            console.log("Error: " + data);
+            console.log("Error:");
+            console.log(data);
         }
     });
 }

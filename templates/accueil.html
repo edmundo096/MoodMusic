@@ -320,7 +320,10 @@
                                 {% endif %}
 
                                 {# Main "getMusic()" JavaScript function. #}
-                                <a class="list-group-item marge-bas" onClick="getMusic(event)">
+                                <a class="list-group-item marge-bas" onClick="getMusic(this)"
+                                   data-artist="{{ musique['artist'] }}"
+                                   data-album="{{ musique['album'] }}"
+                                   data-title="{{ musique['title'] }}">
                                     <span class="glyphicon glyphicon-music"></span>
                                     {{ musique['artist'] }} - {{ musique['album'] }} - {{ musique['title'] }}
                                 </a>
