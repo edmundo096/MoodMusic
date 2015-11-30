@@ -105,19 +105,18 @@ def accueil():
         # Get a playlist from DB if client does NOT has one.
         if not session['playlist']:
             for music in DbFunct.listeMusiqueYoutube():
-                session['playlist'].append(
-                    json.dumps(music.nomArtist + " - " + music.nomAlbum + " - " + music.titre).replace('"', ""))
+                session['playlist'].append({'artist': music.compositeur , 'album': music.nomAlbum, 'title': music.titre})
 
         liste = session['playlist']
         print "accueil liste: {liste}".format(liste=liste)
 
         # TODO seems to be broken.. Get the first song from the list, or from the request arguments.
         if (request.args.get('compositeur') or request.args.get('titre')) is None:
-            music = DbFunct.recupMusiqueYoutube(liste[0].split(" - ")[0], liste[0].split(" - ")[1],
-                                                liste[0].split(" - ")[2])
+            music = DbFunct.get_song_data(liste[0]['artist'], liste[0]['album'],
+                                          liste[0]['title'])
         else:
-            music = DbFunct.recupMusiqueYoutube(request.args.get('compositeur'), request.args.get('album'),
-                                                request.args.get('titre'))
+            music = DbFunct.get_song_data(request.args.get('compositeur'), request.args.get('album'),
+                                          request.args.get('titre'))
 
         return render_template('accueil.html', music=music, musiqueliste=liste, pseudo=session['pseudo'])
 
@@ -149,19 +148,17 @@ def chercher():
 
             # Cerate playlist.
             for music in listMusic:
-                session['playlist'].append(
-                    json.dumps(music.nomArtist + " - " + music.nomAlbum + " - " + music.titre).replace('"', ""))
-                print session['playlist']
+                session['playlist'].append({'artist': music.compositeur , 'album': music.nomAlbum, 'title': music.titre})
+            print "accueil POST - session['playlist']: "
+            print session['playlist']
 
-            # Get music from the playlist and the DB
+            # Get the 1 st song from the DB for the client "music" variable (for metadata and src load).
             listeMusiques = session['playlist']
             if not listeMusiques:
                 return redirect("/accueil")
             else:
-                music = None
-                # (Not used)
-                music = DbFunct.recupMusiqueYoutube(listeMusiques[0].split(" - ")[0], listeMusiques[0].split(" - ")[1],
-                                                    listeMusiques[0].split(" - ")[2])
+                music = DbFunct.get_song_data(listeMusiques[0]['artist'], listeMusiques[0]['album'],
+                                              listeMusiques[0]['title'])
                 return render_template('accueil.html', music=music, musiqueliste=listeMusiques,
                                        pseudo=session['pseudo'])
         else:
@@ -190,9 +187,9 @@ def getMusic():
     """API getMusic route makes a GET to get the Music from the DB"""
     if not request.json:
         abort(300)
-    music = DbFunct.recupMusiqueYoutube(request.json['music'].split(" - ")[0], request.json['music'].split(" - ")[1],
-                                        request.json['music'].split(" - ")[2])
-    return jsonify({'Artist': music.nomArtist, 'Album': music.nomAlbum, 'Titre': music.titre, 'Annee': music.Annee,
+    music = DbFunct.get_song_data(request.json['music'].split(" - ")[0], request.json['music'].split(" - ")[1],
+                                  request.json['music'].split(" - ")[2])
+    return jsonify({'Artist': music.compositeur, 'Album': music.nomAlbum, 'Titre': music.titre, 'Annee': music.Annee,
                     'Label': music.Label, 'musicPath': music.musicPath, 'imagePath': music.imagePath})
 
 
@@ -202,8 +199,8 @@ def rating():
     if not request.json:
         abort(300)
     email = session['email']
-    music = DbFunct.recupMusique(request.json['music'].split("-")[0], request.json['music'].split("-")[1],
-                                 request.json['music'].split("-")[2])
+    music = DbFunct.get_song_data(request.json['music'].split("-")[0], request.json['music'].split("-")[1],
+                                  request.json['music'].split("-")[2])
     note = request.json['note']
     DbFunct.insererNote(email, music, note)
     return jsonify({'succes': 1})
@@ -246,8 +243,8 @@ def setHumeur():
     if not request.json:
         abort(300)
     email = session['email']
-    music = DbFunct.recupMusique(request.json['music'].split("-")[0], request.json['music'].split("-")[1],
-                                 request.json['music'].split("-")[2])
+    music = DbFunct.get_song_data(request.json['music'].split("-")[0], request.json['music'].split("-")[1],
+                                  request.json['music'].split("-")[2])
     humeur = request.json['humeur']
     DbFunct.insererHumeur(email, music, humeur)
     return jsonify({'succes': 1})

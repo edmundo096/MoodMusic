@@ -228,6 +228,9 @@
 
 
                         <div class="raw" style="padding-top: 30px;">
+
+                            {# Main Client player.
+                               Values loaded from POST with the {{ }}, and then by AJAX. #}
                             <audio controls id="Player"
                                    data-info-album-art="{{ music.imagePath }}"
                                    data-info-album-title="{{ music.nomAlbum }}"
@@ -237,6 +240,7 @@
                                    data-info-year="{{ music.Annee }}">
                                 <source id=audiosrc src="{{ music.musicPath }}" type="audio/mpeg"/>
                             </audio>
+
                             <div class="col-sm-6 col-md-12">
                                 <h7>What makes you feel ?</h7>
 
@@ -274,9 +278,6 @@
                                             <option value="Aventureuse">adventurous</option>
                                             <option value="Humoristique">Humorous</option>
                                         </select>
-                                        <script type="text/javascript">
-
-                                        </script>
                                     </div>
                                 </form>
 
@@ -284,7 +285,6 @@
                                 <div class="embed-responsive embed-responsive-16by9">
                                     <div id="yt-player"></div>
                                 </div>
-
 
                             </div>
                         </div>
@@ -309,21 +309,26 @@
                                 {% if musiqueliste.index(musique)==5 and musiqueliste|length>5 %}
                                     <p>
                                         <button id="titi" class="btn btn-primary btn-lg" Title="Voir plus de musiques"
-                                                onclick="div_afficher_masque()"><span id="icon_pm"
-                                                                                      class="glyphicon glyphicon-plus"
-                                                                                      style="font-size:17px;"></span>
+                                                onclick="div_afficher_masque()">
+                                            <span id="icon_pm" class="glyphicon glyphicon-plus" style="font-size:17px;"></span>
                                             <h7> see more music</h7>
                                         </button>
                                     </p>
+
+                                    <!-- The begining of the DIV container for items from 5 and up. -->
                                     <div id="toto" style="display:none">
                                 {% endif %}
+
+                                {# Main "getMusic()" JavaScript function. #}
                                 <a class="list-group-item marge-bas" onClick="getMusic(event)">
-                                    <span class="glyphicon glyphicon-music"></span> {{ musique }} </a>
-
+                                    <span class="glyphicon glyphicon-music"></span>
+                                    {{ musique['artist'] }} - {{ musique['album'] }} - {{ musique['title'] }}
+                                </a>
                             {% endfor %}
-                            {% if musiqueliste|length>5 %}
-                                </div>
 
+                            {% if musiqueliste|length>5 %}
+                                <!-- The end of the DIV container for items from 5 and up. -->
+                                </div>
                             {% endif %}
                         </ul>
                     </div>

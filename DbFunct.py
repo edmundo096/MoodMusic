@@ -52,19 +52,21 @@ def listeMusiqueYoutube():
     return liste
 
 
-def recupMusiqueYoutube(compositeur, album, titre):
-    """Get a song data from the DB"""
+def get_song_data(compositeur, album, titre):
+    """Get a song data from the DB
+    Returns an object with the properties: idmusic, titre, musicPath, nomAlbum, label, annee, compositeur, imagePath.
+    """
     connection = init()
     liste = []
     sql = "SELECT Music.idmusic, Music.titre, Music.musicPath, Music.nomAlbum, Music.label, Music.annee, Music.compositeur, Music.imagePath FROM Music WHERE Music.titre = '" + titre.encode(
-        "utf-8") + "' AND Music.nomArtist = '" + compositeur.encode(
+        "utf-8") + "' AND Music.compositeur = '" + compositeur.encode(
         "utf-8") + "' AND Music.nomAlbum = '" + album.encode("utf-8") + "' AND Music.source = 'youtube'"
 
     for music in connection.execute(sql):
         liste.append(music)
         # TODO Currently returns the last one form the list of the DB query.
 
-    print "recupMusiqueYoutube liste: {lst}".format(lst=liste)
+    print "recupMusiqueYoutube liste: {list}".format(list=liste)
 
     # return music
     if len(liste) > 0:
