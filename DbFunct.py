@@ -42,18 +42,18 @@ def recupUtilisateur(email, mdp):
 def listeMusiqueYoutube():
     connection=init()
     liste=[]
-    sql = "SELECT Album.nomArtist, Music.titre, Music.nomAlbum FROM Album, Music WHERE Album.nomAlbum = Music.nomAlbum AND Music.source = 'youtube'"
+    sql = "SELECT Music.compositeur, Music.titre, Music.nomAlbum FROM Music WHERE Music.source = 'youtube'"
     for music in connection.execute(sql):
         print music
         liste.append(music)
     return liste
 
 
-'''get songs from the DB'''
+'''Get a song data from the DB'''
 def recupMusiqueYoutube(compositeur, album, titre):
     connection=init()
     liste=[]
-    sql = "SELECT Music.idmusic, Music.titre, Music.musicPath, Album.nomAlbum, Album.Label, Album.Annee, Album.nomArtist, Album.imagePath FROM Music, Album WHERE Album.nomAlbum = Music.nomAlbum AND Music.titre = '" + titre.encode("utf-8") + "' AND Album.nomArtist = '" + compositeur.encode("utf-8") + "' AND Music.nomAlbum = '" + album.encode("utf-8") + "' AND Music.source = 'youtube'"
+    sql = "SELECT Music.idmusic, Music.titre, Music.musicPath, Music.nomAlbum, Music.label, Music.annee, Music.compositeur, Music.imagePath FROM Music WHERE Music.titre = '" + titre.encode("utf-8") + "' AND Music.nomArtist = '" + compositeur.encode("utf-8") + "' AND Music.nomAlbum = '" + album.encode("utf-8") + "' AND Music.source = 'youtube'"
 
     for music in connection.execute(sql):
         liste.append(music)
@@ -74,12 +74,16 @@ def updatePassword(password, email):
 	sql = "UPDATE users SET password='"+password.encode("utf-8")+"' WHERE users.email='"+email.encode("utf-8")+"'"
 	connection.execute(sql)
 
-'''return the list of last songs '''
+'''
+return the list of last songs
+(But only the ones that are classified at least 1 time by any user, in other words, that exists on the avis table)
+Ordered by the Album Year in Descendent.
+'''
 def lastMusic():
 	connection = init()
 	liste = []
 	i = 0
-	sql = "SELECT Music.titre, Music.musicPath, Album.nomAlbum, Album.Label, Album.Annee, Album.nomArtist, Album.imagePath FROM Album, Music, avis WHERE avis.idmusic=Music.idmusic AND Album.nomAlbum = Music.nomAlbum ORDER BY Album.Annee DESC"
+	sql = "SELECT Music.titre, Music.musicPath, Music.nomAlbum, Music.label, Music.annee, Music.compositeur, Music.imagePath FROM Music, avis WHERE avis.idmusic = Music.idmusic AND Music.source = 'youtube' ORDER BY Music.annee DESC"
 	for m in connection.execute(sql):
 		if i == 10:
 			break
@@ -87,12 +91,15 @@ def lastMusic():
 		i += 1
 	return liste
 
-'''return the list of top Music ordred by note of users '''
+'''
+return the list of top Music ordred by note of users
+(But only the ones that are classified at least 1 time by any user, in other words, that exists on the avis table)
+'''
 def listTopMusicAll():
 	connection = init()
 	liste = []
 	i = 0
-	sql = "SELECT Music.titre, Album.nomArtist, Album.nomAlbum, Album.imagePath FROM Album, Music, avis WHERE avis.idmusic=Music.idmusic AND Album.nomAlbum = Music.nomAlbum ORDER BY avis.note DESC"
+	sql = "SELECT Music.titre, Music.compositeur, Music.nomAlbum, Music.imagePath FROM Music, avis WHERE avis.idmusic = Music.idmusic AND Music.source = 'youtube' ORDER BY avis.note DESC"
 	for m in connection.execute(sql):
 		if i == 10:
 			break
@@ -107,7 +114,7 @@ def algoMatchYoutube(listeHumeur,email):
 	listeAppCaract=[]
 	nbMusique=0;
 	for Humeur in listeHumeur:
-		sql ="SELECT Music.caract from Music, avis where Music.idmusic=avis.idmusic and avis.useremail='"+email.encode("utf-8")+"' and avis.humeur LIKE '%%"+Humeur.encode("utf-8")+"%%' AND Music.source = 'youtube'"
+		sql ="SELECT Music.caract FROM Music, avis WHERE Music.idmusic = avis.idmusic AND avis.useremail = '" + email.encode("utf-8") + "' AND avis.humeur LIKE '%%" + Humeur.encode("utf-8") + "%%' AND Music.source = 'youtube'"
 		for listeSQLCaract in connection.execute(sql):
 			nbMusique+=1
 			for caract in listeSQLCaract.caract.split():
@@ -129,9 +136,9 @@ def algoMatchYoutube(listeHumeur,email):
 			sql=""
 			for caract in listeCaractImportante[i:i+k]:
 				if sql=="":
-					sql ="SELECT Music.titre, Music.musicPath, Album.nomAlbum, Album.Label, Album.Annee, Album.nomArtist, Album.imagePath from Music, Album where Album.nomAlbum=Music.nomAlbum and Music.caract LIKE '%%"+caract+"%%' AND Music.source = 'youtube'"
+					sql = "SELECT Music.titre, Music.musicPath, Music.nomAlbum, Music.label, Music.annee, Music.compositeur, Music.imagePath FROM Music WHERE Music.caract LIKE '%%" + caract + "%%' AND Music.source = 'youtube'"
 				else:
-					sql=sql+" and Music.caract LIKE '%%"+caract+"%%'"
+					sql += " AND Music.caract LIKE '%%" + caract + "%%'"
 
 			for music in connection.execute(sql):
 				if music in playlist:
@@ -146,11 +153,13 @@ def algoMatchYoutube(listeHumeur,email):
 def insererHumeur(email, music, humeur):
 	connection = init()
 	avis = []
-	sql = "SELECT * from avis where avis.useremail='"+email.encode("utf-8")+"' and avis.idmusic="+str(music.idmusic)
+	sql = "SELECT * FROM avis WHER avis.useremail='" + email.encode("utf-8") + "' AND avis.idmusic = " + str(music.idmusic)
+
 	for hum in connection.execute(sql):
 		avis.append(hum)
+
 	if not avis:
-		sql = "INSERT INTO avis set useremail='"+email.encode("utf-8")+"', idmusic="+str(music.idmusic)+", humeur='"+humeur.encode("utf-8")+"'"
+		sql = "INSERT INTO avis set useremail = '" + email.encode("utf-8") + "', idmusic = " + str(music.idmusic) + ", humeur = '" + humeur.encode("utf-8") + "'"
 		connection.execute(sql)
 	else:
 		sql = "UPDATE avis set humeur='"+humeur.encode("utf-8")+"' where id="+str(avis[0].id)
@@ -161,7 +170,7 @@ def chercherMusiqueYoutube(listeMotCle):
 	connection=init()
 	listeMusiques=[]
 	for motCle in listeMotCle:
-		sql="SELECT Music.nomAlbum, Album.nomArtist, Album.Label, Album.Annee, Music.titre from Music, Album WHERE Album.nomAlbum = Music.nomAlbum AND (Music.titre LIKE '%%"+motCle+"%%' or Album.nomArtist LIKE '%%"+motCle+"%%' or Music.nomAlbum LIKE '%%"+motCle+"%%' or Album.label LIKE '%%"+motCle+"%%' or Album.Annee LIKE '%%"+motCle+"%%') AND  Music.source = 'youtube'"
+		sql = "SELECT Music.nomAlbum, Music.compositeur, music.label, music.annee, Music.titre from Music WHERE (Music.titre LIKE '%%"+motCle+"%%' or Music.compositeur LIKE '%%"+motCle+"%%' or Music.nomAlbum LIKE '%%"+motCle+"%%' or Music.label LIKE '%%"+motCle+"%%' or Music.Annee LIKE '%%"+motCle+"%%') AND  Music.source = 'youtube'"
 		for music in connection.execute(sql):
 			if music in listeMusiques:
 				pass
@@ -184,12 +193,15 @@ def insererNote(email,music,note):
 		sql="UPDATE avis SET note="+note+" WHERE id="+str(avis[0].id)
 		connection.execute(sql)
 
-'''user favorite songs '''
+'''
+user favorite songs
+(Only the ones that are classified at least 1 time by the user)
+'''
 def listTopMusicUser(email):
 	connection = init()
 	i = 0
 	liste = []
-	sql = "SELECT Music.titre, Album.nomArtist, Album.nomAlbum, Album.imagePath FROM Album, Music, avis WHERE avis.idmusic=Music.idmusic AND Album.nomAlbum = Music.nomAlbum AND avis.useremail='"+email.encode("utf-8")+"' ORDER BY avis.note DESC"
+	sql = "SELECT Music.titre, Music.compositeur, Music.nomAlbum, Music.imagePath FROM Music, avis WHERE avis.idmusic = Music.idmusic AND avis.useremail = '"+email.encode("utf-8") + "' AND Music.source = 'youtube' ORDER BY avis.note DESC"
 	for m in connection.execute(sql):
 		if i == 3:
 			break
