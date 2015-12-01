@@ -184,10 +184,18 @@ def last_music():
 
 @app.route('/api/getMusic', methods=['GET'])
 def getMusic():
-    """API getMusic route makes a GET to get the Music from the DB
+    """
+    @api {get} /api/getMusic Song data
+
+    @apiParam {String} artist The exact song's artist name on the system.
+    @apiParam {String} album The exact song's album name on the system.
+    @apiParam {String} title The exact song's title on the system.
+
+    @apiDescription
+    API getMusic route makes a GET to get the Music from the DB,
     Returns JSON object.
     """
-
+    #@apiParam {String="info","id"} [method=id]  Especifies the information used to query the song, either with id or info.
     music = DbFunct.get_song_data(request.args.get('artist'), request.args.get('album'), request.args.get('title'))
     print "api getMusic() music: "
     print music
@@ -197,7 +205,12 @@ def getMusic():
 
 @app.route('/api/note', methods=['POST'])
 def rating():
-    """API note to set a note for a song
+    """
+    @api {post} /api/note Song data
+
+
+
+    API note to set a note for a song
     Returns JSON object.
     """
     if not request.json:
@@ -252,6 +265,10 @@ def setHumeur():
     humeur = request.json['humeur']
     DbFunct.insererHumeur(email, music, humeur)
     return jsonify({'succes': 1})
+
+@app.route('/api', methods=['GET'])
+def apidoc():
+    return render_template('api.html', pseudo=session['pseudo'])
 
 
 if __name__ == '__main__':
