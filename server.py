@@ -188,7 +188,7 @@ def getMusic():
     @api {get} /api/getMusic Song data
 
     @apiParam {String} artist The exact song's artist name on the system.
-    @apiParam {String} album The exact song's album name on the system.
+    @apiParam {Object} album The exact song's album name on the system.
     @apiParam {String} title The exact song's title on the system.
 
     @apiDescription
@@ -196,6 +196,10 @@ def getMusic():
     Returns JSON object.
     """
     #@apiParam {String="info","id"} [method=id]  Especifies the information used to query the song, either with id or info.
+
+    if  request.args.get('artist') == None or request.args.get('album') == None or request.args.get('title') == None:
+        return jsonify({})
+
     music = DbFunct.get_song_data(request.args.get('artist'), request.args.get('album'), request.args.get('title'))
     print "api getMusic() music: "
     print music
@@ -206,10 +210,9 @@ def getMusic():
 @app.route('/api/note', methods=['POST'])
 def rating():
     """
-    @api {post} /api/note Song data
+    @api {post} /api/note Post a song rate
 
-
-
+    @apiDescription
     API note to set a note for a song
     Returns JSON object.
     """
@@ -238,10 +241,12 @@ def profile():
     img = []
     img = DbFunct.getUserImage(session['email'])
     print img
+
+    # GET
     if request.method == 'GET':
         return render_template('profil.html', email=session['email'], pseudo=session['pseudo'], list_music=liste,
                                image=img[0])
-
+    # POST
     file = request.files['file']
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -265,6 +270,7 @@ def setHumeur():
     humeur = request.json['humeur']
     DbFunct.insererHumeur(email, music, humeur)
     return jsonify({'succes': 1})
+
 
 @app.route('/api', methods=['GET'])
 def apidoc():
