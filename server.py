@@ -235,11 +235,11 @@ def last_music():
 @app.route('/api/getMusic', methods=['GET'])
 def getMusic():
     """
-    @api {get} /api/getMusic Song data
+    @api {get} /api/getMusic Get song data
 
-    @apiParam {String} artist The exact song's artist name on the system.
-    @apiParam {Object} album The exact song's album name on the system.
-    @apiParam {String} title The exact song's title on the system.
+    @apiParam {string} artist The exact song's artist name on the system.
+    @apiParam {string} album The exact song's album name on the system.
+    @apiParam {string} title The exact song's title on the system.
 
     @apiDescription
     API getMusic route makes a GET to get the Music from the DB,
@@ -262,29 +262,55 @@ def rating():
     """
     @api {post} /api/note Post a song rate
 
+    @apiParam {string} artist The exact song's artist name on the system.
+    @apiParam {string} album The exact song's album name on the system.
+    @apiParam {string} title The exact song's title on the system.
+    @apiParam {number{1}=1,2,3,4,5} note The rating given to the song.
+    @apiParam {string} email TODO, The email of the user that post the rating.
+
     @apiDescription
-    API note to set a note for a song
+    API note to set a note for a song.
     Returns JSON object.
     """
+    if request.json['artist'] == None or request.json['album'] == None or request.json['title'] == None or request.json['note'] == None:
+        return jsonify({'result': 0})
+
     if not request.json:
         abort(300)
     email = session['email']
-    music = DbFunct.get_song_data(request.json['music'].split("-")[0], request.json['music'].split("-")[1],
-                                  request.json['music'].split("-")[2])
+    music = DbFunct.get_song_data(request.json['artist'], request.json['album'], request.json['title'])
     note = request.json['note']
+
+    # TODO, fails if the music/song was not found (= None).
     DbFunct.insererNote(email, music, note)
     return jsonify({'succes': 1})
 
 
 @app.route('/api/humeur', methods=['POST'])
 def setHumeur():
-    """route to post a mood to song """
+    """
+    @api {post} /api/humeur Post song mood
+
+    @apiParam {string} artist The exact song's artist name on the system.
+    @apiParam {string} album The exact song's album name on the system.
+    @apiParam {string} title The exact song's title on the system.
+    @apiParam {string} humeur The mood classification given to the song.
+                            TODO, enumerate the moods.
+    @apiParam {string} email TODO, The email of the user that post the mood classfication.
+
+    @apiDescription
+    Route to post a mood to song.
+    """
+    if request.json['artist'] == None or request.json['album'] == None or request.json['title'] == None or request.json['humeur'] == None:
+        return jsonify({'result': 0})
+
     if not request.json:
         abort(300)
     email = session['email']
-    music = DbFunct.get_song_data(request.json['music'].split("-")[0], request.json['music'].split("-")[1],
-                                  request.json['music'].split("-")[2])
+    music = DbFunct.get_song_data(request.json['artist'], request.json['album'], request.json['title'])
     humeur = request.json['humeur']
+
+    # TODO, fails if the music/song was not found (= None).
     DbFunct.insererHumeur(email, music, humeur)
     return jsonify({'succes': 1})
 
