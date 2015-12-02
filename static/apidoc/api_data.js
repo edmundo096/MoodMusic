@@ -3,6 +3,7 @@ define({ "api": [
     "type": "get",
     "url": "/api/getMusic",
     "title": "Get song data",
+    "group": "Song",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -33,8 +34,7 @@ define({ "api": [
     "description": "<p>API getMusic route makes a GET to get the Music from the DB, Returns JSON object.</p> ",
     "version": "0.0.0",
     "filename": "./server.py",
-    "group": "D__DevProjects_GitHub_MoodMusic_server_py",
-    "groupTitle": "D__DevProjects_GitHub_MoodMusic_server_py",
+    "groupTitle": "Song",
     "name": "GetApiGetmusic",
     "sampleRequest": [
       {
@@ -46,6 +46,7 @@ define({ "api": [
     "type": "post",
     "url": "/api/humeur",
     "title": "Post song mood",
+    "group": "Song",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -90,8 +91,7 @@ define({ "api": [
     "description": "<p>Route to post a mood to song.</p> ",
     "version": "0.0.0",
     "filename": "./server.py",
-    "group": "D__DevProjects_GitHub_MoodMusic_server_py",
-    "groupTitle": "D__DevProjects_GitHub_MoodMusic_server_py",
+    "groupTitle": "Song",
     "name": "PostApiHumeur",
     "sampleRequest": [
       {
@@ -103,6 +103,7 @@ define({ "api": [
     "type": "post",
     "url": "/api/note",
     "title": "Post a song rate",
+    "group": "Song",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -155,8 +156,7 @@ define({ "api": [
     "description": "<p>API note to set a note for a song. Returns JSON object.</p> ",
     "version": "0.0.0",
     "filename": "./server.py",
-    "group": "D__DevProjects_GitHub_MoodMusic_server_py",
-    "groupTitle": "D__DevProjects_GitHub_MoodMusic_server_py",
+    "groupTitle": "Song",
     "name": "PostApiNote",
     "sampleRequest": [
       {

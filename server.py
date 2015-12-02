@@ -236,6 +236,7 @@ def last_music():
 def getMusic():
     """
     @api {get} /api/getMusic Get song data
+    @apiGroup Song
 
     @apiParam {string} artist The exact song's artist name on the system.
     @apiParam {string} album The exact song's album name on the system.
@@ -261,6 +262,7 @@ def getMusic():
 def rating():
     """
     @api {post} /api/note Post a song rate
+    @apiGroup Song
 
     @apiParam {string} artist The exact song's artist name on the system.
     @apiParam {string} album The exact song's album name on the system.
@@ -290,6 +292,7 @@ def rating():
 def setHumeur():
     """
     @api {post} /api/humeur Post song mood
+    @apiGroup Song
 
     @apiParam {string} artist The exact song's artist name on the system.
     @apiParam {string} album The exact song's album name on the system.
