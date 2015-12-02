@@ -29,6 +29,9 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
+#========================================
+# NAVIGATION
+#========================================
 
 @app.route('/')
 def start():
@@ -36,6 +39,14 @@ def start():
     session['playlist'] = []
     return redirect(url_for('accueil'))
 
+
+@app.route('/api', methods=['GET'])
+def apidoc():
+    return render_template('api.html', pseudo=session['pseudo'])
+
+#----------------------------------------
+# User handling
+#----------------------------------------
 
 @app.route('/register', methods=['GET'])
 def register():
@@ -95,8 +106,43 @@ def login():
         return redirect(url_for('accueil'))
 
 
-# Music Pages and APIs
+@app.route('/logout')
+def logout():
+    """route to logout from the application """
+    session.clear()
+    return redirect(url_for('page_authent'))
 
+
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    """ route to the user profile """
+    liste = []
+    liste = DbFunct.listTopMusicUser(session['email'])
+    img = []
+    img = DbFunct.getUserImage(session['email'])
+    print img
+
+    # GET
+    if request.method == 'GET':
+        return render_template('profil.html', email=session['email'], pseudo=session['pseudo'], list_music=liste,
+                               image=img[0])
+    # POST
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        extension = filename.rsplit('.', 1)[1]
+        filename = session['email'] + '.' + extension
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        filename = app.config['UPLOAD_FOLDER'].split(".")[1] + '/' + filename
+        DbFunct.updateUserImage(filename, session['email'])
+        return render_template('profil.html', email=session['email'], pseudo=session['pseudo'], list_music=liste,
+                               image=filename)
+
+
+
+#---------------------------------------
+# Music Pages
+#----------------------------------------
 
 @app.route('/accueil', methods=['GET'])
 def accueil():
@@ -182,6 +228,10 @@ def last_music():
     return render_template('last.html', list_music=liste, pseudo=session['pseudo'])
 
 
+#========================================
+# AJAX API
+#========================================
+
 @app.route('/api/getMusic', methods=['GET'])
 def getMusic():
     """
@@ -226,39 +276,6 @@ def rating():
     return jsonify({'succes': 1})
 
 
-@app.route('/logout')
-def logout():
-    """route to logout from the application """
-    session.clear()
-    return redirect(url_for('page_authent'))
-
-
-@app.route('/profile', methods=['GET', 'POST'])
-def profile():
-    """ route to the user profile """
-    liste = []
-    liste = DbFunct.listTopMusicUser(session['email'])
-    img = []
-    img = DbFunct.getUserImage(session['email'])
-    print img
-
-    # GET
-    if request.method == 'GET':
-        return render_template('profil.html', email=session['email'], pseudo=session['pseudo'], list_music=liste,
-                               image=img[0])
-    # POST
-    file = request.files['file']
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        extension = filename.rsplit('.', 1)[1]
-        filename = session['email'] + '.' + extension
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        filename = app.config['UPLOAD_FOLDER'].split(".")[1] + '/' + filename
-        DbFunct.updateUserImage(filename, session['email'])
-        return render_template('profil.html', email=session['email'], pseudo=session['pseudo'], list_music=liste,
-                               image=filename)
-
-
 @app.route('/api/humeur', methods=['POST'])
 def setHumeur():
     """route to post a mood to song """
@@ -270,11 +287,6 @@ def setHumeur():
     humeur = request.json['humeur']
     DbFunct.insererHumeur(email, music, humeur)
     return jsonify({'succes': 1})
-
-
-@app.route('/api', methods=['GET'])
-def apidoc():
-    return render_template('api.html', pseudo=session['pseudo'])
 
 
 if __name__ == '__main__':
