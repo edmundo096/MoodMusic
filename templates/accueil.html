@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,306 +13,339 @@
     <!-- Bootstrap core CSS -->
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/bootstrap/bootstrap-player/css/bootstrap-player.css" rel="stylesheet">
-    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.no-icons.min.css" type="text/css" rel="stylesheet">
-    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" type="text/css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.no-icons.min.css"
+          type="text/css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" type="text/css"
+          rel="stylesheet">
     <link href="/static/bootstrap/css/bootstrap-select.css" rel="stylesheet">
-	<link href="/static/bootstrap/css/bootstrap-select.min.css" rel="stylesheet">
-	
-   
+    <link href="/static/bootstrap/css/bootstrap-select.min.css" rel="stylesheet">
+
+
     <!-- Custom styles for this template -->
     <link href="/static/style.css" rel="stylesheet">
     <link href="/static/checkbox.css" rel="stylesheet">
     <link href="/static/bootstrap/css/bootstrap-combobox.css" rel="stylesheet">
-   
-  
+
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="/static/bootstrap/js/ie-emulation-modes-warning.js" ></script>
+    <script src="/static/bootstrap/js/ie-emulation-modes-warning.js"></script>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-  </head>
+</head>
 
-  <body>
+<body>
 
-<!---------------------------------- Barre de navigation ------------------------------------------------------------>
+    <!---------------------------------- Barre de navigation ------------------------------------------------------------>
 
     <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-         <a class="navbar-brand" href="#">
-			<img style="max-width:500px; margin-top: -7px;"
-             src="/static/images/logo.gif">
-          </a>
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <img style="max-width:500px; margin-top: -7px;"
+                         src="/static/images/logo.gif">
+                </a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/accueil"><h6>Home</h6></a></li>
+                    <li><a href="/top_music"><h6><span class="glyphicon glyphicon-star" style="font-size:17px;"></span>
+                        Top</h6></a></li>
+                    <li><a href="/last_music"><h6><span class="glyphicon glyphicon-music"
+                                                        style="font-size:17px;"></span> New</h6></a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/profile"><h6><span class="glyphicon glyphicon-user"
+                                                     style="font-size:17px;"></span> {{ pseudo }}</h6></a></li>
+                    <li><a href="/logout"><h6><span class="glyphicon glyphicon-remove" style="font-size:17px;"></span>
+                        Log Out</h6></a></li>
+                </ul>
+
+                <form action="/accueil" method="POST" id="cherche" class="navbar-form inline-form">
+                    <div class="form-group ">
+                        <input name="search" type="search" class="input-lg form-control" placeholder="music search"
+                               style="font-size:22px;">
+                        <button type="submit" class="btn btn-primary btn-lg"><span
+                                class="glyphicon glyphicon-headphones" style="font-size:17px;"></span>
+                            <h7> Search</h7>
+                        </button>
+                    </div>
+                </form>
+
+            </div><!--/.nav-collapse -->
         </div>
-        <div id="navbar" class="collapse navbar-collapse">
-           <ul class="nav navbar-nav">
-            <li class="active"><a href="/accueil"><h6>Home</h6></a></li>
-            <li><a href="/top_music"><h6><span class="glyphicon glyphicon-star"  style="font-size:17px;" ></span> Top</h6></a></li>
-            <li><a href="/last_music"><h6><span class="glyphicon glyphicon-music"  style="font-size:17px;" ></span> New</h6></a></li>
-          </ul>
- 	   <ul class="nav navbar-nav navbar-right">
-             <li><a href="/profile"><h6><span class="glyphicon glyphicon-user"  style="font-size:17px;" ></span>  {{pseudo}}</h6></a></li>
-             <li><a href="/logout"><h6><span class="glyphicon glyphicon-remove"  style="font-size:17px;" ></span>  Log Out</h6></a></li>
-           </ul> 
-          
-          <form action="/accueil" method="POST" id="cherche" class="navbar-form inline-form">
-			<div class="form-group ">
-				<input name="search" type="search" class="input-lg form-control" placeholder="music search" style="font-size:22px;">
-				<button type="submit" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-headphones"  style="font-size:17px;" ></span><h7>  Search</h7></button>
-			</div>
-         </form>
-           
-        </div><!--/.nav-collapse -->
-      </div>
     </div>
-    
+
     <!-----------------------------------------------middle container------------------------------------------------------>
-   
-   <!-- <div class="container-fluid" style="background-color: black;"> -->
+
+    <!-- <div class="container-fluid" style="background-color: black;"> -->
     <div class="container-fluid" id="color_blue" style="padding-top: 30px;">
-     <div class="raw" >
- 	
-               <!-----------------colonne 1 ---------------------------------------------------------->
+        <div class="raw">
 
-		<div class="col-sm-10 col-md-6">
-			
-			<div class="panel panel-primary">
-			<div class="panel-heading">
-		   <h3 class="panel-title"> What is your mood today? </h3>
-		   </div>	
-		   
-		   <div class="panel-body couleur-body">
-			   <form id="HumeurNow"  action="">
-                   <div class="raw" style="padding-top: 20px; ">
+            <!-----------------colonne 1 ---------------------------------------------------------->
 
-                     <div class="col-sm-5 col-md-3">
-                      
-                      <p>
-                        <input type="checkbox" id="test3" data-Humeur='Chill'>
-						<label for="test3"><h6>Chill</h6></label>
-                       </p>
-                       
-                       <p class="spacer">
-                        <input type="checkbox" id="test4" data-Humeur='Triste'>
-						<label for="test4"><h6>Sad</h6></label>
-                       </p>
-                       <p class="spacer">
-                        <input type="checkbox" id="test5" data-Humeur='Nostalgique'>
-						<label for="test5"><h6>nostalgic</h6></label>
-                       </p>
-                      
-                       <p class="spacer">
-                        <input type="checkbox" id="test22" data-Humeur='Gaming'>
-						<label for="test22"><h6>Gaming</h6></label>
-                       </p>
-                       <p class="spacer">
-                        <input type="checkbox" id="test23" data-Humeur='Voyage'>
-						<label for="test23"><h6>Travel</h6></label>
-                       </p>
-                     </div>
+            <div class="col-sm-10 col-md-6">
 
-                     <div class="col-sm-5 col-md-3">
-					   <p style="padding-top: 10px;">
-                        <input type="checkbox" id="test7" data-Humeur='Motivee'>
-						<label for="test7"><h6>motivated</h6></label>
-                       </p>
-                       <p class="spacer">
-                        <input type="checkbox" id="test8" data-Humeur='Enthousiaste'>
-						<label for="test8"><h6>enthusiastic</h6></h></label>
-                       </p>
-                       <p class="spacer">
-                        <input type="checkbox" id="test9" data-Humeur='Enervee'>
-						<label for="test9"><h6>upset</h6></label>
-                       </p>
-                      
-                       <p class="spacer">
-                        <input type="checkbox" id="test11" data-Humeur='Inspiree'>
-						<label for="test11"><h6>inspired</h6></label>
-                       </p>
-                       
-                       <p class="spacer">
-                        <input type="checkbox" id="test25" data-Humeur='Festive'>
-						<label for="test25"><h6>Festive</h6></label>
-                       </p>
-                     </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"> What is your mood today? </h3>
+                    </div>
 
-                     <div class="col-sm-5 col-md-3">
-					   
-                      
-                       
-                       <p >
-                        <input type="checkbox" id="test14" data-Humeur='Bosseur'>
-						<label for="test14"><h6>hard worker</h6></label>
-                       </p>
-                       <p class="spacer">
-                        <input type="checkbox" id="test15" data-Humeur='Codeur'>
-						<label for="test15"><h6>Geek</h6></label>
-                       </p>
-                       <p class="spacer">
-                        <input type="checkbox" id="test16" data-Humeur='Instrumental'>
-						<label for="test16"><h6>Instrumental</h6></label>
-                       </p>
-                       <p class="spacer">
-                        <input type="checkbox" id="test26" data-Humeur='Creative'>
-						<label for="test26"><h6>Creative</h6></label>
-                       </p>
-                       <p class="spacer">
-                        <input type="checkbox" id="test27" data-Humeur='Tropicale'>
-						<label for="test27"><h6>Tropical</h6></label>
-                       </p>
-                        
-                     </div>
-                   <div class="col-sm-5 col-md-3">
-                     <p style="padding-top: 10px;">
-                        <input type="checkbox" id="test17" data-Humeur='Studieux'>
-						<label for="test17"><h6>studious</h6></label>
-                       </p>
-                       <p class="spacer">
-                        <input type="checkbox" id="test18" data-Humeur='Agressif'>
-						<label for="test18"><h6>aggressive</h6></label>
-                       </p>
-                      
-                       
-                       <p class="spacer">
-                        <input type="checkbox" id="test21" data-Humeur='Calme'>
-						<label for="test21"><h6>Calm</h6></label>
-                       </p>
-                       <p class="spacer">
-                        <input type="checkbox" id="test28" data-Humeur='Aventureuse'>
-						<label for="test28"><h6>adventurous</h6></label>
-                       </p>
-                       <p class="spacer">
-                        <input type="checkbox" id="test29" data-Humeur='Humoristique'>
-						<label for="test29"><h6>Humorous</h6></label>
-                       </p>
-                     </div>
-                   </div>
-                   <div>
-                    <button type="submit" class="btn btn-primary btn-lg" onClick="getCheckBox(this.form); return false;" ><span class="glyphicon glyphicon-search"  style="font-size:19px;" ></span><h7>  search playlist</h7></button>
-	             </div>
-	             </form>
-	             </div>
-				</div>
+                    <div class="panel-body couleur-body">
+                        <form id="HumeurNow" action="">
+                            <div class="raw" style="padding-top: 20px; ">
 
-		</div>
+                                <div class="col-sm-5 col-md-3">
+                                    <p>
+                                        <input type="checkbox" id="test3" data-Humeur='Chill'>
+                                        <label for="test3"><h6>Chill</h6></label>
+                                    </p>
 
-              <!-----------------colonne 2----------------------------------------------------------->
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test4" data-Humeur='Triste'>
+                                        <label for="test4"><h6>Sad</h6></label>
+                                    </p>
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test5" data-Humeur='Nostalgique'>
+                                        <label for="test5"><h6>nostalgic</h6></label>
+                                    </p>
 
-		<div class="col-sm-5 col-md-3" >
-			
-			<div class="panel panel-primary">
-			<div class="panel-heading">
-		   <h3 class="panel-title"> Current Music </h3>
-		   </div>	
-		   
-		   <div class="panel-body couleur-body">
-			
-			
-			<div class="raw" style="padding-top: 30px;">
-				<audio controls id="Player"
-					data-info-album-art="{{music.imagePath}}"
-					data-info-album-title="{{music.nomAlbum}}"
-					data-info-artist="{{music.nomArtist}}"
-					data-info-title="{{music.titre}}"
-					data-info-label="{{music.Label}}"
-					data-info-year="{{music.Annee}}">
-				    <source id= audiosrc src="{{music.musicPath}}" type="audio/mpeg" />			  
-				</audio>
-				<div class="col-sm-6 col-md-12" >
-					<h7>What makes you feel ?</h7>
-						
-					<div class="rating" id="global"><!--
-						--><a id="rating-5" title="Donner 5 étoiles">☆</a><!--
-						--><a id="rating-4" title="Donner 4 étoiles">☆</a><!--
-					   --><a id="rating-3" title="Donner 3 étoiles">☆</a><!--
-					   --><a id="rating-2" title="Donner 2 étoiles">☆</a><!--
-					   --><a id="rating-1"  title="Donner 1 étoile">☆</a>
-					</div>
-					
-				   <form id="productForm" method="post" class="form-horizontal">      
-           <div class="form-group">
-            <select id="comboselect" onchange="setHumeur();" class="combobox form-control" name="inline">
-              <option value="" selected="selected">choose a mood</option>
-			        <option value="Chill">Chill</option>
-              <option value="Triste">Sad</option>
-              <option value="Nostalgique">Nostalgic</option>
-			        <option value="Gaming">Gaming</option>
-              <option value="Voyage">Travel</option>
-              <option value="Motivee">Motivated</option>
-			        <option value="Enthousiaste">enthusiastic</option>
-              <option value="Enervee">Upset</option>
-              <option value="Inspiree">Inspired</option>
-			        <option value="Festive">Festive</option>
-              <option value="Bosseur">Hard worker</option>
-              <option value="Codeur">Geek</option>
-              <option value="Instrumental">Instrumental</option>
-              <option value="Creative">Creative</option>
-              <option value="Tropicale">Tropicale</option>
-			        <option value="Studieux">Studious</option>
-              <option value="Agressif">aggressive</option>
-              <option value="Calme">Calm</option>
-              <option value="Aventureuse">adventurous</option>
-              <option value="Humoristique">Humorous</option>
-            </select>
-            <script type="text/javascript">
-                
-            </script>
-          </div>
-                 </form>
-					
-				</div>
-			</div>
-			</div>
-			</div>
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test22" data-Humeur='Gaming'>
+                                        <label for="test22"><h6>Gaming</h6></label>
+                                    </p>
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test23" data-Humeur='Voyage'>
+                                        <label for="test23"><h6>Travel</h6></label>
+                                    </p>
+                                </div>
 
-		</div>
+                                <div class="col-sm-5 col-md-3">
+                                    <p style="padding-top: 10px;">
+                                        <input type="checkbox" id="test7" data-Humeur='Motivee'>
+                                        <label for="test7"><h6>motivated</h6></label>
+                                    </p>
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test8" data-Humeur='Enthousiaste'>
+                                        <label for="test8"><h6>enthusiastic</h6></label>
+                                    </p>
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test9" data-Humeur='Enervee'>
+                                        <label for="test9"><h6>upset</h6></label>
+                                    </p>
 
-              <!-----------------colonne 3------------------------------------------------------------->
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test11" data-Humeur='Inspiree'>
+                                        <label for="test11"><h6>inspired</h6></label>
+                                    </p>
 
-		
-				
-		<div class="col-sm-5 col-md-3">
-                   <div class="panel panel-primary">
-			<div class="panel-heading">
-		   <h3 class="panel-title"> Playlist  </h3>
-		   </div>	
-		   
-		   <div class="panel-body couleur-body">
-                   <ul class="playlist">
-				{% for musique in musiqueliste %}
-						{% if musiqueliste.index(musique)==5 and musiqueliste|length>5%}
-							<p><button id="titi" class="btn btn-primary btn-lg" Title="Voir plus de musiques" onclick="div_afficher_masque()"><span id="icon_pm" class="glyphicon glyphicon-plus"  style="font-size:17px;" ></span><h7>  see more music</h7></button></p>		
-							<div id="toto" style="display:none" >
-						{%endif%}
-					    <a class="list-group-item marge-bas" onClick="getMusic(event)">
-							<span class="glyphicon glyphicon-music" ></span> {{musique}} </a>
-									
-				{% endfor %}
-				{% if musiqueliste|length>5%}
-							</div>
-					
-						{%endif%}
-						</a>
-					</ul>
-				</div>
-		</div>
-</div>
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test25" data-Humeur='Festive'>
+                                        <label for="test25"><h6>Festive</h6></label>
+                                    </p>
+                                </div>
 
-              <!---------------------------------------------------------------------------------------->
+                                <div class="col-sm-5 col-md-3">
+                                    <p>
+                                        <input type="checkbox" id="test14" data-Humeur='Bosseur'>
+                                        <label for="test14"><h6>hard worker</h6></label>
+                                    </p>
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test15" data-Humeur='Codeur'>
+                                        <label for="test15"><h6>Geek</h6></label>
+                                    </p>
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test16" data-Humeur='Instrumental'>
+                                        <label for="test16"><h6>Instrumental</h6></label>
+                                    </p>
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test26" data-Humeur='Creative'>
+                                        <label for="test26"><h6>Creative</h6></label>
+                                    </p>
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test27" data-Humeur='Tropicale'>
+                                        <label for="test27"><h6>Tropical</h6></label>
+                                    </p>
+                                </div>
+                                <div class="col-sm-5 col-md-3">
+                                    <p style="padding-top: 10px;">
+                                        <input type="checkbox" id="test17" data-Humeur='Studieux'>
+                                        <label for="test17"><h6>studious</h6></label>
+                                    </p>
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test18" data-Humeur='Agressif'>
+                                        <label for="test18"><h6>aggressive</h6></label>
+                                    </p>
 
-   </div>
-    </div> 
-    
+
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test21" data-Humeur='Calme'>
+                                        <label for="test21"><h6>Calm</h6></label>
+                                    </p>
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test28" data-Humeur='Aventureuse'>
+                                        <label for="test28"><h6>adventurous</h6></label>
+                                    </p>
+                                    <p class="spacer">
+                                        <input type="checkbox" id="test29" data-Humeur='Humoristique'>
+                                        <label for="test29"><h6>Humorous</h6></label>
+                                    </p>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary btn-lg"
+                                        onClick="getCheckBox(this.form); return false;"><span
+                                        class="glyphicon glyphicon-search" style="font-size:19px;"></span>
+                                    <h7> search playlist</h7>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-----------------colonne 2----------------------------------------------------------->
+
+            <div class="col-sm-5 col-md-3">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"> Current Music </h3>
+                    </div>
+
+                    <div class="panel-body couleur-body">
+
+
+                        <div class="raw" style="padding-top: 30px;">
+
+                            {# Main Client player.
+                               Values loaded from POST with the {{ }}, and then by AJAX. #}
+                            <audio controls id="Player"
+                                   data-info-album-art="{{ music.imagePath }}"
+                                   data-info-album-title="{{ music.nomAlbum }}"
+                                   data-info-artist="{{ music.nomArtist }}"
+                                   data-info-title="{{ music.titre }}"
+                                   data-info-label="{{ music.Label }}"
+                                   data-info-year="{{ music.Annee }}">
+                                <source id=audiosrc src="{{ music.musicPath }}" type="audio/mpeg"/>
+                            </audio>
+
+                            <!-- Youtube player
+                            TODO Put dynamically the YT player along the audio contorls, and just hidde and show seach depenign a custom source attribute -->
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <div id="yt-player"></div>
+                            </div>
+
+
+                            <div class="col-sm-12">
+                                <h7>What makes you feel ?</h7>
+
+                                <div class="rating" id="global">
+                                    <a id="rating-5" title="Donner 5 étoiles">☆</a>
+                                    <a id="rating-4" title="Donner 4 étoiles">☆</a>
+                                    <a id="rating-3" title="Donner 3 étoiles">☆</a>
+                                    <a id="rating-2" title="Donner 2 étoiles">☆</a>
+                                    <a id="rating-1" title="Donner 1 étoile">☆</a>
+                                </div>
+
+                                <form id="productForm" method="post" class="form-horizontal">
+                                    <div class="form-group">
+                                        <select id="comboselect" onchange="setHumeur();" class="combobox form-control"
+                                                name="inline">
+                                            <option value="" selected="selected">choose a mood</option>
+                                            <option value="Chill">Chill</option>
+                                            <option value="Triste">Sad</option>
+                                            <option value="Nostalgique">Nostalgic</option>
+                                            <option value="Gaming">Gaming</option>
+                                            <option value="Voyage">Travel</option>
+                                            <option value="Motivee">Motivated</option>
+                                            <option value="Enthousiaste">enthusiastic</option>
+                                            <option value="Enervee">Upset</option>
+                                            <option value="Inspiree">Inspired</option>
+                                            <option value="Festive">Festive</option>
+                                            <option value="Bosseur">Hard worker</option>
+                                            <option value="Codeur">Geek</option>
+                                            <option value="Instrumental">Instrumental</option>
+                                            <option value="Creative">Creative</option>
+                                            <option value="Tropicale">Tropicale</option>
+                                            <option value="Studieux">Studious</option>
+                                            <option value="Agressif">aggressive</option>
+                                            <option value="Calme">Calm</option>
+                                            <option value="Aventureuse">adventurous</option>
+                                            <option value="Humoristique">Humorous</option>
+                                        </select>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-----------------colonne 3------------------------------------------------------------->
+
+
+            <div class="col-sm-5 col-md-3">
+                <div class="panel panel-primary">
+
+                    <div class="panel-heading">
+                        <h3 class="panel-title"> Playlist </h3>
+                    </div>
+
+                    <div class="panel-body couleur-body">
+                        <ul class="playlist">
+                            {% for musique in musiqueliste %}
+                                {% if musiqueliste.index(musique)==5 and musiqueliste|length>5 %}
+                                    <p>
+                                        <button id="titi" class="btn btn-primary btn-lg" Title="Voir plus de musiques"
+                                                onclick="div_afficher_masque()">
+                                            <span id="icon_pm" class="glyphicon glyphicon-plus" style="font-size:17px;"></span>
+                                            <h7> see more music</h7>
+                                        </button>
+                                    </p>
+
+                                    <!-- The begining of the DIV container for items from 5 and up. -->
+                                    <div id="toto" style="display:none">
+                                {% endif %}
+
+                                {# Main "getMusic()" JavaScript function. #}
+                                <a class="list-group-item marge-bas" onClick="getMusic(this)"
+                                   data-artist="{{ musique['artist'] }}"
+                                   data-album="{{ musique['album'] }}"
+                                   data-title="{{ musique['title'] }}">
+                                    <span class="glyphicon glyphicon-music"></span>
+                                    {{ musique['artist'] }} - {{ musique['album'] }} - {{ musique['title'] }}
+                                </a>
+                            {% endfor %}
+
+                            {% if musiqueliste|length>5 %}
+                                <!-- The end of the DIV container for items from 5 and up. -->
+                                </div>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!---------------------------------------------------------------------------------------->
+
+        </div>
+    </div>
+
     <!--<div class="container-fluid" id="color_blue" style="padding-top: 50px;">
 		<div class="raw">
 			<div class="col-sm-10 col-md-6">
@@ -322,49 +355,50 @@
 			</div>
 		</div>
     </div>-->
-     
-	<!-------------------------------------Containers de bas de page---------------------------------------------------------->	 
-	    
-     <div class="container-fluid" id="end" >
-		<div class="raw">
-			<div class="col-sm-6 col-md-4 col-md-offset-2">
-				<h3>Who are we ?</h3>
-				<ul>
-					<li style="text-align: left; margin-left: 70px;"><a href="#contact">Our Team</a></li>
-					<li style="text-align: left; margin-left: 70px;"><a href="#contact">E-Mails</a></li>
-					<li style="text-align: left; margin-left: 70px;"><a href="#contact">=======</a></li>
-				</ul>
-			</div>
-			<div class="col-sm-6 col-md-4 ">
-				<h3>About</h3>
-				<ul>
-					<li style="text-align: left; margin-left: 120px;"><a href="/about_accueil">Home</a></li>
-					<li style="text-align: left; margin-left: 120px;"><a href="/about_profil">profile</a></li>
-					<li style="text-align: left; margin-left: 120px;"><a href="/about_schemas_base">Structure</a></li>
-				</ul>
-			</div>
-		</div>
-     </div>
-    
+
+    <!-------------------------------------Containers de bas de page---------------------------------------------------------->
+
+    <div class="container-fluid" id="end">
+        <div class="raw">
+            <div class="col-sm-6 col-md-4 col-md-offset-2">
+                <h3>Who are we ?</h3>
+                <ul>
+                    <li style="text-align: left; margin-left: 70px;"><a href="#contact">Our Team</a></li>
+                    <li style="text-align: left; margin-left: 70px;"><a href="#contact">E-Mails</a></li>
+                    <li style="text-align: left; margin-left: 70px;"><a href="api">Api doc 1</a></li>
+                    <li style="text-align: left; margin-left: 70px;"><a href="/static/apidoc/index.html">Api doc 2</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-6 col-md-4 ">
+                <h3>About</h3>
+                <ul>
+                    <li style="text-align: left; margin-left: 120px;"><a href="/about_accueil">Home</a></li>
+                    <li style="text-align: left; margin-left: 120px;"><a href="/about_profil">profile</a></li>
+                    <li style="text-align: left; margin-left: 120px;"><a href="/about_schemas_base">Structure</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    
-	
-	<!--<script src="bootstrap/js/bootstrap-select.min.js"></script>-->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	
-	<!--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/js/bootstrap-select.min.js"></script>-->
-    
-	
+
+
+    <!--<script src="bootstrap/js/bootstrap-select.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/js/bootstrap-select.min.js"></script>-->
+
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-   
+
     <script src="/static/bootstrap/js/bootstrap-select.js"></script>
     <script src="/static/bootstrap/bootstrap-player/js/bootstrap-player.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-	<script src="/static/bootstrap/js/bootstrap-combobox.js"></script>
+    <script src="/static/bootstrap/js/bootstrap-combobox.js"></script>
     <!--<script src="/static/bootstrap/js/my.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/static/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
@@ -373,9 +407,9 @@
     <script src="/static/rating.js"></script>
     <script src="/static/setHumeur.js"></script>
     <script src="/static/lookCheckBox.js"></script>
-	<script src="/static/getMusic.js"></script>
+    <script src="/static/getMusic.js"></script>
 
-  </body>
+</body>
 </html>
 
 
