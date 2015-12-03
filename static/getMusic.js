@@ -15,8 +15,8 @@ function getMusic(element) {
         type: 'GET',
         url: '/api/getMusic',
         data: info_send,
-        dataType: 'json',
-        //contentType: 'application/json; charset=utf-8', // Used only when POSTing data.
+        dataType: 'json',   // The type of data that you're expecting back from the server.
+        //contentType: 'application/json; charset=utf-8', // Used 'application/json' only when is NOT GETing data with query string.
         success: function (data) {
             // TODO This call is made to a not yet created Player object.
             Player.pause();
@@ -78,7 +78,7 @@ function onYouTubeIframeAPIReady() {
 
 // 4. The API will call this function when the video player is ready.
 function onPlayerReady(event) {
-    event.target.playVideo();
+    //event.target.playVideo();
 }
 
 // 5. The API calls this function when the player's state changes.
