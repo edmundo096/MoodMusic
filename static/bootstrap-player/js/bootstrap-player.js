@@ -3,7 +3,7 @@ jQuery(document).ready(PlayerAudio($))
 
 function PlayerAudio($) {
 	'use strict';
-	console.log($('audio[controls]'))
+	//console.log($('audio[controls]'))
 	$('audio[controls]').before(function(){
 		var song = this;
 			song.controls=false;
