@@ -1,0 +1,267 @@
+body {
+  padding-top: 50px;
+  height: 1080px;
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.inline-form input {
+   display: inline-block;
+   width: 100px;
+}
+
+[class*="col-"], footer {
+ /* border: 2px solid black;
+  border-radius: 6px;*/
+  line-height: 40px;
+  text-align: center;
+}
+
+#cherche{
+  text-align: center;
+}
+
+.sidenav {
+  position: fixed;
+  bottom: 0px;
+  top: 60px;
+  left: 0px;
+  background-color:#f5f5f5;
+  margin-top: 100px;
+  width: 240px;
+  text-transform: uppercase;
+}
+
+ul{
+  list-style: none;
+}
+
+p.spacer{
+  padding-top: 20px;
+}
+
+.couleur-body {
+	background-color: white;
+}
+
+
+.rating a {
+   float: right;
+   color: #aaa;
+   text-decoration: none;
+   font-size: 3em;
+   transition: color .4s;
+}
+
+
+
+.rating a:hover,
+.rating a:focus,
+.rating a:hover ~ a,
+.rating a:focus ~ a {
+   color: orange;
+   cursor: pointer;
+}
+
+#global{
+
+  margin-left: auto;
+  margin-right: auto;
+   width: 200px;
+}
+
+#header {
+    background-color:black;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+#nav {
+    line-height:30px;
+    background-color:#eeeeee;
+    height:300px;
+    
+    float:left;
+    padding:5px;        
+}
+
+code {
+  position: center;
+}
+pre code {
+  display : block;
+  font-size: 14px;
+  font-family: "Source Code Pro"
+  font-style: normal;
+  font-weight: 400;
+  word-wrap: normal;
+  white-space: pre;
+
+}
+pre {
+  background-color: #292b36;
+  color :#ffffff;
+  padding :10px;
+  border-radius: 6px;
+  position:relative;
+  padding: 9.5px;
+  height: 40px;
+}
+pre.language-html{
+  margin: 40px 0 20px 0 ;
+}
+
+#nav a {
+  text-decoration: none;
+  display : block;
+  padding: 2px 2px 2px 16px;
+  color: inherit;
+  font-size: 20px;
+}
+.li{
+  margin-left: 10px;
+}
+#section {
+    text-align:left;
+    float:left;
+    padding:10px;    
+}
+ul.nav-tabs{
+  margin:0;
+}
+.nav-tabs{
+  border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(221, 221, 221);
+}
+table{
+  display:table;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 20px 0;
+  border-color: grey;
+}
+.nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus{
+  color: #555;
+  cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    border-top-color: rgb(221, 221, 221);
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-right-color: rgb(221, 221, 221);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-bottom-color: transparent;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: rgb(221, 221, 221);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-radius: 4px 4px 0 0;
+}
+form{
+  margin-top: 20px;
+}
+ul {
+  padding:0;
+  font-size: 24px;
+}
+td.code{
+  font-size: 20px;
+    font-family: "Source Code Pro";
+    font-style: normal;
+    font-weight: 400;
+}
+td{
+  vertical-align: top;
+    padding: 2px 8px;
+    border: #e0e0e0 1px solid;
+}
+th{
+  background-color: #f5f5f5;
+  text-align: left;
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 700px;
+  padding:4px 8px;
+  border-top-color:rgb(224, 224, 224);
+  border-top-style: solid;
+    border-top-width: 1px;
+    border-right-color: rgb(224, 224, 224);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-bottom-color: rgb(224, 224, 224);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: rgb(224, 224, 224);
+    border-left-style: solid;
+    border-left-width: 1px;
+    font-size: 16px;
+}
+tr{
+  display:table-row;
+}
+tbody {
+  display :table-row-group;
+  vertical-align: middle;
+}
+td th {
+  display : table-cell;
+}
+thead{
+  display:table-header-group;
+  vertical-align: middle;
+  border-color: inherit;
+}
+#codes {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:left;
+    padding:5px; 
+    font-size: 20px;
+    border-radius: 6px;
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;    
+}
+#footer {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+    padding:5px;    
+}
+
+#end{
+	background-color:black ;
+	height:181px;
+}
+
+h3{
+	font-family: "Comic Sans MS", Verdana, Arial, "Arial Black";
+}
+
+.lft{
+
+	padding-left: 0px;
+}
+
+
+h6{
+   font-family: Aller, "Comic Sans MS", Verdana, Arial, "Arial Black";
+   font-size: medium;
+   padding-left: 30px;
+}
+
+h7{
+   font-family: "Comic Sans MS", Verdana, Arial, "Arial Black";
+   font-size: 17px;
+}
+
+h8{
+	font-family: "Comic Sans MS", Verdana, Arial, "Arial Black";
+	font-size: 40px;
+	color: black;
+}
