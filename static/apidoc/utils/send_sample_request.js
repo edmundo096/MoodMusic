@@ -69,11 +69,16 @@ define([
       } // for
 
       // send AJAX request, catch success or error callback
+      // ADDED: When GET, use default URL encoded params method, and give jQuery the original Object with params.
       $.ajax({
           url: url,
           dataType: "json",
-          contentType: "application/json",
-          data: JSON.stringify(param),
+          contentType: type.toUpperCase() == 'GET' ?
+              "application/x-www-form-urlencoded; charset=UTF-8" :
+              "application/json; charset=UTF-8",
+          data: type.toUpperCase() == 'GET' ?
+              param :
+              JSON.stringify(param),
           headers: header,
           type: type.toUpperCase(),
           success: displaySuccess,
