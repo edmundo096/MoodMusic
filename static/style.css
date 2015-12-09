@@ -16,8 +16,10 @@ body {
 [class*="col-"], footer {
  /* border: 2px solid black;
   border-radius: 6px;*/
-  line-height: 40px;
-  text-align: center;
+
+    /* Distorts the height of the text */
+    /*line-height: 40px;*/
+    text-align: center;
 }
 
 #cherche{
