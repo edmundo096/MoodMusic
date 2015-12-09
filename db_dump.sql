@@ -21,27 +21,27 @@ USE `web_db`;
 -- Table structure for table `avis`
 --
 
-DROP TABLE IF EXISTS `avis`;
+DROP TABLE IF EXISTS `rates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `avis` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `useremail` varchar(30) NOT NULL,
   `idmusic` int(10) unsigned NOT NULL,
-  `note` smallint(5) unsigned DEFAULT NULL,
-  `humeur` longtext,
+  `rating` smallint(5) unsigned DEFAULT NULL,
+  `mood` longtext,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `avis`
+-- Dumping data for table `rates`
 --
 
-LOCK TABLES `avis` WRITE;
-/*!40000 ALTER TABLE `avis` DISABLE KEYS */;
-INSERT INTO `avis` VALUES (7,'lukatoni1992@gmail.com',52,5,'Cool'),(8,'lukatoni1992@gmail.com',65,3,'Cool'),(9,'lukatoni1992@gmail.com',56,3,'Cool'),(10,'foo@example.com',52,2,'Codeur'),(11,'foo@example.com',53,4,NULL),(12,'foo@example.com',54,5,NULL),(13,'foo@example.com',55,5,NULL),(14,'foo@example.com',56,3,NULL),(15,'foo@example.com',57,2,NULL),(16,'foo@example.com',58,1,NULL),(17,'foo@example.com',60,2,NULL),(18,'foo@example.com',61,4,NULL),(19,'foo@example.com',62,5,NULL),(20,'foo@example.com',63,4,NULL),(21,'foo@example.com',64,2,NULL),(22,'foo@example.com',67,3,NULL),(23,'foo@example.com',66,4,NULL),(24,'a@b.com',52,5,'Calme'),(25,'lukatoni1992@gmail.com',1,NULL,'Gaming'),(26,'lukatoni1992@gmail.com',16,NULL,'Chill'),(27,'lukatoni1992@gmail.com',53,4,'Motivee'),(28,'lukatoni1992@gmail.com',54,4,'Motivee'),(29,'celine@example.com',53,5,'Creative'),(30,'celine@example.com',52,4,'Triste'),(31,'me@example.com',54,5,'Triste'),(32,'me@example.com',56,5,'Chill'),(33,'asd@example.com',52,3,'Chill'),(34,'asd@example.com',118,4,NULL);
-/*!40000 ALTER TABLE `avis` ENABLE KEYS */;
+LOCK TABLES `rates` WRITE;
+/*!40000 ALTER TABLE `rates` DISABLE KEYS */;
+INSERT INTO `rates` VALUES (7,'lukatoni1992@gmail.com',52,5,'Cool'),(8,'lukatoni1992@gmail.com',65,3,'Cool'),(9,'lukatoni1992@gmail.com',56,3,'Cool'),(10,'foo@example.com',52,2,'Codeur'),(11,'foo@example.com',53,4,NULL),(12,'foo@example.com',54,5,NULL),(13,'foo@example.com',55,5,NULL),(14,'foo@example.com',56,3,NULL),(15,'foo@example.com',57,2,NULL),(16,'foo@example.com',58,1,NULL),(17,'foo@example.com',60,2,NULL),(18,'foo@example.com',61,4,NULL),(19,'foo@example.com',62,5,NULL),(20,'foo@example.com',63,4,NULL),(21,'foo@example.com',64,2,NULL),(22,'foo@example.com',67,3,NULL),(23,'foo@example.com',66,4,NULL),(24,'a@b.com',52,5,'Calme'),(25,'lukatoni1992@gmail.com',1,NULL,'Gaming'),(26,'lukatoni1992@gmail.com',16,NULL,'Chill'),(27,'lukatoni1992@gmail.com',53,4,'Motivee'),(28,'lukatoni1992@gmail.com',54,4,'Motivee'),(29,'celine@example.com',53,5,'Creative'),(30,'celine@example.com',52,4,'Triste'),(31,'me@example.com',54,5,'Triste'),(32,'me@example.com',56,5,'Chill'),(33,'asd@example.com',52,3,'Chill'),(34,'asd@example.com',118,4,NULL);
+/*!40000 ALTER TABLE `rates` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -53,16 +53,16 @@ DROP TABLE IF EXISTS `music`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `music` (
   `idmusic` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `titre` varchar(120) DEFAULT NULL,
-  `compositeur` varchar(60) DEFAULT NULL,
-  `nomAlbum` varchar(30) NOT NULL,
-  `annee` year(4) DEFAULT NULL,
+  `title` varchar(120) DEFAULT NULL,
+  `artist` varchar(60) DEFAULT NULL,
+  `album` varchar(30) NOT NULL,
+  `year` year(4) DEFAULT NULL,
   `label` varchar(120) DEFAULT NULL,
   `source` varchar(45) NOT NULL,
   `imagePath` longtext,
   `musicPath` longtext,
-  `caract` longtext,
-  `dateAjout` date DEFAULT NULL,
+  `genre` longtext,
+  `dateAdded` date DEFAULT NULL,
   PRIMARY KEY (`idmusic`)
 ) ENGINE=InnoDB AUTO_INCREMENT=168 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;

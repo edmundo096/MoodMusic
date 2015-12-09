@@ -150,19 +150,19 @@ def accueil():
     if 'pseudo' in session:
         # Get a playlist from DB if client does NOT has one.
         if not session['playlist']:
-            for music in DbFunct.listeMusiqueYoutube():
-                session['playlist'].append({'artist': music.compositeur , 'album': music.nomAlbum, 'title': music.titre})
+            for music in DbFunct.listeMusicYoutube():
+                session['playlist'].append({'artist': music.artist , 'album': music.album, 'title': music.title})
 
         liste = session['playlist']
         print "accueil liste: {liste}".format(liste=liste)
 
         # TODO seems to be broken.. Get the first song from the list, or from the request arguments.
-        if (request.args.get('compositeur') or request.args.get('titre')) is None:
+        if (request.args.get('artist') or request.args.get('title')) is None:
             music = DbFunct.get_song_data(liste[0]['artist'], liste[0]['album'],
                                           liste[0]['title'])
         else:
-            music = DbFunct.get_song_data(request.args.get('compositeur'), request.args.get('album'),
-                                          request.args.get('titre'))
+            music = DbFunct.get_song_data(request.args.get('artist'), request.args.get('album'),
+                                          request.args.get('title'))
 
         return render_template('accueil.html', music=music, musiqueliste=liste, pseudo=session['pseudo'])
 
@@ -171,41 +171,41 @@ def accueil():
 
 
 @app.route('/accueil', methods=['POST'])
-def chercher():
+def search():
     """route to get the Home page of the application in case where a mood is set by the user """
     if 'pseudo' in session:
         # Check if there was any search.
         if request.form['search'] is not None:
-            recherche = escape(request.form['search']).encode("utf-8")
-            print recherche
+            search = escape(request.form['search']).encode("utf-8")
+            print search
 
-            listeMotCle = recherche.split()
+            listeKeyword = search.split()
             session['playlist'] = []
 
             # Check if search was empty, redirect to home.
-            if not listeMotCle:
+            if not listeKeyword:
                 return redirect("/accueil")
 
             # Search music by arguments, or by a Mood (set by the same user).
-            if (listeMotCle[0] != "humeur:"):
-                listMusic = DbFunct.chercherMusiqueYoutube(listeMotCle)
+            if (listeKeyword[0] != "mood:"):
+                listMusic = DbFunct.searchMusiqueYoutube(listeKeyword)
             else:
-                listMusic = DbFunct.algoMatchYoutube(listeMotCle[1:], session['email'])
+                listMusic = DbFunct.algoMatchYoutube(listeKeyword[1:], session['email'])
 
             # Cerate playlist.
             for music in listMusic:
-                session['playlist'].append({'artist': music.compositeur , 'album': music.nomAlbum, 'title': music.titre})
+                session['playlist'].append({'artist': music.artist , 'album': music.album, 'title': music.title})
             print "accueil POST - session['playlist']: "
             print session['playlist']
 
             # Get the 1 st song from the DB for the client "music" variable (for metadata and src load).
-            listeMusiques = session['playlist']
-            if not listeMusiques:
+            listeMusic = session['playlist']
+            if not listeMusic:
                 return redirect("/accueil")
             else:
-                music = DbFunct.get_song_data(listeMusiques[0]['artist'], listeMusiques[0]['album'],
-                                              listeMusiques[0]['title'])
-                return render_template('accueil.html', music=music, musiqueliste=listeMusiques,
+                music = DbFunct.get_song_data(listeMusic[0]['artist'], listeMusic[0]['album'],
+                                              listeMusic[0]['title'])
+                return render_template('accueil.html', music=music, musicliste=listeMusic,
                                        pseudo=session['pseudo'])
         else:
             return redirect("/accueil")
@@ -254,7 +254,7 @@ def getMusic():
     music = DbFunct.get_song_data(request.args.get('artist'), request.args.get('album'), request.args.get('title'))
     print "api getMusic() music: "
     print music
-    return jsonify({'Artist': music.compositeur, 'Album': music.nomAlbum, 'Titre': music.titre, 'Annee': music.annee,
+    return jsonify({'Artist': music.artist, 'Album': music.album, 'Title': music.title, 'Year': music.year,
                     'Label': music.label, 'musicPath': music.musicPath, 'imagePath': music.imagePath})
 
 
@@ -267,24 +267,24 @@ def rating():
     @apiParam {string} artist The exact song's artist name on the system.
     @apiParam {string} album The exact song's album name on the system.
     @apiParam {string} title The exact song's title on the system.
-    @apiParam {number{1}=1,2,3,4,5} note The rating given to the song.
+    @apiParam {number{1}=1,2,3,4,5} rating The rating given to the song.
     @apiParam {string} email TODO, The email of the user that post the rating.
 
     @apiDescription
     API note to set a note for a song.
     Returns JSON object.
     """
-    if request.json['artist'] == None or request.json['album'] == None or request.json['title'] == None or request.json['note'] == None:
+    if request.json['artist'] == None or request.json['album'] == None or request.json['title'] == None or request.json['rating'] == None:
         return jsonify({'result': 0})
 
     if not request.json:
         abort(300)
     email = session['email']
     music = DbFunct.get_song_data(request.json['artist'], request.json['album'], request.json['title'])
-    note = request.json['note']
+    rating = request.json['rating']
 
     # TODO, fails if the music/song was not found (= None).
-    DbFunct.insererNote(email, music, note)
+    DbFunct.insertRating(email, music, rating)
     return jsonify({'succes': 1})
 
 
@@ -297,24 +297,24 @@ def setHumeur():
     @apiParam {string} artist The exact song's artist name on the system.
     @apiParam {string} album The exact song's album name on the system.
     @apiParam {string} title The exact song's title on the system.
-    @apiParam {string} humeur The mood classification given to the song.
+    @apiParam {string} mood The mood classification given to the song.
                             TODO, enumerate the moods.
     @apiParam {string} email TODO, The email of the user that post the mood classfication.
 
     @apiDescription
     Route to post a mood to song.
     """
-    if request.json['artist'] == None or request.json['album'] == None or request.json['title'] == None or request.json['humeur'] == None:
+    if request.json['artist'] == None or request.json['album'] == None or request.json['title'] == None or request.json['mood'] == None:
         return jsonify({'result': 0})
 
     if not request.json:
         abort(300)
     email = session['email']
     music = DbFunct.get_song_data(request.json['artist'], request.json['album'], request.json['title'])
-    humeur = request.json['humeur']
+    mood = request.json['mood']
 
     # TODO, fails if the music/song was not found (= None).
-    DbFunct.insererHumeur(email, music, humeur)
+    DbFunct.insertMood(email, music, mood)
     return jsonify({'succes': 1})
 
 
