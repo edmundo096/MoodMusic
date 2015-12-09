@@ -235,7 +235,7 @@
                             </audio>
 
                             <!-- Main Player -->
-                            <div class="undefined well container-fluid playa"
+                            <div id="player" class="well container-fluid playa"
                                  data-source="{{ music.musicPath }}"
                                  data-source-type="youtube"
                                  data-info-album-art="{{ music.imagePath }}"
@@ -245,6 +245,7 @@
                                  data-info-label="{{ music.Label }}"
                                  data-info-year="{{ music.Annee }}">
 
+                                <!-- Toggle button -->
                                 <div class="playa-toggle-holder btn-group center-block row col-sm-12">
                                     <button class="btn btn-default btn-lg btn-block row col-sm-12" style="opacity:0.3"
                                             title="" data-original-title="Details">
@@ -252,6 +253,7 @@
                                     </button>
                                 </div>
 
+                                <!-- Data section -->
                                 <section class="playa-data-sec center-block row col-sm-12 collapse in" aria-expanded="true">
                                     <img class="thumbnail" src="https://farm9.staticflickr.com/8642/16106988340_058071cdbe_z.jpg">
 
@@ -286,23 +288,38 @@
                                     </table>
                                 </section>
 
+                                <!-- Player Controls section -->
                                 <section class="btn-group center-block row col-sm-12">
+                                    <!-- Play/Pause button -->
                                     <button class="btn btn-default col-sm-1"><i class="glyphicon glyphicon-play"></i></button>
-                                    <div class="btn btn-default col-sm-4 hidden-xs"><input type="range" min="0" value="0" class="seek"
-                                                                                           max="198.844082" step="1.9884408199999999"
-                                                                                           style="background: -webkit-linear-gradient(left, rgb(223, 240, 216) 0%, rgb(223, 240, 216) 97.000000231337%, rgba(223, 240, 216, 0) 97.000000231337%, rgba(217, 237, 247, 0) 97.000000231337%, rgb(217, 237, 247) 97.000000231337%, rgb(217, 237, 247) 100%, rgba(217, 237, 247, 0) 100%) rgb(221, 221, 221);">
+
+                                    <!-- Time slider -->
+                                    <div class="btn btn-default col-sm-4 hidden-xs">
+                                        <input type="range" min="0" value="0" class="seek" max="198.844082" step="1.9884408199999999"
+                                               style="background: -webkit-linear-gradient(left, rgb(223, 240, 216) 0%, rgb(223, 240, 216) 97.000000231337%, rgba(223, 240, 216, 0) 97.000000231337%, rgba(217, 237, 247, 0) 97.000000231337%, rgb(217, 237, 247) 97.000000231337%, rgb(217, 237, 247) 100%, rgba(217, 237, 247, 0) 100%) rgb(221, 221, 221);">
                                     </div>
+
+                                    <!-- Current Time / Reset button -->
                                     <button class="btn btn-default col-sm-3"
                                             data-original-title="Click to Reset<hr style=&quot;padding:0; margin:0;&quot; />Position: 03:12"
                                             title="">03:18
                                     </button>
+
+                                    <!-- Mute / Volume icon -->
                                     <button class="btn btn-default col-sm-1"><i class="glyphicon glyphicon-volume-up"></i></button>
-                                    <div class="btn btn-default row col-sm-3 hidden-xs"><input type="range" min="0" max="1" step="0.01" value="1">
+
+                                    <!-- Volume slider -->
+                                    <div class="btn btn-default row col-sm-3 hidden-xs">
+                                        <input type="range" min="0" max="1" step="0.01" value="1">
                                     </div>
                                 </section>
-                                <div class="row col-sm-10 col-sm-offset-1"><a class="text-muted btn btn-link btn-sm"
-                                                                              href="https://github.com/iainhouston">Music: Iain Houston and Felix
-                                    Gibbons.</a></div>
+
+                                <!-- Attribution -->
+                                <div class="row col-sm-10 col-sm-offset-1">
+                                    <a class="text-muted btn btn-link btn-sm" href="https://github.com/iainhouston">
+                                        Music: Iain Houston and Felix Gibbons.
+                                    </a>
+                                </div>
                             </div>
                             <!-- / Main Player -->
 
