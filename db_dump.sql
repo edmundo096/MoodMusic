@@ -24,7 +24,7 @@ USE `web_db`;
 DROP TABLE IF EXISTS `rates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `avis` (
+CREATE TABLE `rates` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `useremail` varchar(30) NOT NULL,
   `idmusic` int(10) unsigned NOT NULL,
