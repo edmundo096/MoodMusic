@@ -19,13 +19,13 @@ function getMusic(element) {
             var player = $('#player');
             var params = {
                 sourceType: 'youtube',  // TODO, read from server.
-                source: data.musicPath,
-                infoAlbumArt: data.imagePath,   // Currently not used.
-                infoAlbumTitle: data.Album,
-                infoArtist: data.Artist,
-                infoTitle: data.Titre,
-                infoLabel: data.Label,
-                infoYear: data.Annee
+                source: data.music_path,
+                infoAlbumArt: data.image_path,   // Currently not used.
+                infoAlbumTitle: data.album,
+                infoArtist: data.artist,
+                infoTitle: data.title,
+                infoLabel: data.label,
+                infoYear: data.year
             };
             player.trigger('loadNew', params);
         },

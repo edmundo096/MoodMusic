@@ -254,8 +254,8 @@ def getMusic():
     music = DbFunct.get_song_data(request.args.get('artist'), request.args.get('album'), request.args.get('title'))
     print "api getMusic() music: "
     print music
-    return jsonify({'Artist': music.artist, 'Album': music.album, 'Title': music.title, 'Year': music.year,
-                    'Label': music.label, 'musicPath': music.musicPath, 'imagePath': music.imagePath})
+    return jsonify({'artist': music.artist, 'album': music.album, 'title': music.title, 'year': music.year,
+                    'label': music.label, 'music_path': music.musicPath, 'image_path': music.imagePath})
 
 
 @app.route('/api/note', methods=['POST'])
