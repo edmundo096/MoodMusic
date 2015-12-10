@@ -60,7 +60,7 @@
             
           </ul>
  	   <ul class="nav navbar-nav navbar-right">
-             <li><a href="/profile"><h6><span class="glyphicon glyphicon-user"  style="font-size:17px;" ></span>  {{pseudo}}</h6></a></li>
+             <li><a href="/profile"><h6><span class="glyphicon glyphicon-user"  style="font-size:17px;" ></span>  {{username}}</h6></a></li>
              <li><a href="/logout"><h6><span class="glyphicon glyphicon-remove"  style="font-size:17px;" ></span>  Log Out</h6></a></li>
            </ul> 
           
@@ -112,7 +112,7 @@
         </thead>
         <tbody>
         <tr>
-          <td class= "code">Pseudo </td>
+          <td class= "code">username </td>
           <td> VARCHAR primary key</td>
           <td><p>User name</p></td>
         </tr>
@@ -138,7 +138,7 @@
       <form role="form" action="/register" method="POST" class="form-register">
                         <div class="form-group">
           <label class="control-label" for="input-username">Username</label>  
-          <input type="text" name="pseudo" id="pseudo" class="form-control " placeholder="Pseudo" tabindex="3">
+          <input type="text" name="username" id="username" class="form-control " placeholder="username" tabindex="3">
       </div>
       
       <div class="form-group">

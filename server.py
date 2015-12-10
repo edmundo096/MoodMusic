@@ -42,7 +42,7 @@ def start():
 
 @app.route('/api', methods=['GET'])
 def apidoc():
-    return render_template('api.html', pseudo=session['pseudo'])
+    return render_template('api.html', username=session['username'])
 
 #----------------------------------------
 # User handling
@@ -57,7 +57,7 @@ def register():
 @app.route('/register', methods=['POST'])
 def register_post():
     """Route to Post the user Information in the DB (making call to the insertUser function ) and redirect to the authentication page"""
-    first_name = escape(request.form['pseudo'])
+    first_name = escape(request.form['username'])
     email = escape(request.form['email'])
     password = escape(request.form['password'])
     # Encrypt password.
@@ -99,7 +99,7 @@ def login():
     if user is None:
         return redirect(url_for('page_authent'))
     else:
-        session['pseudo'] = user['pseudo']
+        session['username'] = user['username']
         session['email'] = user['email']
         session['password'] = user['password']
         session['playlist'] = []
@@ -124,7 +124,7 @@ def profile():
 
     # GET
     if request.method == 'GET':
-        return render_template('profil.html', email=session['email'], pseudo=session['pseudo'], list_music=liste,
+        return render_template('profil.html', email=session['email'], username=session['username'], list_music=liste,
                                image=img[0])
     # POST
     file = request.files['file']
@@ -135,7 +135,7 @@ def profile():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         filename = app.config['UPLOAD_FOLDER'].split(".")[1] + '/' + filename
         DbFunct.updateUserImage(filename, session['email'])
-        return render_template('profil.html', email=session['email'], pseudo=session['pseudo'], list_music=liste,
+        return render_template('profil.html', email=session['email'], username=session['username'], list_music=liste,
                                image=filename)
 
 
@@ -147,7 +147,7 @@ def profile():
 @app.route('/accueil', methods=['GET'])
 def accueil():
     """Main route that makes call to the recupMusic function and return the home page if the email is in the session    """
-    if 'pseudo' in session:
+    if 'username' in session:
         # Get a playlist from DB if client does NOT has one.
         if not session['playlist']:
             for music in DbFunct.listeMusicYoutube():
@@ -164,7 +164,7 @@ def accueil():
             music = DbFunct.get_song_data(request.args.get('artist'), request.args.get('album'),
                                           request.args.get('title'))
 
-        return render_template('accueil.html', music=music, musiqueliste=liste, pseudo=session['pseudo'])
+        return render_template('accueil.html', music=music, musiqueliste=liste, username=session['username'])
 
     else:
         return redirect(url_for('page_authent'))
@@ -173,7 +173,7 @@ def accueil():
 @app.route('/accueil', methods=['POST'])
 def search():
     """route to get the Home page of the application in case where a mood is set by the user """
-    if 'pseudo' in session:
+    if 'username' in session:
         # Check if there was any search.
         if request.form['search'] is not None:
             search = escape(request.form['search']).encode("utf-8")
@@ -206,7 +206,7 @@ def search():
                 music = DbFunct.get_song_data(listeMusic[0]['artist'], listeMusic[0]['album'],
                                               listeMusic[0]['title'])
                 return render_template('accueil.html', music=music, musicliste=listeMusic,
-                                       pseudo=session['pseudo'])
+                                       username=session['username'])
         else:
             return redirect("/accueil")
     else:
@@ -218,14 +218,14 @@ def top_music():
     """Route to Get the list of Top Music for a user according to the email , return top.html page"""
     email = session['email']
     liste = DbFunct.listTopMusicAll()
-    return render_template('top.html', list_music=liste, pseudo=session['pseudo'])
+    return render_template('top.html', list_music=liste, username=session['username'])
 
 
 @app.route('/last_music')
 def last_music():
     """Route to Get the last music list, return last.html"""
     liste = DbFunct.lastMusic()
-    return render_template('last.html', list_music=liste, pseudo=session['pseudo'])
+    return render_template('last.html', list_music=liste, username=session['username'])
 
 
 #========================================

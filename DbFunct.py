@@ -11,11 +11,11 @@ def init():
     return connection
 
 
-def insertUser(pseudo_u, email_u, password_u):
+def insertUser(username_u, email_u, password_u):
     """insert the User using his username, email address and password """
     connection = init()
     sql = "INSERT INTO users SET email='" + email_u.encode("utf-8") + "', password='" + password_u.encode(
-        "utf-8") + "', pseudo='" + pseudo_u.encode("utf-8") + "'"
+        "utf-8") + "', username='" + username_u.encode("utf-8") + "'"
     connection.execute(sql)
 
 
@@ -166,11 +166,11 @@ def insertMood(email, music, mood):
     """insert a mood to a song """
     connection = init()
     rates = []
-    sql = "SELECT * FROM rates WHER rates.useremail='" + email.encode("utf-8") + "' AND rates.idmusic = " + str(
+    sql = "SELECT * FROM rates WHERE rates.useremail='" + email.encode("utf-8") + "' AND rates.idmusic = " + str(
         music.idmusic)
 
-    for mod in connection.execute(sql):
-        rates.append(mod)
+    for moodListResult in connection.execute(sql):
+        rates.append(moodListResult)
 
     if not rates:
         sql = "INSERT INTO rates SET useremail = '" + email.encode("utf-8") + "', idmusic = " + str(
