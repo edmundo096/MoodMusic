@@ -234,6 +234,7 @@
                                 <source id=audiosrc src="{{ music.musicPath }}" type="audio/mpeg"/>
                             </audio>
 
+
                             <!-- Main Player -->
                             <div id="player" class="well container-fluid playa"
                                  data-source="{{ music.musicPath }}"
@@ -247,15 +248,16 @@
 
                                 <!-- Toggle button -->
                                 <div class="playa-toggle-holder btn-group center-block row col-sm-12">
-                                    <button class="btn btn-default btn-lg btn-block row col-sm-12" style="opacity:0.3"
-                                            title="" data-original-title="Details">
+                                    <button id="button-toggle" title="Show or hide details"
+                                            class="btn btn-default btn-lg btn-block row col-sm-12" style="opacity:0.3"
+                                            data-original-title="Details">
                                         <i class="glyphicon glyphicon-align-justify" style="top:-3px"></i>
                                     </button>
                                 </div>
 
                                 <!-- Data section -->
-                                <section class="playa-data-sec center-block row col-sm-12 collapse in" aria-expanded="true">
-                                    <img class="thumbnail" src="https://farm9.staticflickr.com/8642/16106988340_058071cdbe_z.jpg">
+                                <section id="section-data" class="playa-data-sec center-block row col-sm-12 collapse in" aria-expanded="true">
+                                    <!-- <img class="thumbnail" src="https://farm9.staticflickr.com/8642/16106988340_058071cdbe_z.jpg"> -->
 
                                     <!-- Youtube player -->
                                     <div class="embed-responsive embed-responsive-16by9">
@@ -264,53 +266,56 @@
 
                                     <table class="table table-condensed">
                                         <tbody>
-                                        <tr>
+                                        <tr id="row-artist">
                                             <th>Artist</th>
-                                            <td>Iain Houston and Felix Gibbons</td>
+                                            <td>-</td>
                                         </tr>
-                                        <tr>
+                                        <tr id="row-title">
                                             <th>Title</th>
-                                            <td>BeBop Aliens</td>
+                                            <td>-</td>
                                         </tr>
-                                        <tr>
+                                        <tr id="row-album">
                                             <th>Album</th>
-                                            <td>8874</td>
+                                            <td>-</td>
                                         </tr>
-                                        <tr>
+                                        <tr id="row-label">
                                             <th>Label</th>
-                                            <td>Independent</td>
+                                            <td>-</td>
                                         </tr>
-                                        <tr>
+                                        <tr id="row-year">
                                             <th>Year</th>
-                                            <td>2005</td>
+                                            <td>-</td>
                                         </tr>
                                         </tbody>
                                     </table>
                                 </section>
 
                                 <!-- Player Controls section -->
-                                <section class="btn-group center-block row col-sm-12">
+                                <section id="section-player-controls" class="btn-group center-block row col-sm-12">
                                     <!-- Play/Pause button -->
-                                    <button class="btn btn-default col-sm-1"><i class="glyphicon glyphicon-play"></i></button>
+                                    <button id="button-play-pause" class="btn btn-default col-sm-1"><i class="glyphicon glyphicon-play"></i></button>
 
                                     <!-- Time slider -->
                                     <div class="btn btn-default col-sm-4 hidden-xs">
-                                        <input type="range" min="0" value="0" class="seek" max="198.844082" step="1.9884408199999999"
+                                        <input id="sider-time" type="range" min="0" value="0" class="seek" max="198.844082" step="1.9884408199999999"
                                                style="background: -webkit-linear-gradient(left, rgb(223, 240, 216) 0%, rgb(223, 240, 216) 97.000000231337%, rgba(223, 240, 216, 0) 97.000000231337%, rgba(217, 237, 247, 0) 97.000000231337%, rgb(217, 237, 247) 97.000000231337%, rgb(217, 237, 247) 100%, rgba(217, 237, 247, 0) 100%) rgb(221, 221, 221);">
                                     </div>
 
                                     <!-- Current Time / Reset button -->
-                                    <button class="btn btn-default col-sm-3"
+                                    <button id="button-current-time-reset" class="btn btn-default col-sm-3"
                                             data-original-title="Click to Reset<hr style=&quot;padding:0; margin:0;&quot; />Position: 03:12"
-                                            title="">03:18
+                                            title="">
+                                        03:18
                                     </button>
 
                                     <!-- Mute / Volume icon -->
-                                    <button class="btn btn-default col-sm-1"><i class="glyphicon glyphicon-volume-up"></i></button>
+                                    <button id="button-mute" class="btn btn-default col-sm-1">
+                                        <i class="glyphicon glyphicon-volume-up"></i>
+                                    </button>
 
                                     <!-- Volume slider -->
                                     <div class="btn btn-default row col-sm-3 hidden-xs">
-                                        <input type="range" min="0" max="1" step="0.01" value="1">
+                                        <input id="sider-volume" type="range" min="0" max="1" step="0.01" value="1">
                                     </div>
                                 </section>
 

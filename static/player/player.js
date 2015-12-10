@@ -1,5 +1,280 @@
 /* global jQuery */
-(function ($) {'use strict';
+(function ($) {
+    'use strict';
+
+    var jqPlayer                = $('#player');
+
+    var jqButtonToggle          = $('#button-toggle');
+    var jqSectionData           = $('#section-data');
+
+    var jqSectionPlayerControls = $('#section-player-controls');
+    var jqButtonPlayPause       = $('#button-play-pause');
+    var jqSliderTime            = $('#sider-time');
+    var jqButtonCurrentTimeReset= $('#button-current-time-reset');
+    var jqButtonMute            = $('#button-mute');
+    var jqSliderVolume          = $('#sider-volume');
+
+
+    // Process YouTube Div to iFrame.
+    // Save ytPlayer as window global variable.
+    window.onYouTubeIframeAPIReady = function() {
+        window.ytPlayer = new YT.Player('yt-player', {
+            height: '390',
+            width: '640',
+            videoId: jqPlayer.data('source'),
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange,
+                'onError': onPlayerError
+            },
+            playerVars: {
+                controls: 0
+            }
+        });
+    };
+
+    // Load the YouTube iFrame API script.
+    $('script').first().before(function() {
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        return tag;
+    });
+
+    // Set up buttons.
+    jqButtonToggle.click(function () { jqSectionData.collapse('toggle'); });
+    jqButtonToggle.tooltip({'container': 'body', 'placement': 'top', 'html': true});
+
+    // Set up player event for loading new videos.
+    jqPlayer.on('loadNew', function(event, params) {
+        // If no parameters, exit.
+        if (!params) { console.log('Player: Emtpy parameters.'); return; }
+
+        reloadData(params);
+    });
+
+    // Set initial information data load.
+    initialLoadData();
+
+
+    var load_error = function () {
+        // console.log('error');
+        jqPlayer.find('.btn').addClass('disabled');
+        jqPlayer.find('input[type="range"]').hide();
+        jqPlayer.find('.glyphicon-refresh').text('Error');
+        jqPlayer.find('.glyphicon-refresh').parent().attr('title', 'There was an error loading the audio.');
+        jqPlayer.find('.glyphicon-refresh').parent().tooltip('fixTitle');
+        jqPlayer.find('.glyphicon-refresh').removeClass('glyphicon glyphicon-refresh spin');
+    }; // load_error
+
+
+    // Function to update the Time from YT.
+    var updateTimeFromYT = function() {
+        var percentageLoaded = ytPlayer.getVideoLoadedFraction();
+        var currentTime = ytPlayer.getCurrentTime();
+        var duration = ytPlayer.getDuration();
+
+        // Create a simulated TimeRanges Object with only 1 range.
+        //srcTag.buffered = {
+        //    length: 1,
+        //    start: function(i) { return 0; },
+        //    end: function(i) { return duration * percentageLoaded; }
+        //};
+        //srcTag.currentTime = currentTime;
+        //srcTag.duration = duration;
+        //srcTag.paused = ytPlayer.getPlayerState() != YT.PlayerState.PLAYING;
+        //srcTag.networkState = 0;
+        //srcTag.readyState = 0;  // Only used 1 time at setup.
+        //srcTag.loop = 0;
+        //srcTag.muted = ytPlayer.isMuted();
+        //srcTag.volume = ytPlayer.getVolume()/100;
+
+        jqSliderTime.val(currentTime);
+        jqButtonCurrentTimeReset.text(currentTime);
+    };
+    // Closure Function to update the Volume and Mute controls, only if there are changes from YT since last update.
+    var updateVolumeFromYT = function() {
+        var previousVolume, wasMuted;
+        return function() {
+            var volume = ytPlayer.getVolume() / 100;
+            var isMuted = ytPlayer.isMuted();
+
+            // Exit if the previous values are still the same.
+            if (volume === previousVolume && isMuted === wasMuted)
+                return;
+
+            // Else, modify DOM.
+            if (volume > 0.5 && !isMuted) {
+                jqButtonMute.html('<i class="glyphicon glyphicon-volume-up"></i>');
+            } else if (volume < 0.5 && volume >= 0 && !isMuted) {
+                jqButtonMute.html('<i class="glyphicon glyphicon-volume-down"></i>');
+            } else {
+                jqButtonMute.html('<i class="glyphicon glyphicon-volume-off"></i>');
+            }
+            jqSliderVolume.val(volume);
+        };
+    }();
+    // Closure Function to turn On or Off the Time updating intervals.
+    var updateTimeFromYTInterval = function() {
+        var intervalId;
+        return function(active) {
+            // Clear last interval.
+            window.clearInterval(intervalId);
+            // Set a new interval if needed.
+            if (active)
+                intervalId = window.setInterval(updateTimeFromYT, 500);
+        };
+    }();
+    // Closure Function to turn On or Off the Volume updating intervals.
+    var updateVolumeFromYTInterval = function() {
+        var intervalId;
+        return function(active) {
+            // Clear last interval.
+            window.clearInterval(intervalId);
+            // Set a new interval if needed.
+            if (active)
+                intervalId = window.setInterval(updateVolumeFromYT, 500);
+        };
+    }();
+
+
+    function setPlayButtonStateAndTimeUpdatingInterval(isPlaying) {
+        if (isPlaying) {
+            jqButtonPlayPause.html('<i class="glyphicon glyphicon-pause"></i>');
+            updateTimeFromYTInterval(true);
+        }
+        else {
+            jqButtonPlayPause.html('<i class="glyphicon glyphicon-play"></i>');
+            updateTimeFromYTInterval(false);
+        }
+    }
+
+    function onPlayerReady(event) {
+        var ytPlayer = event.target;
+
+        // Initial controls update from YouTube player (except for play/pause, since is updated from stateChange).
+        updateTimeFromYT();
+        updateVolumeFromYT();
+        // Start volume update interval.
+        updateVolumeFromYTInterval(true);
+
+        // Set events....................................................
+
+        // Play/Pause
+        jqButtonPlayPause.click(function(eventObject) {
+            var state = ytPlayer.getPlayerState();
+
+            if (state != YT.PlayerState.PLAYING) {
+                ytPlayer.playVideo();
+                setPlayButtonStateAndTimeUpdatingInterval(true);
+            }
+            else if (state != YT.PlayerState.PAUSED) {
+                ytPlayer.pauseVideo();
+                setPlayButtonStateAndTimeUpdatingInterval(false);
+            }
+        });
+
+        // Time slider.
+        jqSliderTime.mousedown(function(eventObject) {
+            // Stop updating Time from YT.
+            updateTimeFromYTInterval(false);
+        });
+        jqSliderTime.on('input', function(eventObject) {
+            // Stop updating Time from YT (in case of no mouse), and seek without buffering.
+            updateTimeFromYTInterval(false);
+            ytPlayer.seekTo(eventObject.target.value, false);
+        });
+        jqSliderTime.change(function(eventObject) {
+            // Resume updating Time from YT, and seek with buffering.
+            updateTimeFromYTInterval(true);
+            ytPlayer.seekTo(eventObject.target.value, true);
+        });
+
+        // Time reset.
+        jqButtonCurrentTimeReset.click(function(eventObject) {
+            ytPlayer.seekTo(0, true);
+        });
+
+        // Mute.
+        jqButtonMute.click(function(eventObject) {
+            ytPlayer.isMuted() ? ytPlayer.unMute() : ytPlayer.mute();
+            updateVolumeFromYT();
+        });
+
+        // Volume slider.
+        jqSliderVolume.mousedown(function(eventObject) {
+            // Stop updating Volume from YT.
+            updateVolumeFromYTInterval(false);
+        });
+        jqSliderVolume.on('input', function(eventObject) {
+            // Stop updating Volume from YT (in case of no mouse), and change Volume.
+            updateVolumeFromYTInterval(false);
+            ytPlayer.setVolume(eventObject.target.value * 100);   // YT is 0 to 100.
+        });
+        jqSliderVolume.change(function(eventObject) {
+            // Resume updating Volume from YT.
+            updateVolumeFromYTInterval(true);
+        });
+    }
+
+    function onPlayerStateChange(event) {
+        console.log('Player: YT state: ' + event.data);
+
+        // Update play/pause buttons states from YouTube.
+        if (event.data == YT.PlayerState.PLAYING)
+            setPlayButtonStateAndTimeUpdatingInterval(true);
+        else if (event.data == YT.PlayerState.PAUSED)
+            setPlayButtonStateAndTimeUpdatingInterval(false);
+    }
+
+    function onPlayerError(event) {
+        console.error('Player: Error on YT player. ERR code: ' + event.data +
+            '.\nSee more at: https://developers.google.com/youtube/iframe_api_reference#Events');
+    }
+
+    function initialLoadData() {
+        // Update Information data.
+        $('#row-artist').find('td').first().text(jqPlayer.data('infoArtist'));
+        $('#row-title').find('td').first().text(jqPlayer.data('infoTitle'));
+        $('#row-album').find('td').first().text(jqPlayer.data('infoAlbumTitle'));
+        $('#row-label').find('td').first().text(jqPlayer.data('infoLabel'));
+        $('#row-year').find('td').first().text(jqPlayer.data('infoYear'));
+    }
+
+    function reloadData(paramsObj) {
+        // Check params and if source type is not youtube, then exit.
+        if(paramsObj.sourceType !== 'youtube') {
+            console.log('Player: Parameter sourceType is not "youtube", parameters:');
+            console.log(paramsObj);
+            return;
+        }
+
+        console.log('Player: Reloading data with:');
+        console.log(paramsObj);
+        // Update data attributes (just as reference!).
+        jqPlayer.data('sourceType', paramsObj.sourceType);
+        jqPlayer.data('source', paramsObj.source);
+
+        jqPlayer.data('infoAlbumArt', paramsObj.infoAlbumArt);      // Currently not used.
+        jqPlayer.data('infoAlbumTitle', paramsObj.infoAlbumTitle);
+        jqPlayer.data('infoArtist', paramsObj.infoArtist);
+        jqPlayer.data('infoTitle', paramsObj.infoTitle);
+        jqPlayer.data('infoLabel', paramsObj.infoLabel);
+        jqPlayer.data('infoYear', paramsObj.infoYear);
+
+        // Load YT video.
+        window.ytPlayer.loadVideoById(paramsObj.source);
+
+        // Update Information data.
+        $('#row-artist').find('td').first().text(paramsObj.infoArtist);
+        $('#row-title').find('td').first().text(paramsObj.infoTitle);
+        $('#row-album').find('td').first().text(paramsObj.infoAlbumTitle);
+        $('#row-label').find('td').first().text(paramsObj.infoLabel);
+        $('#row-year').find('td').first().text(paramsObj.infoYear);
+    }
+
+
+
+
     $('audio[controls]').before(function () {
 
         var song = this;
@@ -29,15 +304,20 @@
         var player = document.createElement('section');
         $(player).addClass('btn-group  center-block row  col-sm-12');
 
-        var load_error = function () {
-            // console.log('error');
-            $(player_box).find('.btn').addClass('disabled');
-            $(player_box).find('input[type="range"]').hide();
-            $(player_box).find('.glyphicon-refresh').text('Error');
-            $(player_box).find('.glyphicon-refresh').parent().attr('title', 'There was an error loading the audio.');
-            $(player_box).find('.glyphicon-refresh').parent().tooltip('fixTitle');
-            $(player_box).find('.glyphicon-refresh').removeClass('glyphicon glyphicon-refresh spin');
-        }; // load_error
+
+
+
+        //var load_error = function () {
+        //    // console.log('error');
+        //    jqPlayer.find('.btn').addClass('disabled');
+        //    jqPlayer.find('input[type="range"]').hide();
+        //    jqPlayer.find('.glyphicon-refresh').text('Error');
+        //    jqPlayer.find('.glyphicon-refresh').parent().attr('title', 'There was an error loading the audio.');
+        //    jqPlayer.find('.glyphicon-refresh').parent().tooltip('fixTitle');
+        //    jqPlayer.find('.glyphicon-refresh').removeClass('glyphicon glyphicon-refresh spin');
+        //}; // load_error
+
+
 
         var addPlay = function () {
             var play = document.createElement('button');
@@ -72,13 +352,13 @@
                     clearInterval(loadCheck);
                     return true;
                 }
-                if (song.networkState === 3 || timeout === 100) {
-                    // 3 = NETWORK_NO_SOURCE - no audio/video source found
-                    console.log('No audio source was found or a timeout occurred');
-                    load_error();
-                    clearInterval(loadCheck);
-                    return false;
-                }
+                //if (song.networkState === 3 || timeout === 100) {
+                //    // 3 = NETWORK_NO_SOURCE - no audio/video source found
+                //    console.log('No audio source was found or a timeout occurred');
+                //    load_error();
+                //    clearInterval(loadCheck);
+                //    return false;
+                //}
                 timeout++;
             }, 100); // x milliseconds per attempt
             $(player).append(play);
