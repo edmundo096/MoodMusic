@@ -18,9 +18,10 @@ USE `web_db`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `avis`
+-- Table structure for table `rates`
 --
 
+DROP TABLE IF EXISTS `avis`;
 DROP TABLE IF EXISTS `rates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
