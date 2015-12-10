@@ -192,7 +192,7 @@ def searchMusicYoutube(listeKeyword):
                 pass
             else:
                 print music
-                listeMusiques.append(music)
+                listeMusic.append(music)
     return listeMusic
 
 
