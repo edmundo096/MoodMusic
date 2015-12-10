@@ -188,7 +188,7 @@ def search():
 
             # Search music by arguments, or by a Mood (set by the same user).
             if (listeKeyword[0] != "mood:"):
-                listMusic = DbFunct.searchMusiqueYoutube(listeKeyword)
+                listMusic = DbFunct.searchMusicYoutube(listeKeyword)
             else:
                 listMusic = DbFunct.algoMatchYoutube(listeKeyword[1:], session['email'])
 
