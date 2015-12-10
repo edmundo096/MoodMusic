@@ -229,12 +229,6 @@
 
                         <div class="raw" style="padding-top: 30px;">
 
-                            <!-- Main Client player. Values loaded from POST with the { { } }, and then by AJAX. -->
-                            <audio controls>
-                                <source id=audiosrc src="{{ music.musicPath }}" type="audio/mpeg"/>
-                            </audio>
-
-
                             <!-- Main Player -->
                             <div id="player" class="well container-fluid playa"
                                  data-source="{{ music.musicPath }}"
@@ -297,15 +291,14 @@
 
                                     <!-- Time slider -->
                                     <div class="btn btn-default col-sm-4 hidden-xs">
-                                        <input id="sider-time" type="range" min="0" value="0" class="seek" max="198.844082" step="1.9884408199999999"
-                                               style="background: -webkit-linear-gradient(left, rgb(223, 240, 216) 0%, rgb(223, 240, 216) 97.000000231337%, rgba(223, 240, 216, 0) 97.000000231337%, rgba(217, 237, 247, 0) 97.000000231337%, rgb(217, 237, 247) 97.000000231337%, rgb(217, 237, 247) 100%, rgba(217, 237, 247, 0) 100%) rgb(221, 221, 221);">
+                                        <input id="sider-time" type="range" class="seek" min="0" max="100" step="1" value="0">
                                     </div>
 
                                     <!-- Current Time / Reset button -->
                                     <button id="button-current-time-reset" class="btn btn-default col-sm-3"
-                                            data-original-title="Click to Reset<hr style=&quot;padding:0; margin:0;&quot; />Position: 03:12"
+                                            data-original-title="Click to Reset<hr style=&quot;padding:0; margin:0;&quot; />Position: --:--"
                                             title="">
-                                        03:18
+                                        --:--
                                     </button>
 
                                     <!-- Mute / Volume icon -->
@@ -320,9 +313,9 @@
                                 </section>
 
                                 <!-- Attribution -->
-                                <div class="row col-sm-10 col-sm-offset-1">
-                                    <a class="text-muted btn btn-link btn-sm" href="https://github.com/iainhouston">
-                                        Music: Iain Houston and Felix Gibbons.
+                                <div class="row col-sm-10 col-sm-offset-1 hidden">
+                                    <a class="text-muted btn btn-link btn-sm" href="https://github.com/">
+                                        -
                                     </a>
                                 </div>
                             </div>
