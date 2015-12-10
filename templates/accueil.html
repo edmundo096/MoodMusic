@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+    <link rel="icon" href="/static/favicon.ico">
 
     <title>Home</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/bootstrap3_player/css/bootstrap3_player.css" rel="stylesheet">
+    <link href="/static/player/player.css" rel="stylesheet">
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.no-icons.min.css"
           type="text/css" rel="stylesheet">
     <link href="https://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" type="text/css"
@@ -229,23 +229,97 @@
 
                         <div class="raw" style="padding-top: 30px;">
 
-                            {# Main Client player.
-                               Values loaded from POST with the {{ }}, and then by AJAX. #}
-                            <audio controls id="Player"
-                                   data-info-album-art="{{ music.imagePath }}"
-                                   data-info-album-title="{{ music.nomAlbum }}"
-                                   data-info-artist="{{ music.nomArtist }}"
-                                   data-info-title="{{ music.titre }}"
-                                   data-info-label="{{ music.Label }}"
-                                   data-info-year="{{ music.Annee }}">
-                                <source id=audiosrc src="{{ music.musicPath }}" type="audio/mpeg"/>
-                            </audio>
+                            <!-- Main Player -->
+                            <div id="player" class="well container-fluid playa"
+                                 data-source="{{ music.musicPath }}"
+                                 data-source-type="youtube"
+                                 data-info-album-art="{{ music.imagePath }}"
+                                 data-info-album-title="{{ music.nomAlbum }}"
+                                 data-info-artist="{{ music.nomArtist }}"
+                                 data-info-title="{{ music.titre }}"
+                                 data-info-label="{{ music.Label }}"
+                                 data-info-year="{{ music.Annee }}">
 
-                            <!-- Youtube player
-                            TODO Put dynamically the YT player along the audio contorls, and just hidde and show seach depenign a custom source attribute -->
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <div id="yt-player"></div>
+                                <!-- Toggle button -->
+                                <div class="playa-toggle-holder btn-group center-block row col-sm-12">
+                                    <button id="button-toggle" title="Show or hide details"
+                                            class="btn btn-default btn-lg btn-block row col-sm-12" style="opacity:0.3"
+                                            data-original-title="Details">
+                                        <i class="glyphicon glyphicon-align-justify" style="top:-3px"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Data section -->
+                                <section id="section-data" class="playa-data-sec center-block row col-sm-12 collapse in" aria-expanded="true">
+                                    <!-- <img class="thumbnail" src="https://farm9.staticflickr.com/8642/16106988340_058071cdbe_z.jpg"> -->
+
+                                    <!-- Youtube player -->
+                                    <div class="embed-responsive embed-responsive-16by9">
+                                        <div id="yt-player"></div>
+                                    </div>
+
+                                    <table class="table table-condensed">
+                                        <tbody>
+                                        <tr id="row-artist">
+                                            <th>Artist</th>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr id="row-title">
+                                            <th>Title</th>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr id="row-album">
+                                            <th>Album</th>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr id="row-label">
+                                            <th>Label</th>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr id="row-year">
+                                            <th>Year</th>
+                                            <td>-</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </section>
+
+                                <!-- Player Controls section -->
+                                <section id="section-player-controls" class="btn-group center-block row col-sm-12">
+                                    <!-- Play/Pause button -->
+                                    <button id="button-play-pause" class="btn btn-default col-sm-1"><i class="glyphicon glyphicon-play"></i></button>
+
+                                    <!-- Time slider -->
+                                    <div class="btn btn-default col-sm-4 hidden-xs">
+                                        <input id="sider-time" type="range" class="seek" min="0" max="100" step="1" value="0">
+                                    </div>
+
+                                    <!-- Current Time / Reset button -->
+                                    <button id="button-current-time-reset" class="btn btn-default col-sm-3"
+                                            data-original-title="Click to Reset<hr style=&quot;padding:0; margin:0;&quot; />Position: --:--"
+                                            title="">
+                                        --:--
+                                    </button>
+
+                                    <!-- Mute / Volume icon -->
+                                    <button id="button-mute" class="btn btn-default col-sm-1">
+                                        <i class="glyphicon glyphicon-volume-up"></i>
+                                    </button>
+
+                                    <!-- Volume slider -->
+                                    <div class="btn btn-default row col-sm-3 hidden-xs">
+                                        <input id="sider-volume" type="range" min="0" max="1" step="0.01" value="1">
+                                    </div>
+                                </section>
+
+                                <!-- Attribution -->
+                                <div class="row col-sm-10 col-sm-offset-1 hidden">
+                                    <a class="text-muted btn btn-link btn-sm" href="https://github.com/">
+                                        -
+                                    </a>
+                                </div>
                             </div>
+                            <!-- / Main Player -->
 
 
                             <div class="col-sm-12">
@@ -337,7 +411,6 @@
                             {% endif %}
                         </ul>
                     </div>
-
                 </div>
             </div>
 
@@ -396,7 +469,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
     <script src="/static/bootstrap/js/bootstrap-select.js"></script>
-    <script src="/static/bootstrap3_player/js/bootstrap3_player.js"></script>
+    <script src="/static/player/player.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap-combobox.js"></script>
     <!--<script src="/static/bootstrap/js/my.js"></script>

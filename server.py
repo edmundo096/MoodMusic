@@ -319,4 +319,4 @@ def setHumeur():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, ssl_context=context)
+    app.run(debug=True, ssl_context=context, port=443)
