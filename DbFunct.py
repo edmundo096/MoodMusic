@@ -1,11 +1,26 @@
 # useful set of functions for the server
 
 from sqlalchemy import *
+import os
 
 
 def init():
     """Create the engine and connect to the DB"""
-    engine = create_engine('mysql+pymysql://root:lok@localhost/web_db?charset=utf8', echo=False)
+
+    db_url = 'mysql+pymysql://root:lok@localhost/web_db?charset=utf8'
+
+    # Check if the heroku local DB_URL var exist, then use it.
+    # (If the app runs on Heroku, use the ClearDB database).
+    if os.environ.has_key('DATABASE_URL'):
+        # Todo, parse the '?reconnect=true' from the default heroku var.
+        db_url = os.environ['DATABASE_URL']
+        print os.environ['DATABASE_URL']
+
+    print os.environ.has_key('DATABASE_URL')
+    print db_url
+
+    engine = create_engine(db_url, echo=False)
+
     metadata = MetaData(engine)
     connection = engine.connect()
     return connection
