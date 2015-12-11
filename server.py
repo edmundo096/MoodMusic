@@ -70,15 +70,6 @@ def nav_register_post():
         return render_template('register.html')
 
 
-@app.route('/login')
-def nav_login():
-    """authentication route for all users """
-    if 'email' in session:
-        return redirect(url_for('nav_home'))
-    else:
-        return render_template('login.html')
-
-
 @app.route('/submit_password', methods=['POST'])
 def submit_password():
     """route to submit the new password   """
@@ -86,8 +77,18 @@ def submit_password():
         abort(300)
     email = session['email']
     password = request.json['psswd']
+    # TODO hashing
     DbFunct.updatePassword(password, email)
     return jsonify({'succes': 1})
+
+
+@app.route('/login')
+def nav_login():
+    """authentication route for all users """
+    if 'username' in session:
+        return redirect(url_for('nav_home'))
+    else:
+        return render_template('login.html')
 
 
 @app.route('/login', methods=['POST'])
