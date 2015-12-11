@@ -40,8 +40,7 @@
 
 <body>
 
-    <!---------------------------------- Barre de navigation ------------------------------------------------------------>
-
+    <!-- Navigation bar -->
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -58,7 +57,7 @@
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="/accueil"><h6>Home</h6></a></li>
+                    <li class="active"><a href="/home"><h6>Home</h6></a></li>
                     <li><a href="/top_music"><h6><span class="glyphicon glyphicon-star" style="font-size:17px;"></span>
                         Top</h6></a></li>
                     <li><a href="/last_music"><h6><span class="glyphicon glyphicon-music"
@@ -71,7 +70,7 @@
                         Log Out</h6></a></li>
                 </ul>
 
-                <form action="/accueil" method="POST" id="cherche" class="navbar-form inline-form">
+                <form action="/home" method="POST" id="search" class="navbar-form inline-form">
                     <div class="form-group ">
                         <input name="search" type="search" class="input-lg form-control" placeholder="music search"
                                style="font-size:22px;">
@@ -85,20 +84,20 @@
             </div><!--/.nav-collapse -->
         </div>
     </div>
+    <!-- /Navigation bar -->
 
-    <!-----------------------------------------------middle container------------------------------------------------------>
+
 
     <!-- <div class="container-fluid" style="background-color: black;"> -->
     <div class="container-fluid" id="color_blue" style="padding-top: 30px;">
         <div class="raw">
 
-            <!-----------------colonne 1 ---------------------------------------------------------->
-
+            <!-- Mood list panel -->
             <div class="col-sm-10 col-md-6">
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title"> What is your mood today? </h3>
+                        <h3 class="panel-title">What is your mood today?</h3>
                     </div>
 
                     <div class="panel-body couleur-body">
@@ -117,7 +116,7 @@
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test5" data-Humeur='Nostalgique'>
-                                        <label for="test5"><h6>nostalgic</h6></label>
+                                        <label for="test5"><h6>Nostalgic</h6></label>
                                     </p>
 
                                     <p class="spacer">
@@ -133,20 +132,20 @@
                                 <div class="col-sm-5 col-md-3">
                                     <p style="padding-top: 10px;">
                                         <input type="checkbox" id="test7" data-Humeur='Motivee'>
-                                        <label for="test7"><h6>motivated</h6></label>
+                                        <label for="test7"><h6>Motivated</h6></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test8" data-Humeur='Enthousiaste'>
-                                        <label for="test8"><h6>enthusiastic</h6></label>
+                                        <label for="test8"><h6>Enthusiastic</h6></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test9" data-Humeur='Enervee'>
-                                        <label for="test9"><h6>upset</h6></label>
+                                        <label for="test9"><h6>Upset</h6></label>
                                     </p>
 
                                     <p class="spacer">
                                         <input type="checkbox" id="test11" data-Humeur='Inspiree'>
-                                        <label for="test11"><h6>inspired</h6></label>
+                                        <label for="test11"><h6>Inspired</h6></label>
                                     </p>
 
                                     <p class="spacer">
@@ -158,7 +157,7 @@
                                 <div class="col-sm-5 col-md-3">
                                     <p>
                                         <input type="checkbox" id="test14" data-Humeur='Bosseur'>
-                                        <label for="test14"><h6>hard worker</h6></label>
+                                        <label for="test14"><h6>Hard worker</h6></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test15" data-Humeur='Codeur'>
@@ -180,11 +179,11 @@
                                 <div class="col-sm-5 col-md-3">
                                     <p style="padding-top: 10px;">
                                         <input type="checkbox" id="test17" data-Humeur='Studieux'>
-                                        <label for="test17"><h6>studious</h6></label>
+                                        <label for="test17"><h6>Studious</h6></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test18" data-Humeur='Agressif'>
-                                        <label for="test18"><h6>aggressive</h6></label>
+                                        <label for="test18"><h6>Aggressive</h6></label>
                                     </p>
 
 
@@ -202,21 +201,24 @@
                                     </p>
                                 </div>
                             </div>
+
                             <div>
                                 <button type="submit" class="btn btn-primary btn-lg"
                                         onClick="getCheckBox(this.form); return false;"><span
                                         class="glyphicon glyphicon-search" style="font-size:19px;"></span>
-                                    <h7> search playlist</h7>
+                                    <h7>Search playlist</h7>
                                 </button>
                             </div>
+
                         </form>
                     </div>
                 </div>
 
             </div>
+            <!-- \Mood list panel -->
 
-            <!-----------------colonne 2----------------------------------------------------------->
 
+            <!-- Player panel -->
             <div class="col-sm-5 col-md-3">
 
                 <div class="panel panel-primary">
@@ -234,11 +236,11 @@
                                  data-source="{{ music.musicPath }}"
                                  data-source-type="youtube"
                                  data-info-album-art="{{ music.imagePath }}"
-                                 data-info-album-title="{{ music.nomAlbum }}"
-                                 data-info-artist="{{ music.nomArtist }}"
-                                 data-info-title="{{ music.titre }}"
-                                 data-info-label="{{ music.Label }}"
-                                 data-info-year="{{ music.Annee }}">
+                                 data-info-album-title="{{ music.album }}"
+                                 data-info-artist="{{ music.artist }}"
+                                 data-info-title="{{ music.title }}"
+                                 data-info-label="{{ music.label }}"
+                                 data-info-year="{{ music.year }}">
 
                                 <!-- Toggle button -->
                                 <div class="playa-toggle-holder btn-group center-block row col-sm-12">
@@ -368,10 +370,9 @@
                 </div>
 
             </div>
+            <!-- \Player panel -->
 
-            <!-----------------colonne 3------------------------------------------------------------->
-
-
+            <!-- Playlist panel -->
             <div class="col-sm-5 col-md-3">
                 <div class="panel panel-primary">
 
@@ -413,50 +414,39 @@
                     </div>
                 </div>
             </div>
-
-            <!---------------------------------------------------------------------------------------->
+            <!-- \Playlist panel -->
 
         </div>
     </div>
 
-    <!--<div class="container-fluid" id="color_blue" style="padding-top: 50px;">
-		<div class="raw">
-			<div class="col-sm-10 col-md-6">
-				 <div>
-                    <button type="submit" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-search"  style="font-size:17px;" ></span><h7>  Chercher playlist</h7></button>
-	             </div>
-			</div>
-		</div>
-    </div>-->
 
-    <!-------------------------------------Containers de bas de page---------------------------------------------------------->
 
+    <!-- Footer -->
     <div class="container-fluid" id="end">
         <div class="raw">
             <div class="col-sm-6 col-md-4 col-md-offset-2">
-                <h3>Who are we ?</h3>
+                <h3>About</h3>
                 <ul>
-                    <li style="text-align: left; margin-left: 70px;"><a href="#contact">Our Team</a></li>
-                    <li style="text-align: left; margin-left: 70px;"><a href="#contact">E-Mails</a></li>
+                    <!--<li style="text-align: left; margin-left: 70px;"><a href="#contact">Our Team</a></li>-->
+                    <!--<li style="text-align: left; margin-left: 70px;"><a href="#contact">E-Mails</a></li>-->
                     <!--<li style="text-align: left; margin-left: 70px;"><a href="api">Api doc 1</a></li>-->
-                    <li style="text-align: left; margin-left: 70px;"><a href="/static/apidoc/index.html">Developers API</a></li>
+                    <li style="text-align: left; margin-left: 70px;"><a href="http://moodmusicproject.blogspot.se/">Blog</a></li>
                 </ul>
             </div>
             <div class="col-sm-6 col-md-4 ">
-                <h3>About</h3>
+                <h3>More</h3>
                 <ul>
-                    <li style="text-align: left; margin-left: 120px;"><a href="/about_accueil">Home</a></li>
-                    <li style="text-align: left; margin-left: 120px;"><a href="/about_profil">profile</a></li>
-                    <li style="text-align: left; margin-left: 120px;"><a href="/about_schemas_base">Structure</a></li>
+                    <li style="text-align: left; margin-left: 120px;"><a href="/static/apidoc/index.html">Developers API</a></li>
+                    <li style="text-align: left; margin-left: 120px;"><a href="https://github.com/edmundo096/MoodMusic">GitHub</a></li>
+                    <!--<li style="text-align: left; margin-left: 120px;"><a href="/about_accueil">Home</a></li>-->
+                    <!--<li style="text-align: left; margin-left: 120px;"><a href="/about_profil">profile</a></li>-->
+                    <!--<li style="text-align: left; margin-left: 120px;"><a href="/about_schemas_base">Structure</a></li>-->
                 </ul>
             </div>
         </div>
     </div>
+    <!-- \Footer -->
 
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
 
 
     <!--<script src="bootstrap/js/bootstrap-select.min.js"></script>-->
