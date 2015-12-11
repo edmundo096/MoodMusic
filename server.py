@@ -91,7 +91,7 @@ def submit_password():
 
 
 @app.route('/login', methods=['POST'])
-def nav_login():
+def nav_login_post():
     """login route to the application """
     # Encrypt password.
     password = hashlib.sha224(escape(request.form['password'])).hexdigest()
