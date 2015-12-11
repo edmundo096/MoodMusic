@@ -1,1 +1,1 @@
-web: python server.py
+web: python start_tornado.py --port=$PORT
