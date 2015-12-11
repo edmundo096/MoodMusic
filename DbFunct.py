@@ -107,7 +107,7 @@ def lastMusic():
     connection = init()
     liste = []
     i = 0
-    sql = "SELECT Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND Music.source = 'youtube' ORDER BY Music.yearDESC"
+    sql = "SELECT Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND Music.source = 'youtube' ORDER BY Music.year DESC"
     for m in connection.execute(sql):
         if i == 10:
             break
