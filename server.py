@@ -76,7 +76,7 @@ def page_authent():
     if 'email' in session:
         return redirect(url_for('accueil'))
     else:
-        return render_template('authent.html')
+        return render_template('login.html')
 
 
 @app.route('/submit_password', methods=['POST'])
@@ -124,7 +124,7 @@ def profile():
 
     # GET
     if request.method == 'GET':
-        return render_template('profil.html', email=session['email'], username=session['username'], list_music=liste,
+        return render_template('profile.html', email=session['email'], username=session['username'], list_music=liste,
                                image=img[0])
     # POST
     file = request.files['file']
@@ -135,7 +135,7 @@ def profile():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         filename = app.config['UPLOAD_FOLDER'].split(".")[1] + '/' + filename
         DbFunct.updateUserImage(filename, session['email'])
-        return render_template('profil.html', email=session['email'], username=session['username'], list_music=liste,
+        return render_template('profile.html', email=session['email'], username=session['username'], list_music=liste,
                                image=filename)
 
 
@@ -164,7 +164,7 @@ def accueil():
             music = DbFunct.get_song_data(request.args.get('artist'), request.args.get('album'),
                                           request.args.get('title'))
 
-        return render_template('accueil.html', music=music, musiqueliste=liste, username=session['username'])
+        return render_template('home.html', music=music, musiqueliste=liste, username=session['username'])
 
     else:
         return redirect(url_for('page_authent'))
@@ -205,7 +205,7 @@ def search():
             else:
                 music = DbFunct.get_song_data(listeMusic[0]['artist'], listeMusic[0]['album'],
                                               listeMusic[0]['title'])
-                return render_template('accueil.html', music=music, musicliste=listeMusic,
+                return render_template('home.html', music=music, musicliste=listeMusic,
                                        username=session['username'])
         else:
             return redirect("/accueil")
