@@ -11,13 +11,12 @@ def init():
 
     # Check if the heroku local DB_URL var exist, then use it.
     # (If the app runs on Heroku, use the ClearDB database).
-    if os.environ.has_key('DATABASE_URL'):
-        # Todo, parse the '?reconnect=true' from the default heroku var.
-        db_url = os.environ['DATABASE_URL']
-        print os.environ['DATABASE_URL']
+    if os.environ.has_key('CLEARDB_DATABASE_URL'):
+        # Todo, delete the '?reconnect=true' and add '+pymysql' from the default heroku var.
+        db_url = os.environ['CLEARDB_DATABASE_URL']
 
-    print os.environ.has_key('DATABASE_URL')
-    print db_url
+    print "DB_FUNCT: " + str(os.environ.has_key('CLEARDB_DATABASE_URL'))
+    print "DB_FUNCT: " + db_url
 
     engine = create_engine(db_url, echo=False)
 

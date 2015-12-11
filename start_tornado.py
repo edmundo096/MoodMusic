@@ -6,7 +6,7 @@ import tornado.options
 import server
 
 
-tornado.options.define("port", default=5000, help="run on the given port", type=int)
+tornado.options.define("port", default=80, help="run on the given port", type=int)
 
 tornado.options.parse_command_line()
 
