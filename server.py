@@ -17,13 +17,6 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 """app configuration*****"""
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Enable HTTPS
-import ssl
-
-appPath = os.path.dirname(os.path.realpath(__file__))
-context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-context.load_cert_chain(appPath + '/ssl.crt', appPath + '/ssl.key')
-
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -319,5 +312,14 @@ def setHumeur():
     return jsonify({'succes': 1})
 
 
+# Enable HTTPS
+import ssl
+
+appPath = os.path.dirname(os.path.realpath(__file__))
+context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+context.load_cert_chain(appPath + '/ssl.crt', appPath + '/ssl.key')
+
+
 if __name__ == '__main__':
-    app.run(debug=True, ssl_context=context, port=443)
+    #app.run(debug=True, ssl_context=context, port=443)
+    app.run(debug=True, port=80)
