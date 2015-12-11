@@ -12,7 +12,8 @@ def init():
     # Check if the heroku local DB_URL var exist, then use it.
     # (If the app runs on Heroku, use the ClearDB database).
     if os.environ.has_key('CLEARDB_DATABASE_URL'):
-        # Todo, delete the '?reconnect=true' and add '+pymysql' from the default heroku var.
+        # Todo, delete the '?reconnect=true' and add '+pymysql' and '?charset=utf8' from the default heroku var.
+        # Should return this: mysql+pymysql://b6a232d03633eb:15c6e6ed@us-cdbr-iron-east-03.cleardb.net/heroku_f937bd33ab8f703?charset=utf8
         db_url = os.environ['CLEARDB_DATABASE_URL']
 
     print "DB_FUNCT: " + str(os.environ.has_key('CLEARDB_DATABASE_URL'))
