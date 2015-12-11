@@ -34,14 +34,14 @@ def allowed_file(filename):
 #========================================
 
 @app.route('/')
-def start():
+def nav_root_to_home():
     """  starting route """
     session['playlist'] = []
-    return redirect(url_for('accueil'))
+    return redirect(url_for('nav_home'))
 
 
 @app.route('/api', methods=['GET'])
-def apidoc():
+def nav_apidoc():
     return render_template('api.html', username=session['username'])
 
 #----------------------------------------
@@ -49,13 +49,13 @@ def apidoc():
 #----------------------------------------
 
 @app.route('/register', methods=['GET'])
-def register():
+def nav_register():
     """Get the Registration page """
     return render_template('register.html')
 
 
 @app.route('/register', methods=['POST'])
-def register_post():
+def nav_register_post():
     """Route to Post the user Information in the DB (making call to the insertUser function ) and redirect to the authentication page"""
     first_name = escape(request.form['username'])
     email = escape(request.form['email'])
@@ -65,22 +65,22 @@ def register_post():
     user = DbFunct.recupUtilisateur(email, None)
     if user is None:
         DbFunct.insertUser(first_name, email, password)
-        return redirect('/authent')
+        return redirect('/login')
     else:
         return render_template('register.html')
 
 
-@app.route('/authent')
-def page_authent():
+@app.route('/login')
+def nav_login():
     """authentication route for all users """
     if 'email' in session:
-        return redirect(url_for('accueil'))
+        return redirect(url_for('nav_home'))
     else:
         return render_template('login.html')
 
 
 @app.route('/submit_password', methods=['POST'])
-def submit_psswd():
+def submit_password():
     """route to submit the new password   """
     if not request.json:
         abort(300)
@@ -91,30 +91,30 @@ def submit_psswd():
 
 
 @app.route('/login', methods=['POST'])
-def login():
+def nav_login():
     """login route to the application """
     # Encrypt password.
     password = hashlib.sha224(escape(request.form['password'])).hexdigest()
     user = DbFunct.recupUtilisateur(escape(request.form['email']), password)
     if user is None:
-        return redirect(url_for('page_authent'))
+        return redirect(url_for('nav_login'))
     else:
         session['username'] = user['username']
         session['email'] = user['email']
         session['password'] = user['password']
         session['playlist'] = []
-        return redirect(url_for('accueil'))
+        return redirect(url_for('nav_home'))
 
 
 @app.route('/logout')
 def logout():
     """route to logout from the application """
     session.clear()
-    return redirect(url_for('page_authent'))
+    return redirect(url_for('nav_login'))
 
 
 @app.route('/profile', methods=['GET', 'POST'])
-def profile():
+def nav_profile():
     """ route to the user profile """
     liste = []
     liste = DbFunct.listTopMusicUser(session['email'])
@@ -144,8 +144,8 @@ def profile():
 # Music Pages
 #----------------------------------------
 
-@app.route('/accueil', methods=['GET'])
-def accueil():
+@app.route('/home', methods=['GET'])
+def nav_home():
     """Main route that makes call to the recupMusic function and return the home page if the email is in the session    """
     if 'username' in session:
         # Get a playlist from DB if client does NOT has one.
@@ -154,7 +154,7 @@ def accueil():
                 session['playlist'].append({'artist': music.artist , 'album': music.album, 'title': music.title})
 
         liste = session['playlist']
-        print "accueil liste: {liste}".format(liste=liste)
+        print "home liste: {liste}".format(liste=liste)
 
         # TODO seems to be broken.. Get the first song from the list, or from the request arguments.
         if (request.args.get('artist') or request.args.get('title')) is None:
@@ -167,11 +167,11 @@ def accueil():
         return render_template('home.html', music=music, musiqueliste=liste, username=session['username'])
 
     else:
-        return redirect(url_for('page_authent'))
+        return redirect(url_for('nav_login'))
 
 
-@app.route('/accueil', methods=['POST'])
-def search():
+@app.route('/home', methods=['POST'])
+def nav_home_search():
     """route to get the Home page of the application in case where a mood is set by the user """
     if 'username' in session:
         # Check if there was any search.
@@ -184,7 +184,7 @@ def search():
 
             # Check if search was empty, redirect to home.
             if not listeKeyword:
-                return redirect("/accueil")
+                return redirect("/home")
 
             # Search music by arguments, or by a Mood (set by the same user).
             if (listeKeyword[0] != "mood:"):
@@ -195,22 +195,22 @@ def search():
             # Cerate playlist.
             for music in listMusic:
                 session['playlist'].append({'artist': music.artist , 'album': music.album, 'title': music.title})
-            print "accueil POST - session['playlist']: "
+            print "home POST - session['playlist']: "
             print session['playlist']
 
             # Get the 1 st song from the DB for the client "music" variable (for metadata and src load).
             listeMusic = session['playlist']
             if not listeMusic:
-                return redirect("/accueil")
+                return redirect("/home")
             else:
                 music = DbFunct.get_song_data(listeMusic[0]['artist'], listeMusic[0]['album'],
                                               listeMusic[0]['title'])
                 return render_template('home.html', music=music, musicliste=listeMusic,
                                        username=session['username'])
         else:
-            return redirect("/accueil")
+            return redirect("/home")
     else:
-        return redirect(url_for('page_authent'))
+        return redirect(url_for('nav_login'))
 
 
 @app.route('/top_music')
