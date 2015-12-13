@@ -1,7 +1,7 @@
 # useful set of functions for the server
 
-from sqlalchemy import *
 import os
+from sqlalchemy import *
 
 
 def init():
@@ -26,23 +26,26 @@ def init():
     return connection
 
 
-def insertUser(username_u, email_u, password_u):
-    """insert the User using his username, email address and password """
+# ----------------------------------------
+# User handling
+# ----------------------------------------
+
+def user_user_insert(username_u, email_u, password_u):
+    """
+    Insert a new User, using his username, email address, and password.
+    """
     connection = init()
     sql = "INSERT INTO users SET email='" + email_u.encode("utf-8") + "', password='" + password_u.encode(
         "utf-8") + "', username='" + username_u.encode("utf-8") + "'"
     connection.execute(sql)
 
 
-def updateUserImage(image, email):
-    """set a new profile image for a user """
-    connection = init()
-    sql = "UPDATE users SET imagePath='" + image.encode("utf-8") + "' WHERE users.email='" + email.encode("utf-8") + "'"
-    connection.execute(sql)
+def user_user_get(email, mdp):
+    """
+    Get an User, using email, and optionally, a hashed password.
 
-
-def recupUtilisateur(email, mdp):
-    """get a User from the users table"""
+    :returns: User object as {email, password, username, imagePath}.
+    """
     connection = init()
     users = []
     if mdp is None:
@@ -56,8 +59,46 @@ def recupUtilisateur(email, mdp):
     return user
 
 
+def user_password_update(password, email):
+    """Update the user password """
+    connection = init()
+    sql = "UPDATE users SET password='" + password.encode("utf-8") + "' WHERE users.email='" + email.encode(
+        "utf-8") + "'"
+    connection.execute(sql)
+
+
+def user_image_update(image_path, email):
+    """
+    Update the profile image_path, from an existent User.
+    """
+    connection = init()
+    sql = "UPDATE users SET imagePath='" + image_path.encode("utf-8") + "' WHERE users.email='" + email.encode("utf-8") + "'"
+    connection.execute(sql)
+
+
+def user_image_get(email):
+    """
+    Get the profile image_path, form an existing User.
+
+    :returns: String of the user image_path.
+    :rtype: str
+    """
+    connection = init()
+    sql = "SELECT imagePath FROM users WHERE users.email='" + email.encode("utf-8") + "'"
+    picture = []
+    for img in connection.execute(sql):
+        picture = img
+    return picture
+
+
+# ----------------------------------------
+# Songs handling
+# ----------------------------------------
+
 def listMusicYoutube():
-    """Returns the list of Music  """
+    """
+    Returns the list of Music.
+    """
     connection = init()
     list = []
     sql = "SELECT Music.artist, Music.title, Music.album FROM Music WHERE Music.source = 'youtube'"
@@ -90,14 +131,6 @@ def get_song_data(artist, album, title):
         return None
 
 
-def updatePassword(password, email):
-    """Update the user password """
-    connection = init()
-    sql = "UPDATE users SET password='" + password.encode("utf-8") + "' WHERE users.email='" + email.encode(
-        "utf-8") + "'"
-    connection.execute(sql)
-
-
 def lastMusic():
     """
     return the list of last songs
@@ -124,7 +157,7 @@ def listTopMusicAll():
     connection = init()
     list = []
     i = 0
-    sql = "SELECT Music.title, Music.artist, Music.album, Music.imagePath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND Music.source = 'youtube' ORDER BY rates.rating DESC"
+    sql = "SELECT Music.title, Music.artist, Music.album, Music.imagePath, Music.musicPath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND Music.source = 'youtube' ORDER BY rates.rating DESC"
     for m in connection.execute(sql):
         if i == 10:
             break
@@ -246,11 +279,4 @@ def listTopMusicUser(email):
     return list
 
 
-def getUserImage(email):
-    """get the user image """
-    connection = init()
-    sql = "SELECT imagePath FROM users WHERE users.email='" + email.encode("utf-8") + "'"
-    picture = []
-    for img in connection.execute(sql):
-        picture = img
-    return picture
+

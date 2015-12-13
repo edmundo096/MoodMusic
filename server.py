@@ -22,9 +22,9 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-#========================================
+# ========================================
 # NAVIGATION
-#========================================
+# ========================================
 
 @app.route('/')
 def nav_root_to_home():
@@ -37,9 +37,9 @@ def nav_root_to_home():
 def nav_apidoc():
     return render_template('api.html', username=session['username'])
 
-#----------------------------------------
+# ----------------------------------------
 # User handling
-#----------------------------------------
+# ----------------------------------------
 
 @app.route('/register', methods=['GET'])
 def nav_register():
@@ -49,15 +49,15 @@ def nav_register():
 
 @app.route('/register', methods=['POST'])
 def nav_register_post():
-    """Route to Post the user Information in the DB (making call to the insertUser function ) and redirect to the authentication page"""
+    """Route to Post the user Information in the DB (making call to the user_user_insert function ) and redirect to the authentication page"""
     first_name = escape(request.form['username'])
     email = escape(request.form['email'])
     password = escape(request.form['password'])
     # Encrypt password.
     password = hashlib.sha224(password).hexdigest()
-    user = DbFunct.recupUtilisateur(email, None)
+    user = DbFunct.user_user_get(email, None)
     if user is None:
-        DbFunct.insertUser(first_name, email, password)
+        DbFunct.user_user_insert(first_name, email, password)
         return redirect('/login')
     else:
         return render_template('register.html')
@@ -71,7 +71,7 @@ def submit_password():
     email = session['email']
     password = request.json['psswd']
     # TODO hashing
-    DbFunct.updatePassword(password, email)
+    DbFunct.user_password_update(password, email)
     return jsonify({'succes': 1})
 
 
@@ -89,7 +89,7 @@ def nav_login_post():
     """login route to the application """
     # Encrypt password.
     password = hashlib.sha224(escape(request.form['password'])).hexdigest()
-    user = DbFunct.recupUtilisateur(escape(request.form['email']), password)
+    user = DbFunct.user_user_get(escape(request.form['email']), password)
     if user is None:
         return redirect(url_for('nav_login'))
     else:
@@ -113,7 +113,7 @@ def nav_profile():
     list = []
     list = DbFunct.listTopMusicUser(session['email'])
     img = []
-    img = DbFunct.getUserImage(session['email'])
+    img = DbFunct.user_image_get(session['email'])
     print img
 
     # GET
@@ -128,15 +128,15 @@ def nav_profile():
         filename = session['email'] + '.' + extension
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         filename = app.config['UPLOAD_FOLDER'].split(".")[1] + '/' + filename
-        DbFunct.updateUserImage(filename, session['email'])
+        DbFunct.user_image_update(filename, session['email'])
         return render_template('profile.html', email=session['email'], username=session['username'], list_music=list,
                                image=filename)
 
 
 
-#---------------------------------------
+# ---------------------------------------
 # Music Pages
-#----------------------------------------
+# ----------------------------------------
 
 @app.route('/home', methods=['GET'])
 def nav_home():
@@ -222,9 +222,9 @@ def last_music():
     return render_template('last.html', list_music=list, username=session['username'])
 
 
-#========================================
+# ========================================
 # AJAX API
-#========================================
+# ========================================
 
 @app.route('/api/getMusic', methods=['GET'])
 def getMusic():
