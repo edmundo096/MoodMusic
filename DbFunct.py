@@ -60,7 +60,9 @@ def user_user_get(email, mdp):
 
 
 def user_password_update(password, email):
-    """Update the user password """
+    """
+    Update the password, from an existing User.
+    """
     connection = init()
     sql = "UPDATE users SET password='" + password.encode("utf-8") + "' WHERE users.email='" + email.encode(
         "utf-8") + "'"
@@ -78,7 +80,7 @@ def user_image_update(image_path, email):
 
 def user_image_get(email):
     """
-    Get the profile image_path, form an existing User.
+    Get the profile image_path, from an existing User.
 
     :returns: String of the user image_path.
     :rtype: str
