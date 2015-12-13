@@ -382,8 +382,8 @@
 
                     <div class="panel-body couleur-body">
                         <ul class="playlist">
-                            {% for musique in musiqueliste %}
-                                {% if musiqueliste.index(musique)==5 and musiqueliste|length>5 %}
+                            {% for musique in music_list %}
+                                {% if music_list.index(musique)==5 and music_list|length>5 %}
                                     <p>
                                         <button id="titi" class="btn btn-primary btn-lg" Title="Voir plus de musiques"
                                                 onclick="div_afficher_masque()">
@@ -406,7 +406,7 @@
                                 </a>
                             {% endfor %}
 
-                            {% if musiqueliste|length>5 %}
+                            {% if music_list|length>5 %}
                                 <!-- The end of the DIV container for items from 5 and up. -->
                                 </div>
                             {% endif %}

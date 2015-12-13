@@ -110,15 +110,15 @@ def logout():
 @app.route('/profile', methods=['GET', 'POST'])
 def nav_profile():
     """ route to the user profile """
-    liste = []
-    liste = DbFunct.listTopMusicUser(session['email'])
+    list = []
+    list = DbFunct.listTopMusicUser(session['email'])
     img = []
     img = DbFunct.getUserImage(session['email'])
     print img
 
     # GET
     if request.method == 'GET':
-        return render_template('profile.html', email=session['email'], username=session['username'], list_music=liste,
+        return render_template('profile.html', email=session['email'], username=session['username'], list_music=list,
                                image=img[0])
     # POST
     file = request.files['file']
@@ -129,7 +129,7 @@ def nav_profile():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         filename = app.config['UPLOAD_FOLDER'].split(".")[1] + '/' + filename
         DbFunct.updateUserImage(filename, session['email'])
-        return render_template('profile.html', email=session['email'], username=session['username'], list_music=liste,
+        return render_template('profile.html', email=session['email'], username=session['username'], list_music=list,
                                image=filename)
 
 
@@ -147,18 +147,18 @@ def nav_home():
             for music in DbFunct.listMusicYoutube():
                 session['playlist'].append({'artist': music.artist , 'album': music.album, 'title': music.title})
 
-        liste = session['playlist']
-        print "home liste: {liste}".format(liste=liste)
+        list = session['playlist']
+        print "home list: {list}".format(list=list)
 
         # TODO seems to be broken.. Get the first song from the list, or from the request arguments.
         if (request.args.get('artist') or request.args.get('title')) is None:
-            music = DbFunct.get_song_data(liste[0]['artist'], liste[0]['album'],
-                                          liste[0]['title'])
+            music = DbFunct.get_song_data(list[0]['artist'], list[0]['album'],
+                                          list[0]['title'])
         else:
             music = DbFunct.get_song_data(request.args.get('artist'), request.args.get('album'),
                                           request.args.get('title'))
 
-        return render_template('home.html', music=music, musiqueliste=liste, username=session['username'])
+        return render_template('home.html', music=music, music_list=list, username=session['username'])
 
     else:
         return redirect(url_for('nav_login'))
@@ -173,18 +173,18 @@ def nav_home_search():
             search = escape(request.form['search']).encode("utf-8")
             print search
 
-            listeKeyword = search.split()
+            listKeyword = search.split()
             session['playlist'] = []
 
             # Check if search was empty, redirect to home.
-            if not listeKeyword:
+            if not listKeyword:
                 return redirect("/home")
 
             # Search music by arguments, or by a Mood (set by the same user).
-            if (listeKeyword[0] != "mood:"):
-                listMusic = DbFunct.searchMusicYoutube(listeKeyword)
+            if (listKeyword[0] != "mood:"):
+                listMusic = DbFunct.searchMusicYoutube(listKeyword)
             else:
-                listMusic = DbFunct.algoMatchYoutube(listeKeyword[1:], session['email'])
+                listMusic = DbFunct.algoMatchYoutube(listKeyword[1:], session['email'])
 
             # Cerate playlist.
             for music in listMusic:
@@ -193,13 +193,13 @@ def nav_home_search():
             print session['playlist']
 
             # Get the 1 st song from the DB for the client "music" variable (for metadata and src load).
-            listeMusic = session['playlist']
-            if not listeMusic:
+            listMusic = session['playlist']
+            if not listMusic:
                 return redirect("/home")
             else:
-                music = DbFunct.get_song_data(listeMusic[0]['artist'], listeMusic[0]['album'],
-                                              listeMusic[0]['title'])
-                return render_template('home.html', music=music, musicliste=listeMusic,
+                music = DbFunct.get_song_data(listMusic[0]['artist'], listMusic[0]['album'],
+                                              listMusic[0]['title'])
+                return render_template('home.html', music=music, music_list=listMusic,
                                        username=session['username'])
         else:
             return redirect("/home")
@@ -211,15 +211,15 @@ def nav_home_search():
 def top_music():
     """Route to Get the list of Top Music for a user according to the email , return top.html page"""
     email = session['email']
-    liste = DbFunct.listTopMusicAll()
-    return render_template('top.html', list_music=liste, username=session['username'])
+    list = DbFunct.listTopMusicAll()
+    return render_template('top.html', list_music=list, username=session['username'])
 
 
 @app.route('/last_music')
 def last_music():
     """Route to Get the last music list, return last.html"""
-    liste = DbFunct.lastMusic()
-    return render_template('last.html', list_music=liste, username=session['username'])
+    list = DbFunct.lastMusic()
+    return render_template('last.html', list_music=list, username=session['username'])
 
 
 #========================================
