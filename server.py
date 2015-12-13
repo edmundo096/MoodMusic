@@ -144,7 +144,7 @@ def nav_home():
     if 'username' in session:
         # Get a playlist from DB if client does NOT has one.
         if not session['playlist']:
-            for music in DbFunct.listeMusicYoutube():
+            for music in DbFunct.listMusicYoutube():
                 session['playlist'].append({'artist': music.artist , 'album': music.album, 'title': music.title})
 
         liste = session['playlist']
