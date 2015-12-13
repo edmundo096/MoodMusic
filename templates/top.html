@@ -89,19 +89,20 @@
 
             <div class="panel-body couleur-body">
 
-                <ul class="playlist-top">
+                <div class="playlist-top">
                     {% for music in list_music %}
                         <a href="" class="list-group-item marge-bas">
 
                             <ul>
-                                <img src="{{ music.musicPath }}"/>
+                                {# TODO supposes that the source is a youtube music. #}
+                                <li><img src="{{ "//img.youtube.com/vi/"+music.musicPath+"/mqdefault.jpg" }}"/></li>
                                 <li>Artist : {{ music.artist }} </li>
                                 <li>Title : {{ music.title }}</li>
                                 <li>Album : {{ music.album }} </li>
                             </ul>
                         </a>
                     {% endfor %}
-                </ul>
+                </div>
 
             </div>
         </div>

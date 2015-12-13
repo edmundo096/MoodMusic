@@ -84,7 +84,7 @@
     <div class="col-sm-8 col-md-6 playlist-milieux" id="color_blue">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title"> NEW 10 Musiques </h3>
+                <h3 class="panel-title">Latest 10 Songs</h3>
             </div>
 
             <div class="panel-body couleur-body">
@@ -94,7 +94,8 @@
                         <a href="" class="list-group-item marge-bas">
 
                             <ul>
-                                <img src="{{ music.imagePath }}"/>
+                                {# TODO supposes that the source is a youtube music. #}
+                                <li><img src="{{ "//img.youtube.com/vi/"+music.musicPath+"/mqdefault.jpg" }}"/></li>
                                 <li>Artiste : {{ music.artist }} </li>
                                 <li>Titre : {{ music.title }}</li>
                                 <li>Album : {{ music.album }} </li>
