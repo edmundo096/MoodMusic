@@ -82,15 +82,24 @@ def user_image_get(email):
     """
     Get the profile image_path, from an existing User.
 
-    :returns: String of the user image_path.
+    :returns: String of the user image_path, if not found then None.
     :rtype: str
     """
     connection = init()
     sql = "SELECT imagePath FROM users WHERE users.email='" + email.encode("utf-8") + "'"
-    picture = []
-    for img in connection.execute(sql):
-        picture = img
-    return picture
+
+    # Since email is Primary key, should always return 1 row result.
+    results_img = connection.execute(sql)
+
+    # Doc: http://docs.sqlalchemy.org/en/latest/core/connections.html#sqlalchemy.engine.ResultProxy
+    # first() Returns None if no row is present.
+    first_row = results_img.first()
+
+    if first_row is not None:
+        # Return the imagePath from the first_row tuple.
+        return first_row[0]
+    else:
+        return None
 
 
 # ----------------------------------------
@@ -111,7 +120,8 @@ def listMusicYoutube():
 
 
 def get_song_data(artist, album, title):
-    """Get a song data from the DB
+    """
+    Get a song data from the DB
     Returns an object with the properties: idmusic, title, musicPath, album, label, year, artist, imagePath.
     """
     connection = init()
@@ -169,7 +179,9 @@ def listTopMusicAll():
 
 
 def algoMatchYoutube(listMood, email):
-    """function that gets music according to a specific mood set by the User email """
+    """
+    function that gets music according to a specific mood set by the User email.
+    """
     connection = init()
     listGenre = []
     listAppGenre = []
@@ -213,7 +225,9 @@ def algoMatchYoutube(listMood, email):
 
 
 def insertMood(email, music, mood):
-    """insert a mood to a song """
+    """
+    insert a mood to a song.
+    """
     connection = init()
     rates = []
     sql = "SELECT * FROM rates WHERE rates.useremail='" + email.encode("utf-8") + "' AND rates.idmusic = " + str(
@@ -232,7 +246,9 @@ def insertMood(email, music, mood):
 
 
 def searchMusicYoutube(listKeyword):
-    """Music search """
+    """
+    Music search.
+    """
     connection = init()
     listMusic = []
     for keyword in listKeyword:
@@ -247,7 +263,9 @@ def searchMusicYoutube(listKeyword):
 
 
 def insertRating(email, music, rating):
-    """insert a rating to a song """
+    """
+    insert a rating to a song.
+    """
     connection = init()
     rates = []
     sql = "SELECT * FROM rates WHERE rates.useremail='" + email.encode("utf-8") + "' AND rates.idmusic=" + str(

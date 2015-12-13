@@ -112,14 +112,14 @@ def nav_profile():
     """ route to the user profile """
     list = []
     list = DbFunct.listTopMusicUser(session['email'])
-    img = []
+
     img = DbFunct.user_image_get(session['email'])
     print img
 
     # GET
     if request.method == 'GET':
         return render_template('profile.html', email=session['email'], username=session['username'], list_music=list,
-                               image=img[0])
+                               image=img)
     # POST
     file = request.files['file']
     if file and allowed_file(file.filename):
@@ -128,7 +128,9 @@ def nav_profile():
         filename = session['email'] + '.' + extension
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         filename = app.config['UPLOAD_FOLDER'].split(".")[1] + '/' + filename
+
         DbFunct.user_image_update(filename, session['email'])
+
         return render_template('profile.html', email=session['email'], username=session['username'], list_music=list,
                                image=filename)
 
