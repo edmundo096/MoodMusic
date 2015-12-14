@@ -284,7 +284,7 @@ def rating():
     rating = request.json['rating']
 
     # TODO, fails if the music/song was not found (= None).
-    DbFunct.song_rate_insert_rating(email, music, rating)
+    DbFunct.song_rate_set_rating(email, music, rating)
     return jsonify({'succes': 1})
 
 
@@ -316,7 +316,7 @@ def setHumeur():
     mood = request.json['mood']
 
     # TODO, fails if the music/song was not found (= None).
-    DbFunct.song_rate_insert_mood(email, music, mood)
+    DbFunct.song_rate_set_mood(email, music, mood)
     return jsonify({'succes': 1})
 
 

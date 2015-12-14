@@ -124,26 +124,6 @@ def song_songs_get_all(source ='youtube'):
     return list
 
 
-def song_data_get(artist, album, title, source = 'youtube'):
-    """
-    Get a song with its data, from the specified artist, album, title, and source.
-    Default source is 'youtube'.
-
-    :returns: Object as {idmusic, title, musicPath, album, label, year, artist, imagePath}.
-    :rtype: sqlalchemy.engine.result.RowProxy
-    """
-    connection = init()
-
-    sql = "SELECT Music.idmusic, Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music WHERE Music.title = '" + title.encode(
-        "utf-8") + "' AND Music.artist = '" + artist.encode(
-        "utf-8") + "' AND Music.album = '" + album.encode("utf-8") + "' AND Music.source = '{s}'".format(s=source)
-
-    # TODO Currently returns the first result (DB or function should be modified to only permit only 1 result, i.e. using a PK).
-    results = connection.execute(sql)
-
-    return results.first()
-
-
 def song_songs_get_latest(source = 'youtube'):
     """
     Get an Array of the first 10 latest songs in DB, i.e. ordered by Decedent Year, matching the source.
@@ -176,6 +156,25 @@ def song_songs_get_top_global(source ='youtube'):
     sql = "SELECT Music.title, Music.artist, Music.album, Music.imagePath, Music.musicPath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND Music.source = '{s}' ORDER BY rates.rating DESC".format(s=source)
     for m in connection.execute(sql):
         if i == 10:
+            break
+        list.append(m)
+        i += 1
+    return list
+
+
+def song_songs_get_top_personal(email, source = 'youtube'):
+    """
+    Get an Array of the favorite, first 3 top User rated songs in DB, i.e. ordered by Decedent Rating, matching the source.
+
+    :returns: An Object Array of matched songs, each as {title, artist, album, imagePath}.
+    """
+    connection = init()
+    i = 0
+    list = []
+    sql = "SELECT Music.title, Music.artist, Music.album, Music.imagePath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND rates.useremail = '" + email.encode(
+        "utf-8") + "' AND Music.source = '{s}' ORDER BY rates.rating DESC".format(s=source)
+    for m in connection.execute(sql):
+        if i == 3:
             break
         list.append(m)
         i += 1
@@ -239,27 +238,6 @@ def song_songs_get_with_mood(selected_moods, email, source = 'youtube'):
     return playlist
 
 
-def song_rate_insert_mood(email, music, mood):
-    """
-    Insert or Update a mood to a song, given an user email.
-    """
-    connection = init()
-    rates = []
-    sql = "SELECT * FROM rates WHERE rates.useremail='" + email.encode("utf-8") + "' AND rates.idmusic = " + str(
-        music.idmusic)
-
-    for moodListResult in connection.execute(sql):
-        rates.append(moodListResult)
-
-    if not rates:
-        sql = "INSERT INTO rates SET useremail = '" + email.encode("utf-8") + "', idmusic = " + str(
-            music.idmusic) + ", mood = '" + mood.encode("utf-8") + "'"
-        connection.execute(sql)
-    else:
-        sql = "UPDATE rates SET mood='" + mood.encode("utf-8") + "' WHERE id=" + str(rates[0].id)
-        connection.execute(sql)
-
-
 def song_songs_get_with_search(listKeyword, source = 'youtube'):
     """
     Music search.
@@ -282,7 +260,48 @@ def song_songs_get_with_search(listKeyword, source = 'youtube'):
     return listMusic
 
 
-def song_rate_insert_rating(email, music, rating):
+def song_data_get(artist, album, title, source = 'youtube'):
+    """
+    Get a song with its data, from the specified artist, album, title, and source.
+    Default source is 'youtube'.
+
+    :returns: Object as {idmusic, title, musicPath, album, label, year, artist, imagePath}.
+    :rtype: sqlalchemy.engine.result.RowProxy
+    """
+    connection = init()
+
+    sql = "SELECT Music.idmusic, Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music WHERE Music.title = '" + title.encode(
+        "utf-8") + "' AND Music.artist = '" + artist.encode(
+        "utf-8") + "' AND Music.album = '" + album.encode("utf-8") + "' AND Music.source = '{s}'".format(s=source)
+
+    # TODO Currently returns the first result (DB or function should be modified to only permit only 1 result, i.e. using a PK).
+    results = connection.execute(sql)
+
+    return results.first()
+
+
+def song_rate_set_mood(email, music, mood):
+    """
+    Insert or Update a mood to a song, given an user email.
+    """
+    connection = init()
+    rates = []
+    sql = "SELECT * FROM rates WHERE rates.useremail='" + email.encode("utf-8") + "' AND rates.idmusic = " + str(
+        music.idmusic)
+
+    for moodListResult in connection.execute(sql):
+        rates.append(moodListResult)
+
+    if not rates:
+        sql = "INSERT INTO rates SET useremail = '" + email.encode("utf-8") + "', idmusic = " + str(
+            music.idmusic) + ", mood = '" + mood.encode("utf-8") + "'"
+        connection.execute(sql)
+    else:
+        sql = "UPDATE rates SET mood='" + mood.encode("utf-8") + "' WHERE id=" + str(rates[0].id)
+        connection.execute(sql)
+
+
+def song_rate_set_rating(email, music, rating):
     """
     Insert or Update a rating to a song, given an user email.
     """
@@ -299,22 +318,3 @@ def song_rate_insert_rating(email, music, rating):
     else:
         sql = "UPDATE rates SET rating=" + rating + " WHERE id=" + str(rates[0].id)
         connection.execute(sql)
-
-
-def song_songs_get_top_personal(email, source = 'youtube'):
-    """
-    Get an Array of the favorite, first 3 top User rated songs in DB, i.e. ordered by Decedent Rating, matching the source.
-
-    :returns: An Object Array of matched songs, each as {title, artist, album, imagePath}.
-    """
-    connection = init()
-    i = 0
-    list = []
-    sql = "SELECT Music.title, Music.artist, Music.album, Music.imagePath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND rates.useremail = '" + email.encode(
-        "utf-8") + "' AND Music.source = '{s}' ORDER BY rates.rating DESC".format(s=source)
-    for m in connection.execute(sql):
-        if i == 3:
-            break
-        list.append(m)
-        i += 1
-    return list
