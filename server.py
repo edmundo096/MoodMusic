@@ -320,12 +320,14 @@ def api_post_rating():
 
     # Check for an email.
     email = None
-    if request.json['email'] != None and request.json['email'] != '':
-        email = request.json['email']
-    elif session['email'] != None:
+    # TODO broken
+    #if request.json['email'] != None: and request.json['email'] != '':
+    #    email = request.json['email']
+    if session['email'] != None:
         email = session['email']
     else:
-        return jsonify({'result': -1})
+        email = request.json['email']
+        #return jsonify({'result': -1})
 
     rating = request.json['rating']
 
@@ -382,13 +384,14 @@ def api_post_mood():
 
     # Check for an email.
     email = None
-    if request.json['email'] != None and request.json['email'] != '':
-        email = request.json['email']
-    elif session['email'] != None:
+    # TODO broken
+    #if request.json['email'] != None and request.json['email'] != '':
+    #    email = request.json['email']
+    if session['email'] != None:
         email = session['email']
-
     else:
-        return jsonify({'result': -1})
+        email = request.json['email']
+        #return jsonify({'result': -1})
 
     mood = request.json['mood']
     music = DbFunct.song_data_get(request.json['artist'], request.json['album'], request.json['title'])
