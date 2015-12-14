@@ -284,7 +284,7 @@ def api_post_rating():
 
     # TODO, fails if the music/song was not found (= None).
     DbFunct.song_rate_set_rating(email, music, rating)
-    return jsonify({'success': rating})
+    return jsonify({'result': rating})
 
 
 @app.route('/api/mood', methods=['POST'])
@@ -316,7 +316,7 @@ def api_post_mood():
 
     # TODO, fails if the music/song was not found (= None).
     DbFunct.song_rate_set_mood(email, music, mood)
-    return jsonify({'success': 1})
+    return jsonify({'result': 1})
 
 
 # Enable HTTPS

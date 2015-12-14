@@ -27,7 +27,7 @@ function setRating(item) {
             console.log("setRating success");
 
             // Use the server result to color the starts.
-            var ratSet = data.success;
+            var ratSet = data.result;
 
             ratSet >= 1 ? rat1.css('color', 'orange') : rat1.css('color', '#aaa');
             ratSet >= 2 ? rat2.css('color', 'orange') : rat2.css('color', '#aaa');

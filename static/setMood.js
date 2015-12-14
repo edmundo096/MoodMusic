@@ -33,7 +33,8 @@ function setMood() {
         success: function (data) {
             console.log("setMood success");
 
-            if (data.success == 1) {
+            // Use the server result to set the post result.
+            if (data.result == 1) {
                 var oldSelectedText = select.options[select.selectedIndex].text;
                 select.selectedIndex = 0;
                 select.options[0].text = oldSelectedText + ' saved';
