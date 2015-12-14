@@ -357,15 +357,15 @@
         console.log('Player: Reloading data with...');
         console.log(paramsObj);
         // Update data attributes (just as reference!).
-        jqPlayer.data('sourceType', paramsObj.sourceType);
-        jqPlayer.data('source', paramsObj.source);
+        jqPlayer.attr('data-source-type', paramsObj.sourceType);
+        jqPlayer.attr('data-source', paramsObj.source);
 
-        jqPlayer.data('infoAlbumArt', paramsObj.infoAlbumArt);      // Currently not used.
-        jqPlayer.data('infoAlbumTitle', paramsObj.infoAlbumTitle);
-        jqPlayer.data('infoArtist', paramsObj.infoArtist);
-        jqPlayer.data('infoTitle', paramsObj.infoTitle);
-        jqPlayer.data('infoLabel', paramsObj.infoLabel);
-        jqPlayer.data('infoYear', paramsObj.infoYear);
+        jqPlayer.attr('data-info-album-art', paramsObj.infoAlbumArt);      // Currently not used.
+        jqPlayer.attr('data-info-album-title', paramsObj.infoAlbumTitle);
+        jqPlayer.attr('data-info-artist', paramsObj.infoArtist);
+        jqPlayer.attr('data-info-title', paramsObj.infoTitle);
+        jqPlayer.attr('data-info-label', paramsObj.infoLabel);
+        jqPlayer.attr('data-info-year', paramsObj.infoYear);
 
         // Load YT video.
         var ytPlayer = window.ytPlayer;
