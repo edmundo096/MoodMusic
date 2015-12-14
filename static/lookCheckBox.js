@@ -23,12 +23,12 @@ function post(path, params, method) {
 }
 
 function getCheckBox(Form){
-	mood="humeur:";
+	mood="mood:";
 	for (i=0 ; i<Form.elements.length; i++){
 		
 		if(Form.elements[i].type =="checkbox"){
 			if(Form.elements[i].checked==true){
-				mood=mood+" "+Form.elements[i].getAttribute('data-humeur');
+				mood=mood+" "+Form.elements[i].getAttribute('data-mood');
 			}
 		}
 		
