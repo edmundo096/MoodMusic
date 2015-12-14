@@ -120,7 +120,7 @@ define({ "api": [
     "groupTitle": "Song",
     "sampleRequest": [
       {
-        "url": "http://localhost/api/getMusic"
+        "url": "http://moodmusic-ltu.herokuapp.com/api/getMusic"
       }
     ]
   },
@@ -188,7 +188,7 @@ define({ "api": [
             "type": "<p>string</p> ",
             "optional": false,
             "field": "email",
-            "description": "<p>The email of the user that post the mood classfication.</p> "
+            "description": "<p>The email of the user that post the mood classification.</p> "
           }
         ]
       }
@@ -239,7 +239,7 @@ define({ "api": [
     "groupTitle": "Song",
     "sampleRequest": [
       {
-        "url": "http://localhost/api/mood"
+        "url": "http://moodmusic-ltu.herokuapp.com/api/mood"
       }
     ]
   },
@@ -344,7 +344,7 @@ define({ "api": [
     "groupTitle": "Song",
     "sampleRequest": [
       {
-        "url": "http://localhost/api/rating"
+        "url": "http://moodmusic-ltu.herokuapp.com/api/rating"
       }
     ]
   }
