@@ -3,6 +3,7 @@
 import os
 from sqlalchemy import *
 
+privateConn = None
 
 def init():
     """Create the engine and connect to the DB"""
@@ -22,8 +23,13 @@ def init():
     engine = create_engine(db_url, echo=False)
 
     metadata = MetaData(engine)
-    connection = engine.connect()
-    return connection
+
+    global privateConn
+    if privateConn == None or privateConn.closed:
+        privateConn = engine.connect()
+
+    #connection = engine.connect()
+    return privateConn
 
 
 # ----------------------------------------
@@ -38,7 +44,7 @@ def user_user_insert(username_u, email_u, password_u):
     sql = "INSERT INTO users SET email='" + email_u.encode("utf-8") + "', password='" + password_u.encode(
         "utf-8") + "', username='" + username_u.encode("utf-8") + "'"
     connection.execute(sql)
-    connection.close()
+
 
 
 def user_user_get(email, mdp):
@@ -69,7 +75,7 @@ def user_password_update(password, email):
     sql = "UPDATE users SET password='" + password.encode("utf-8") + "' WHERE users.email='" + email.encode(
         "utf-8") + "'"
     connection.execute(sql)
-    connection.close()
+
 
 
 def user_image_update(image_path, email):
@@ -79,7 +85,7 @@ def user_image_update(image_path, email):
     connection = init()
     sql = "UPDATE users SET imagePath='" + image_path.encode("utf-8") + "' WHERE users.email='" + email.encode("utf-8") + "'"
     connection.execute(sql)
-    connection.close()
+
 
 
 def user_image_get(email):
@@ -99,7 +105,7 @@ def user_image_get(email):
     # first() Returns None if no row is present.
     first_row = results_img.first()
 
-    connection.close()
+
     if first_row is not None:
         # Return the imagePath from the first_row (either with first_row.imagePath or first_row[0]).
         return first_row.imagePath
@@ -125,7 +131,7 @@ def song_songs_get_all(source ='youtube'):
     for music_result_row in connection.execute(sql):
         list.append(music_result_row)
 
-    connection.close()
+
     return list
 
 
@@ -146,7 +152,7 @@ def song_songs_get_latest(source = 'youtube'):
         list.append(m)
         i += 1
 
-    connection.close()
+
     return list
 
 
@@ -167,7 +173,7 @@ def song_songs_get_top_global(source ='youtube'):
         list.append(m)
         i += 1
 
-    connection.close()
+
     return list
 
 
@@ -188,7 +194,7 @@ def song_songs_get_top_personal(email, source = 'youtube'):
         list.append(m)
         i += 1
 
-    connection.close()
+
     return list
 
 
@@ -246,7 +252,7 @@ def song_songs_get_with_mood(selected_moods, email, source = 'youtube'):
             i += 1
         k -= 1
 
-    connection.close()
+
     return playlist
 
 
@@ -270,7 +276,7 @@ def song_songs_get_with_search(listKeyword, source = 'youtube'):
                 print music
                 listMusic.append(music)
 
-    connection.close()
+
     return listMusic
 
 
@@ -307,7 +313,7 @@ def song_rate_set_mood(email, music, mood):
     # Check if an user with that email does Not exists.
     sql = "SELECT * FROM users WHERE users.email='" + email.encode("utf-8") + "'"
     if connection.execute(sql).first() == None:
-        connection.close()
+
         return False
 
     sql = "SELECT * FROM rates WHERE rates.useremail='" + email.encode("utf-8") + "' AND rates.idmusic = " + str(
@@ -323,7 +329,7 @@ def song_rate_set_mood(email, music, mood):
         sql = "UPDATE rates SET mood='" + mood.encode("utf-8") + "' WHERE id=" + str(rates[0].id)
         connection.execute(sql)
 
-    connection.close()
+
     return True
 
 
@@ -340,7 +346,7 @@ def song_rate_set_rating(email, music, rating):
     # Check if an user with that email does Not exists.
     sql = "SELECT * FROM users WHERE users.email='" + email.encode("utf-8") + "'"
     if connection.execute(sql).first() == None:
-        connection.close()
+
         return False
 
     sql = "SELECT * FROM rates, users WHERE rates.useremail='" + email.encode(
@@ -356,5 +362,5 @@ def song_rate_set_rating(email, music, rating):
         sql = "UPDATE rates SET rating=" + rating + " WHERE id=" + str(rates[0].id)
         connection.execute(sql)
 
-    connection.close()
+
     return True
