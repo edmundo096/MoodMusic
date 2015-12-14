@@ -87,7 +87,7 @@ p.spacer{
 }
 
 h3{
-	font-family: "Comic Sans MS", Verdana, Arial, "Arial Black";
+	font-family: Verdana, Arial, "Arial Black";
 }
 
 .lft{
@@ -97,18 +97,18 @@ h3{
 
 
 h6{
-   font-family: Aller, "Comic Sans MS", Verdana, Arial, "Arial Black";
+   font-family: Aller, Verdana, Arial, "Arial Black";
    font-size: medium;
    padding-left: 30px;
 }
 
 h7{
-   font-family: "Comic Sans MS", Verdana, Arial, "Arial Black";
+   font-family: Verdana, Arial, "Arial Black";
    font-size: 17px;
 }
 
 h8{
-	font-family: "Comic Sans MS", Verdana, Arial, "Arial Black";
+	font-family: Verdana, Arial, "Arial Black";
 	font-size: 40px;
 	color: black;
 }
