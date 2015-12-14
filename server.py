@@ -326,8 +326,8 @@ def api_post_rating():
     if session['email'] != None:
         email = session['email']
     else:
-        email = request.json['email']
-        #return jsonify({'result': -1})
+        #email = request.json['email']
+        return jsonify({'result': -1})
 
     rating = request.json['rating']
 
@@ -390,8 +390,8 @@ def api_post_mood():
     if session['email'] != None:
         email = session['email']
     else:
-        email = request.json['email']
-        #return jsonify({'result': -1})
+        #email = request.json['email']
+        return jsonify({'result': -1})
 
     mood = request.json['mood']
     music = DbFunct.song_data_get(request.json['artist'], request.json['album'], request.json['title'])

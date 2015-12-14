@@ -4,7 +4,7 @@
   "description": "This is the MoodMusic apiDoc",
   "title": "MoodMusic apiDoc",
   "url": "http://moodmusic-ltu.herokuapp.com",
-  "sampleUrl": "http://localhost",
+  "sampleUrl": "http://moodmusic-ltu.herokuapp.com",
   "template": {
     "withCompare": false
   }
