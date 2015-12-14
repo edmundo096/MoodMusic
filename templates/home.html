@@ -389,8 +389,8 @@
 
                     <div class="panel-body couleur-body">
                         <ul class="playlist">
-                            {% for musique in music_list %}
-                                {% if music_list.index(musique)==5 and music_list|length>5 %}
+                            {% for song in music_list %}
+                                {% if music_list.index(song)==5 and music_list|length>5 %}
                                     <p>
                                         <button id="titi" class="btn btn-primary btn-lg" Title="Voir plus de musiques"
                                                 onclick="div_afficher_masque()">
@@ -405,11 +405,11 @@
 
                                 {# Main "getMusic()" JavaScript function. #}
                                 <a class="list-group-item marge-bas" onClick="getMusic(this)"
-                                   data-artist="{{ musique['artist'] }}"
-                                   data-album="{{ musique['album'] }}"
-                                   data-title="{{ musique['title'] }}">
+                                   data-artist="{{ song['artist'] }}"
+                                   data-album="{{ song['album'] }}"
+                                   data-title="{{ song['title'] }}">
                                     <span class="glyphicon glyphicon-music"></span>
-                                    {{ musique['artist'] }} - {{ musique['album'] }} - {{ musique['title'] }}
+                                    {{ song['artist'] }} - {{ song['album'] }} - {{ song['title'] }}
                                 </a>
                             {% endfor %}
 
