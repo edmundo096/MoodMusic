@@ -28,6 +28,13 @@ function getMusic(element) {
                 infoYear: data.year
             };
             player.trigger('loadNew', params);
+
+            // Reset rating stars color.
+            $('#rating-1').css('color', '#aaa');
+            $('#rating-2').css('color', '#aaa');
+            $('#rating-3').css('color', '#aaa');
+            $('#rating-4').css('color', '#aaa');
+            $('#rating-5').css('color', '#aaa');
         },
         error: function (data) {
             console.log("Error:");
