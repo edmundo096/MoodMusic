@@ -135,7 +135,6 @@ def nav_profile():
                                image=filename)
 
 
-
 # ---------------------------------------
 # Music Pages
 # ----------------------------------------
@@ -229,7 +228,7 @@ def last_music():
 # ========================================
 
 @app.route('/api/getMusic', methods=['GET'])
-def getMusic():
+def api_get_music():
     """
     @api {get} /api/getMusic Get song data
     @apiGroup Song
@@ -256,10 +255,10 @@ def getMusic():
                     'label': music.label, 'music_path': music.musicPath, 'image_path': music.imagePath})
 
 
-@app.route('/api/note', methods=['POST'])
-def rating():
+@app.route('/api/rating', methods=['POST'])
+def api_post_rating():
     """
-    @api {post} /api/note Post a song rate
+    @api {post} /api/rating Post a song rate
     @apiGroup Song
 
     @apiParam {string} artist The exact song's artist name on the system.
@@ -285,13 +284,13 @@ def rating():
 
     # TODO, fails if the music/song was not found (= None).
     DbFunct.song_rate_set_rating(email, music, rating)
-    return jsonify({'succes': 1})
+    return jsonify({'succes': rating})
 
 
-@app.route('/api/humeur', methods=['POST'])
-def setHumeur():
+@app.route('/api/mood', methods=['POST'])
+def api_post_mood():
     """
-    @api {post} /api/humeur Post song mood
+    @api {post} /api/mood Post song mood
     @apiGroup Song
 
     @apiParam {string} artist The exact song's artist name on the system.
