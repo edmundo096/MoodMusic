@@ -35,6 +35,8 @@ function getMusic(element) {
             $('#rating-3').css('color', '#aaa');
             $('#rating-4').css('color', '#aaa');
             $('#rating-5').css('color', '#aaa');
+            // Reset mood combo text.
+            document.getElementById("comboselect").options[0].text = 'Choose a mood';
         },
         error: function (data) {
             console.log("Error:");

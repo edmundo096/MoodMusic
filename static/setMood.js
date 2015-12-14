@@ -1,13 +1,17 @@
 /*Script to set a mood */
 function setMood() {
 
-    select = document.getElementById("comboselect");
-    choice = select.selectedIndex;
+    var select = document.getElementById("comboselect");
+    var choice = select.selectedIndex;
     var value = select.options[choice].value;
     var text = select.options[choice].text;
 
     console.log(value);
     //console.log(text);
+
+    // Check if the value is empty.
+    if (value == '')
+        return;
 
     var player = $('#player');
 
@@ -27,10 +31,16 @@ function setMood() {
         dataType: 'json',
         contentType: 'application/json; charset=utf-8',
         success: function (data) {
-            console.log("setMood success")
+            console.log("setMood success");
+
+            if (data.success == 1) {
+                var oldSelectedText = select.options[select.selectedIndex].text;
+                select.selectedIndex = 0;
+                select.options[0].text = oldSelectedText + ' saved';
+            }
         },
         error: function (data) {
-            console.log("setMood error")
+            console.log("setMood error");
         }
     });
 }
