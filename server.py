@@ -231,26 +231,53 @@ def last_music():
 def api_get_music():
     """
     @api {get} /api/getMusic Get song data
+    @apiName api_get_music
     @apiGroup Song
 
     @apiParam {string} artist The exact song's artist name on the system.
     @apiParam {string} album The exact song's album name on the system.
     @apiParam {string} title The exact song's title on the system.
 
+    @apiSuccess {string} artist     The song artist name on the system.
+    @apiSuccess {string} album      The song album name on the system.
+    @apiSuccess {string} title      The song title on the system.
+    @apiSuccess {string} year       The song year of release on the system.
+    @apiSuccess {string} label      The song label on the system.
+    @apiSuccess {string} music_path The song's YouTube video ID.
+    @apiSuccess {string} image_path The song cover image URL (currently not used).
+    @apiError {number} result The result of the GET, being
+                              <code>-1</code> for incomplete/incorrect parameters, or
+                              <code>0</code> for a song not found.
+    @apiSuccessExample {json} Success-Response for an example song:
+                            {
+                                "album":"Motion",
+                                "artist":"Calvin Harris",
+                                "image_path":null,
+                                "label":"Columbia Records; Syco; Syco Music UK",
+                                "music_path":"ebXbLfLACGM",
+                                "title":"Summer",
+                                "year":2014
+                            }
+    @apiErrorExample {json} Error-Response:
+                            { "result": 0 }
+
     @apiDescription
-    API getMusic route makes a GET to get the Music from the DB,
+    API getMusic route makes a GET to get the Music from the DB.
     Returns JSON object.
     """
     #@apiParam {String="info","id"} [method=id]  Especifies the information used to query the song, either with id or info.
 
     if  request.args.get('artist') == None or request.args.get('album') == None or request.args.get('title') == None:
-        return jsonify({})
+        return jsonify({'result': -1})
+    if  request.args.get('artist') == '' or request.args.get('album') == '' or request.args.get('title') == '':
+        return jsonify({'result': -1})
 
     music = DbFunct.song_data_get(request.args.get('artist'), request.args.get('album'), request.args.get('title'))
-    # TODO!! return empty JSON if result is None
 
-    print "api getMusic() music: "
-    print music
+    # Check if there was any returned song from DB.
+    if music == None:
+        return jsonify({'result': 0})
+
     return jsonify({'artist': music.artist, 'album': music.album, 'title': music.title, 'year': music.year,
                     'label': music.label, 'music_path': music.musicPath, 'image_path': music.imagePath})
 
@@ -258,65 +285,123 @@ def api_get_music():
 @app.route('/api/rating', methods=['POST'])
 def api_post_rating():
     """
-    @api {post} /api/rating Post a song rate
+    @api {post} /api/rating Post a song rating
+    @apiName api_post_rating
     @apiGroup Song
 
     @apiParam {string} artist The exact song's artist name on the system.
     @apiParam {string} album The exact song's album name on the system.
     @apiParam {string} title The exact song's title on the system.
     @apiParam {number{1}=1,2,3,4,5} rating The rating given to the song.
-    @apiParam {string} email TODO, The email of the user that post the rating.
+    @apiParam {string} email The email of the user that post the rating.
+
+    @apiSuccess {number} result The result of the POST, being the sent Rating from <code>1</code> to <code>5</code> for Success.
+    @apiError {number} result The result of the POST, being
+                              <code>-1</code> for incomplete/incorrect parameters, or
+                              <code>0</code> for a song not found.
+    @apiSuccessExample {json} Success-Response for a 4 start Rating:
+                              { "result": 4 }
+    @apiErrorExample {json} Error-Response:
+                            { "result": 0 }
 
     @apiDescription
     API note to set a note for a song.
     Returns JSON object.
     """
-    if request.json['artist'] == None or request.json['album'] == None or request.json['title'] == None or request.json['rating'] == None:
-        return jsonify({'result': 0})
-
-    # TODO!! use email
-
     if not request.json:
-        abort(300)
-    email = session['email']
-    music = DbFunct.song_data_get(request.json['artist'], request.json['album'], request.json['title'])
+        return jsonify({'result': -1}) #abort(300)
+
+    if request.json['artist'] == None or request.json['album'] == None or request.json['title'] == None or request.json['rating'] == None:
+        return jsonify({'result': -1})
+    if request.json['artist'] == '' or request.json['album'] == '' or request.json['title'] == '' or request.json['rating'] == '':
+        return jsonify({'result': -1})
+    if not request.json['rating'].isdigit():
+        return jsonify({'result': -1})
+
+    # Check for an email.
+    email = None
+    if request.json['email'] != None and request.json['email'] != '':
+        email = request.json['email']
+    elif session['email'] != None:
+        email = session['email']
+    else:
+        return jsonify({'result': -1})
+
     rating = request.json['rating']
 
-    # TODO, fails if the music/song was not found (= None).
-    DbFunct.song_rate_set_rating(email, music, rating)
-    return jsonify({'result': rating})
+    # Check if rating range is Not valid.
+    if int(rating) < 1 or int(rating) > 5:
+        return jsonify({'result': -1})
+
+    music = DbFunct.song_data_get(request.json['artist'], request.json['album'], request.json['title'])
+
+    # Check if there was any returned song from DB.
+    if music == None:
+        return jsonify({'result': 0})
+
+    result = DbFunct.song_rate_set_rating(email, music, rating)
+    if result == True:
+        return jsonify({'result': int(rating)})
+    else:
+        return jsonify({'result': -1})
 
 
 @app.route('/api/mood', methods=['POST'])
 def api_post_mood():
     """
     @api {post} /api/mood Post song mood
+    @apiName api_post_mood
     @apiGroup Song
 
     @apiParam {string} artist The exact song's artist name on the system.
     @apiParam {string} album The exact song's album name on the system.
     @apiParam {string} title The exact song's title on the system.
-    @apiParam {string} mood The mood classification given to the song.
-                            TODO, enumerate the moods.
-    @apiParam {string} email TODO, The email of the user that post the mood classfication.
+    @apiParam {string=Chill,Sad,Nostalgic,Gaming,Travel,Motivated,Enthusiastic,Upset,Inspired,Festive,Hard,Geek,Instrumental,Creative,Tropical,Studious,Aggressive,Calm,Adventurous,Humorous} mood
+              The mood classification given to the song.
+    @apiParam {string} email The email of the user that post the mood classfication.
+
+    @apiSuccess {number} result The result of the POST, being <code>1</code> for Success.
+    @apiError {number} result The result of the POST, being
+                              <code>-1</code> for incomplete/incorrect parameters, or
+                              <code>0</code> for a song not found.
+    @apiSuccessExample {json} Success-Response:
+                              { "result": 1 }
+    @apiErrorExample {json} Error-Response:
+                            { "result": 0 }
 
     @apiDescription
     Route to post a mood to song.
     """
+    if not request.json:
+        return jsonify({'result': -1}) #abort(300)
+
     if request.json['artist'] == None or request.json['album'] == None or request.json['title'] == None or request.json['mood'] == None:
+        return jsonify({'result': -1})
+    if request.json['artist'] == '' or request.json['album'] == '' or request.json['title'] == '' or request.json['mood'] == '':
+        return jsonify({'result': -1})
+
+    # Check for an email.
+    email = None
+    if request.json['email'] != None and request.json['email'] != '':
+        email = request.json['email']
+    elif session['email'] != None:
+        email = session['email']
+
+    else:
+        return jsonify({'result': -1})
+
+    mood = request.json['mood']
+    music = DbFunct.song_data_get(request.json['artist'], request.json['album'], request.json['title'])
+
+    # Check if there was any returned song from DB.
+    if music == None:
         return jsonify({'result': 0})
 
-    # TODO!! use email
-
-    if not request.json:
-        abort(300)
-    email = session['email']
-    music = DbFunct.song_data_get(request.json['artist'], request.json['album'], request.json['title'])
-    mood = request.json['mood']
-
-    # TODO, fails if the music/song was not found (= None).
-    DbFunct.song_rate_set_mood(email, music, mood)
-    return jsonify({'result': 1})
+    result = DbFunct.song_rate_set_mood(email, music, mood)
+    if result == True:
+        return jsonify({'result': 1})
+    else:
+        return jsonify({'result': -1})
 
 
 # Enable HTTPS

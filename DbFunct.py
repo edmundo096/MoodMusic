@@ -282,13 +282,21 @@ def song_data_get(artist, album, title, source = 'youtube'):
 
 def song_rate_set_mood(email, music, mood):
     """
-    Insert or Update a mood to a song, given an user email.
+    Insert or Update a mood to a song, given an existing user email.
+
+    :returns: Boolean, false if email does not exists on a user, true otherwise.
+    :rtype: bool
     """
     connection = init()
     rates = []
+
+    # Check if an user with that email does Not exists.
+    sql = "SELECT * FROM users WHERE users.email='" + email.encode("utf-8") + "'"
+    if connection.execute(sql).first() == None:
+        return False
+
     sql = "SELECT * FROM rates WHERE rates.useremail='" + email.encode("utf-8") + "' AND rates.idmusic = " + str(
         music.idmusic)
-
     for moodListResult in connection.execute(sql):
         rates.append(moodListResult)
 
@@ -300,17 +308,29 @@ def song_rate_set_mood(email, music, mood):
         sql = "UPDATE rates SET mood='" + mood.encode("utf-8") + "' WHERE id=" + str(rates[0].id)
         connection.execute(sql)
 
+    return True
+
 
 def song_rate_set_rating(email, music, rating):
     """
-    Insert or Update a rating to a song, given an user email.
+    Insert or Update a rating to a song, given an existing user email.
+
+    :returns: Boolean, false if email does not exists on a user, true otherwise.
+    :rtype: bool
     """
     connection = init()
     rates = []
-    sql = "SELECT * FROM rates WHERE rates.useremail='" + email.encode("utf-8") + "' AND rates.idmusic=" + str(
-        music.idmusic)
+
+    # Check if an user with that email does Not exists.
+    sql = "SELECT * FROM users WHERE users.email='" + email.encode("utf-8") + "'"
+    if connection.execute(sql).first() == None:
+        return False
+
+    sql = "SELECT * FROM rates, users WHERE rates.useremail='" + email.encode(
+        "utf-8") + "' AND users.email = rates.useremail AND rates.idmusic=" + str(music.idmusic)
     for rate in connection.execute(sql):
         rates.append(rate)
+
     if not rates:
         sql = "INSERT INTO rates SET useremail='" + email.encode("utf-8") + "', idmusic=" + str(
             music.idmusic) + ", rating=" + rating
@@ -318,3 +338,5 @@ def song_rate_set_rating(email, music, rating):
     else:
         sql = "UPDATE rates SET rating=" + rating + " WHERE id=" + str(rates[0].id)
         connection.execute(sql)
+
+    return True
