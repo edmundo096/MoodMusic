@@ -33,5 +33,5 @@ function getCheckBox(Form){
 		}
 		
 	}
-	post("/accueil",{ search: mood})
+	post("/home",{ search: mood})
 }
