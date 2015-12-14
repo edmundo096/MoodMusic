@@ -44,7 +44,8 @@ def user_user_get(email, mdp):
     """
     Get an User, using email, and optionally, a hashed password.
 
-    :returns: User object as {email, password, username, imagePath}.
+    :returns: Object as {email, password, username, imagePath}, if not found then None.
+    :rtype: sqlalchemy.engine.result.RowProxy
     """
     connection = init()
     users = []
@@ -53,10 +54,10 @@ def user_user_get(email, mdp):
     else:
         sql = "SELECT * FROM users WHERE users.email='" + email.encode("utf-8") + "' AND users.password='" + mdp.encode(
             "utf-8") + "'"
-    user = None
-    for user in connection.execute(sql):
-        users.append(user)
-    return user
+
+    results = connection.execute(sql)
+
+    return results.first()
 
 
 def user_password_update(password, email):
@@ -96,8 +97,8 @@ def user_image_get(email):
     first_row = results_img.first()
 
     if first_row is not None:
-        # Return the imagePath from the first_row tuple.
-        return first_row[0]
+        # Return the imagePath from the first_row (either with first_row.imagePath or first_row[0]).
+        return first_row.imagePath
     else:
         return None
 
@@ -106,53 +107,54 @@ def user_image_get(email):
 # Songs handling
 # ----------------------------------------
 
-def listMusicYoutube():
+def song_songs_get_all(source ='youtube'):
     """
-    Returns the list of Music.
+    Get an Array of all songs in DB matching the source.
+    Default source is 'youtube'.
+
+    :returns: An Object Array of matched songs, each as {artist, title, album}.
     """
     connection = init()
     list = []
-    sql = "SELECT Music.artist, Music.title, Music.album FROM Music WHERE Music.source = 'youtube'"
-    for music in connection.execute(sql):
-        print music
-        list.append(music)
+    sql = "SELECT Music.artist, Music.title, Music.album FROM Music WHERE Music.source = '{s}'".format(s=source)
+
+    for music_result_row in connection.execute(sql):
+        list.append(music_result_row)
+
     return list
 
 
-def get_song_data(artist, album, title):
+def song_data_get(artist, album, title, source = 'youtube'):
     """
-    Get a song data from the DB
-    Returns an object with the properties: idmusic, title, musicPath, album, label, year, artist, imagePath.
+    Get a song with its data, from the specified artist, album, title, and source.
+    Default source is 'youtube'.
+
+    :returns: Object as {idmusic, title, musicPath, album, label, year, artist, imagePath}.
+    :rtype: sqlalchemy.engine.result.RowProxy
     """
     connection = init()
-    list = []
+
     sql = "SELECT Music.idmusic, Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music WHERE Music.title = '" + title.encode(
         "utf-8") + "' AND Music.artist = '" + artist.encode(
-        "utf-8") + "' AND Music.album = '" + album.encode("utf-8") + "' AND Music.source = 'youtube'"
+        "utf-8") + "' AND Music.album = '" + album.encode("utf-8") + "' AND Music.source = '{s}'".format(s=source)
 
-    for music in connection.execute(sql):
-        list.append(music)
-        # TODO Currently returns the last one form the list of the DB query.
+    # TODO Currently returns the first result (DB or function should be modified to only permit only 1 result, i.e. using a PK).
+    results = connection.execute(sql)
 
-    print "recupMusiqueYoutube list: {list}".format(list=list)
-
-    # return music
-    if len(list) > 0:
-        return list[0]
-    else:
-        return None
+    return results.first()
 
 
-def lastMusic():
+def song_songs_get_latest(source = 'youtube'):
     """
-    return the list of last songs
-    (But only the ones that are classified at least 1 time by any user, in other words, that exists on the rates table)
-    Ordered by the Album Year in Descendent.
+    Get an Array of the first 10 latest songs in DB, i.e. ordered by Decedent Year, matching the source.
+    Default source is 'youtube'.
+
+    :returns: An Object Array of matched songs, each as {title, musicPath, album, label, year, artist, imagePath}.
     """
     connection = init()
     list = []
     i = 0
-    sql = "SELECT Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND Music.source = 'youtube' ORDER BY Music.year DESC"
+    sql = "SELECT Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music WHERE Music.source = '{s}' ORDER BY Music.year DESC".format(s=source)
     for m in connection.execute(sql):
         if i == 10:
             break
@@ -161,15 +163,17 @@ def lastMusic():
     return list
 
 
-def listTopMusicAll():
+def song_songs_get_top_global(source ='youtube'):
     """
-    return the list of top Music ordred by rating of users
+    Get an Array of the first 10 top rated songs in DB, i.e. ordered by Decedent Rating, matching the source.
     (But only the ones that are classified at least 1 time by any user, in other words, that exists on the rates table)
+
+    :returns: An Object Array of matched songs, each as {title, artist, album, imagePath}.
     """
     connection = init()
     list = []
     i = 0
-    sql = "SELECT Music.title, Music.artist, Music.album, Music.imagePath, Music.musicPath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND Music.source = 'youtube' ORDER BY rates.rating DESC"
+    sql = "SELECT Music.title, Music.artist, Music.album, Music.imagePath, Music.musicPath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND Music.source = '{s}' ORDER BY rates.rating DESC".format(s=source)
     for m in connection.execute(sql):
         if i == 10:
             break
@@ -178,17 +182,23 @@ def listTopMusicAll():
     return list
 
 
-def algoMatchYoutube(listMood, email):
+def song_songs_get_with_mood(selected_moods, email, source = 'youtube'):
     """
     function that gets music according to a specific mood set by the User email.
+
+    TODO: broken
+
+    :returns: An Object Array of matched songs, each as {---}.
     """
     connection = init()
     listGenre = []
     listAppGenre = []
     nbMusic = 0
-    for Mood in listMood:
+
+    for mood in selected_moods:
         sql = "SELECT Music.genre FROM Music, rates WHERE Music.idmusic = rates.idmusic AND rates.useremail = '" + email.encode(
-            "utf-8") + "' AND rates.mood LIKE '%%" + Mood.encode("utf-8") + "%%' AND Music.source = 'youtube'"
+            "utf-8") + "' AND rates.mood LIKE '%%" + mood.encode("utf-8") + "%%' AND Music.source = '{s}'".format(s=source)
+
         for listSQLGenre in connection.execute(sql):
             nbMusic += 1
             for genre in listSQLGenre.genre.split():
@@ -197,12 +207,16 @@ def algoMatchYoutube(listMood, email):
                 else:
                     listGenre.append(genre)
                     listAppGenre.append(1)
+
     listGenreImportant = []
+
     if nbMusic != 0:
         for genre in listGenre:
             if listAppGenre[listGenre.index(genre)] / float(nbMusic) >= 0.5:
                 listGenreImportant.append(genre)
+
     playlist = []
+
     k = len(listGenreImportant)
     while k > 0:
         i = 0
@@ -210,7 +224,7 @@ def algoMatchYoutube(listMood, email):
             sql = ""
             for genre in listGenreImportant[i:i + k]:
                 if sql == "":
-                    sql = "SELECT Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music WHERE Music.genre LIKE '%%" + genre + "%%' AND Music.source = 'youtube'"
+                    sql = "SELECT Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music WHERE Music.genre LIKE '%%" + genre + "%%' AND Music.source = '{s}'".format(s=source)
                 else:
                     sql += " AND Music.genre LIKE '%%" + genre + "%%'"
 
@@ -221,12 +235,13 @@ def algoMatchYoutube(listMood, email):
                     playlist.append(music)
             i += 1
         k -= 1
+
     return playlist
 
 
-def insertMood(email, music, mood):
+def song_rate_insert_mood(email, music, mood):
     """
-    insert a mood to a song.
+    Insert or Update a mood to a song, given an user email.
     """
     connection = init()
     rates = []
@@ -245,14 +260,19 @@ def insertMood(email, music, mood):
         connection.execute(sql)
 
 
-def searchMusicYoutube(listKeyword):
+def song_songs_get_with_search(listKeyword, source = 'youtube'):
     """
     Music search.
+    Get an Array of all songs in DB matching the source and the keywords with any of the following:
+        title, artist, album, label, year.
+    Default source is 'youtube'
+
+    :returns: An Object Array of matched songs, each as {album, artist, label, year, title}.
     """
     connection = init()
     listMusic = []
     for keyword in listKeyword:
-        sql = "SELECT Music.album, Music.artist, music.label, music.year, Music.title FROM Music WHERE (Music.title LIKE '%%" + keyword + "%%' OR Music.artist LIKE '%%" + keyword + "%%' OR Music.album LIKE '%%" + keyword + "%%' OR Music.label LIKE '%%" + keyword + "%%' OR Music.year LIKE '%%" + keyword + "%%') AND  Music.source = 'youtube'"
+        sql = "SELECT Music.album, Music.artist, music.label, music.year, Music.title FROM Music WHERE (Music.title LIKE '%%" + keyword + "%%' OR Music.artist LIKE '%%" + keyword + "%%' OR Music.album LIKE '%%" + keyword + "%%' OR Music.label LIKE '%%" + keyword + "%%' OR Music.year LIKE '%%" + keyword + "%%') AND  Music.source = '{s}'".format(s=source)
         for music in connection.execute(sql):
             if music in listMusic:
                 pass
@@ -262,9 +282,9 @@ def searchMusicYoutube(listKeyword):
     return listMusic
 
 
-def insertRating(email, music, rating):
+def song_rate_insert_rating(email, music, rating):
     """
-    insert a rating to a song.
+    Insert or Update a rating to a song, given an user email.
     """
     connection = init()
     rates = []
@@ -281,22 +301,20 @@ def insertRating(email, music, rating):
         connection.execute(sql)
 
 
-def listTopMusicUser(email):
+def song_songs_get_top_personal(email, source = 'youtube'):
     """
-    user favorite songs
-    (Only the ones that are classified at least 1 time by the user)
+    Get an Array of the favorite, first 3 top User rated songs in DB, i.e. ordered by Decedent Rating, matching the source.
+
+    :returns: An Object Array of matched songs, each as {title, artist, album, imagePath}.
     """
     connection = init()
     i = 0
     list = []
     sql = "SELECT Music.title, Music.artist, Music.album, Music.imagePath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND rates.useremail = '" + email.encode(
-        "utf-8") + "' AND Music.source = 'youtube' ORDER BY rates.rating DESC"
+        "utf-8") + "' AND Music.source = '{s}' ORDER BY rates.rating DESC".format(s=source)
     for m in connection.execute(sql):
         if i == 3:
             break
         list.append(m)
         i += 1
     return list
-
-
-

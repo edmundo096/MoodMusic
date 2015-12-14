@@ -111,7 +111,7 @@ def logout():
 def nav_profile():
     """ route to the user profile """
     list = []
-    list = DbFunct.listTopMusicUser(session['email'])
+    list = DbFunct.song_songs_get_top_personal(session['email'])
 
     img = DbFunct.user_image_get(session['email'])
     print img
@@ -146,7 +146,7 @@ def nav_home():
     if 'username' in session:
         # Get a playlist from DB if client does NOT has one.
         if not session['playlist']:
-            for music in DbFunct.listMusicYoutube():
+            for music in DbFunct.song_songs_get_all():
                 session['playlist'].append({'artist': music.artist , 'album': music.album, 'title': music.title})
 
         list = session['playlist']
@@ -154,10 +154,10 @@ def nav_home():
 
         # TODO seems to be broken.. Get the first song from the list, or from the request arguments.
         if (request.args.get('artist') or request.args.get('title')) is None:
-            music = DbFunct.get_song_data(list[0]['artist'], list[0]['album'],
+            music = DbFunct.song_data_get(list[0]['artist'], list[0]['album'],
                                           list[0]['title'])
         else:
-            music = DbFunct.get_song_data(request.args.get('artist'), request.args.get('album'),
+            music = DbFunct.song_data_get(request.args.get('artist'), request.args.get('album'),
                                           request.args.get('title'))
 
         return render_template('home.html', music=music, music_list=list, username=session['username'])
@@ -184,9 +184,9 @@ def nav_home_search():
 
             # Search music by arguments, or by a Mood (set by the same user).
             if (listKeyword[0] != "mood:"):
-                listMusic = DbFunct.searchMusicYoutube(listKeyword)
+                listMusic = DbFunct.song_songs_get_with_search(listKeyword)
             else:
-                listMusic = DbFunct.algoMatchYoutube(listKeyword[1:], session['email'])
+                listMusic = DbFunct.song_songs_get_with_mood(listKeyword[1:], session['email'])
 
             # Cerate playlist.
             for music in listMusic:
@@ -199,7 +199,7 @@ def nav_home_search():
             if not listMusic:
                 return redirect("/home")
             else:
-                music = DbFunct.get_song_data(listMusic[0]['artist'], listMusic[0]['album'],
+                music = DbFunct.song_data_get(listMusic[0]['artist'], listMusic[0]['album'],
                                               listMusic[0]['title'])
                 return render_template('home.html', music=music, music_list=listMusic,
                                        username=session['username'])
@@ -213,14 +213,14 @@ def nav_home_search():
 def top_music():
     """Route to Get the list of Top Music for a user according to the email , return top.html page"""
     email = session['email']
-    list = DbFunct.listTopMusicAll()
+    list = DbFunct.song_songs_get_top_global()
     return render_template('top.html', list_music=list, username=session['username'])
 
 
 @app.route('/last_music')
 def last_music():
     """Route to Get the last music list, return last.html"""
-    list = DbFunct.lastMusic()
+    list = DbFunct.song_songs_get_latest()
     return render_template('last.html', list_music=list, username=session['username'])
 
 
@@ -247,7 +247,9 @@ def getMusic():
     if  request.args.get('artist') == None or request.args.get('album') == None or request.args.get('title') == None:
         return jsonify({})
 
-    music = DbFunct.get_song_data(request.args.get('artist'), request.args.get('album'), request.args.get('title'))
+    music = DbFunct.song_data_get(request.args.get('artist'), request.args.get('album'), request.args.get('title'))
+    # TODO!! return empty JSON if result is None
+
     print "api getMusic() music: "
     print music
     return jsonify({'artist': music.artist, 'album': music.album, 'title': music.title, 'year': music.year,
@@ -273,14 +275,16 @@ def rating():
     if request.json['artist'] == None or request.json['album'] == None or request.json['title'] == None or request.json['rating'] == None:
         return jsonify({'result': 0})
 
+    # TODO!! use email
+
     if not request.json:
         abort(300)
     email = session['email']
-    music = DbFunct.get_song_data(request.json['artist'], request.json['album'], request.json['title'])
+    music = DbFunct.song_data_get(request.json['artist'], request.json['album'], request.json['title'])
     rating = request.json['rating']
 
     # TODO, fails if the music/song was not found (= None).
-    DbFunct.insertRating(email, music, rating)
+    DbFunct.song_rate_insert_rating(email, music, rating)
     return jsonify({'succes': 1})
 
 
@@ -303,14 +307,16 @@ def setHumeur():
     if request.json['artist'] == None or request.json['album'] == None or request.json['title'] == None or request.json['mood'] == None:
         return jsonify({'result': 0})
 
+    # TODO!! use email
+
     if not request.json:
         abort(300)
     email = session['email']
-    music = DbFunct.get_song_data(request.json['artist'], request.json['album'], request.json['title'])
+    music = DbFunct.song_data_get(request.json['artist'], request.json['album'], request.json['title'])
     mood = request.json['mood']
 
     # TODO, fails if the music/song was not found (= None).
-    DbFunct.insertMood(email, music, mood)
+    DbFunct.song_rate_insert_mood(email, music, mood)
     return jsonify({'succes': 1})
 
 
