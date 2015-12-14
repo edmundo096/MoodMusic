@@ -84,14 +84,13 @@
 							<img alt="" src="{{image}}">
 						{% else %}
 							<img alt="" src="http://www.google.fr/url?source=imglanding&ct=img&q=http://www.campusidea.com/images/male_profile.gif&sa=X&ei=1vxRVfrRE8fzUO7GgPgJ&ved=0CAkQ8wc&usg=AFQjCNHSDzqakl83UvKxx_4ttMkkYy95Sg">
-						
 						{% endif %}
 						   
     
   		<form action="" method=post enctype=multipart/form-data>					<input type="file" name="file" style="width:200px; font-size:10px;" /> 
 									<button type=submit onclick="submitPicture()" class="btn btn-primary btn-lg">
 										<span style="font-size:17px;" >
-												<h7>  Submit </h7>
+												<h7>Submit</h7>
 										</span>
 									</button>   </form>		
 
@@ -147,7 +146,7 @@
 					  <!-- List group -->
 					<ul class="list-group">
 						{% for music in list_music %}
-						<li class="list-group-item"> {{ music.titre }}</li>
+						<li class="list-group-item"> {{ music.title }}</li>
 						{% endfor %}
 					 </ul>
 				</div>
@@ -155,12 +154,12 @@
 				<div class="col-lg-3 col-sm-6 panel panel-default panel-liste2">
 					  <!-- Default panel contents -->
 					<div class="panel-heading">
-						<strong>Your favorite artists</strong>
+						<strong>Your favorite Artists</strong>
 					</div>
 					  <!-- List group -->
 					<ul class="list-group">
 					{% for music in list_music %}
-						<li class="list-group-item"> {{music.nomArtist}}</li>
+						<li class="list-group-item"> {{music.artist}}</li>
 					{% endfor %}
 					 </ul>
 				</div>
@@ -174,7 +173,7 @@
 <!---------------------------------- Trucs de fin ------------------------------------------------------------>		
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
+		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 		<script src="/static/submitPassword.js"></script>
 		<script src="/static/submitPicture.js"></script>
 	</body>
