@@ -358,7 +358,7 @@ def api_post_mood():
     @apiParam {string} title The exact song's title on the system.
     @apiParam {string=Chill,Sad,Nostalgic,Gaming,Travel,Motivated,Enthusiastic,Upset,Inspired,Festive,Hard,Geek,Instrumental,Creative,Tropical,Studious,Aggressive,Calm,Adventurous,Humorous} mood
               The mood classification given to the song.
-    @apiParam {string} email The email of the user that post the mood classfication.
+    @apiParam {string} email The email of the user that post the mood classification.
 
     @apiSuccess {number} result The result of the POST, being <code>1</code> for Success.
     @apiError {number} result The result of the POST, being
