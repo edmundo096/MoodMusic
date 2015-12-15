@@ -181,11 +181,15 @@ def nav_home_search():
             if not listKeyword:
                 return redirect("/home")
 
-            # Search music by arguments, or by a Mood (set by the same user).
-            if (listKeyword[0] != "mood:"):
-                listMusic = DbFunct.song_songs_get_with_search(listKeyword)
+            # Search music by Moods (set by the same user), or as a common search.
+            if listKeyword[0] == "mood:":
+                # Check the type of mood search.
+                if listKeyword[1] == 'mood:':
+                    listMusic = DbFunct.song_songs_get_with_mood(listKeyword[2:], session['email'])
+                elif listKeyword[1] == 'genre:':
+                    listMusic = DbFunct.song_songs_get_with_mood_genres(listKeyword[2:], session['email'])
             else:
-                listMusic = DbFunct.song_songs_get_with_mood(listKeyword[1:], session['email'])
+                listMusic = DbFunct.song_songs_get_with_search(listKeyword)
 
             # Cerate playlist.
             for music in listMusic:

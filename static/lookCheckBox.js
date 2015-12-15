@@ -22,13 +22,20 @@ function post(path, params, method) {
     form.submit();
 }
 
-function getCheckBox(Form){
+function getCheckBox(Form, typeOfSearch){
 	mood="mood:";
+
+    // For the mood types.
+    if (typeOfSearch == 'mood')
+        mood += ' ' + 'mood:';
+    else if (typeOfSearch == 'genre')
+        mood += ' ' + 'genre:';
+
 	for (i=0 ; i<Form.elements.length; i++){
 		
 		if(Form.elements[i].type =="checkbox"){
 			if(Form.elements[i].checked==true){
-				mood=mood+" "+Form.elements[i].getAttribute('data-mood');
+				mood += " " + Form.elements[i].getAttribute('data-mood');
 			}
 		}
 		
