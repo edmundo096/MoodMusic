@@ -46,7 +46,6 @@ def user_user_insert(username_u, email_u, password_u):
     connection.execute(sql)
 
 
-
 def user_user_get(email, mdp):
     """
     Get an User, using email, and optionally, a hashed password.
@@ -63,7 +62,6 @@ def user_user_get(email, mdp):
             "utf-8") + "'"
 
     results = connection.execute(sql)
-
     return results.first()
 
 
@@ -77,7 +75,6 @@ def user_password_update(password, email):
     connection.execute(sql)
 
 
-
 def user_image_update(image_path, email):
     """
     Update the profile image_path, from an existent User.
@@ -85,7 +82,6 @@ def user_image_update(image_path, email):
     connection = init()
     sql = "UPDATE users SET imagePath='" + image_path.encode("utf-8") + "' WHERE users.email='" + email.encode("utf-8") + "'"
     connection.execute(sql)
-
 
 
 def user_image_get(email):
@@ -104,7 +100,6 @@ def user_image_get(email):
     # Doc: http://docs.sqlalchemy.org/en/latest/core/connections.html#sqlalchemy.engine.ResultProxy
     # first() Returns None if no row is present.
     first_row = results_img.first()
-
 
     if first_row is not None:
         # Return the imagePath from the first_row (either with first_row.imagePath or first_row[0]).
@@ -131,7 +126,6 @@ def song_songs_get_all(source ='youtube'):
     for music_result_row in connection.execute(sql):
         list.append(music_result_row)
 
-
     return list
 
 
@@ -151,7 +145,6 @@ def song_songs_get_latest(source = 'youtube'):
             break
         list.append(m)
         i += 1
-
 
     return list
 
@@ -173,7 +166,6 @@ def song_songs_get_top_global(source ='youtube'):
         list.append(m)
         i += 1
 
-
     return list
 
 
@@ -194,17 +186,33 @@ def song_songs_get_top_personal(email, source = 'youtube'):
         list.append(m)
         i += 1
 
-
     return list
 
 
 def song_songs_get_with_mood(selected_moods, email, source = 'youtube'):
     """
-    function that gets music according to a specific mood set by the User email.
+    Get an Array of songs, ordered by Decedent Rating, matching the source and the Moods, already mood rated by the User email
 
-    TODO: broken
+    :returns: An Object Array of matched songs, each as {rating, idmusic, title, artist, album, year, label, source, imagePath, musicPath, genre, dateAdded}.
+    """
+    connection = init()
+    song_rows_list = []
 
-    :returns: An Object Array of matched songs, each as {---}.
+    for mood in selected_moods:
+        sql = "SELECT Music.*, rates.rating FROM Music, rates WHERE Music.idmusic = rates.idmusic AND rates.useremail = '" + email.encode(
+            "utf-8") + "' AND rates.mood LIKE '%%" + mood.encode("utf-8") + "%%' AND Music.source = '{s}'".format(s=source)
+        for result_row_song in connection.execute(sql):
+            song_rows_list.append(result_row_song)
+
+    # Sort by ratings in descendant.
+    return sorted(song_rows_list, key=lambda song: song.rating, reverse=True)
+
+
+def song_songs_get_with_mood_genres(selected_moods, email, source = 'youtube'):
+    """
+    Get an Array of songs of similar gender with the gender of the specified Moods songs, already mood rated by the User email.
+
+    :returns: An Object Array of matched songs, each as {title, musicPath, album, label, year, artist, imagePath}.
     """
     connection = init()
     listGenre = []
@@ -252,7 +260,6 @@ def song_songs_get_with_mood(selected_moods, email, source = 'youtube'):
             i += 1
         k -= 1
 
-
     return playlist
 
 
@@ -275,7 +282,6 @@ def song_songs_get_with_search(listKeyword, source = 'youtube'):
             else:
                 print music
                 listMusic.append(music)
-
 
     return listMusic
 
@@ -313,7 +319,6 @@ def song_rate_set_mood(email, music, mood):
     # Check if an user with that email does Not exists.
     sql = "SELECT * FROM users WHERE users.email='" + email.encode("utf-8") + "'"
     if connection.execute(sql).first() == None:
-
         return False
 
     sql = "SELECT * FROM rates WHERE rates.useremail='" + email.encode("utf-8") + "' AND rates.idmusic = " + str(
@@ -328,7 +333,6 @@ def song_rate_set_mood(email, music, mood):
     else:
         sql = "UPDATE rates SET mood='" + mood.encode("utf-8") + "' WHERE id=" + str(rates[0].id)
         connection.execute(sql)
-
 
     return True
 
@@ -346,7 +350,6 @@ def song_rate_set_rating(email, music, rating):
     # Check if an user with that email does Not exists.
     sql = "SELECT * FROM users WHERE users.email='" + email.encode("utf-8") + "'"
     if connection.execute(sql).first() == None:
-
         return False
 
     sql = "SELECT * FROM rates, users WHERE rates.useremail='" + email.encode(
@@ -361,6 +364,5 @@ def song_rate_set_rating(email, music, rating):
     else:
         sql = "UPDATE rates SET rating=" + rating + " WHERE id=" + str(rates[0].id)
         connection.execute(sql)
-
 
     return True
