@@ -141,7 +141,11 @@ def nav_profile():
 
 @app.route('/home', methods=['GET'])
 def nav_home():
-    """Main route that makes call to the recupMusic function and return the home page if the email is in the session    """
+    """
+    Main Home page route, shows the user playlist songs.
+    If user has no playlist, makes call to the either gets all songs with 'song_songs_get_all()',
+    If user selected one song (that is, a song data is on the query string), add it to the playlist.
+    """
     if 'username' in session:
         # Get a playlist from DB if client does NOT has one.
         if not session['playlist']:
@@ -154,6 +158,7 @@ def nav_home():
         # If a song was passed by arguments, add it at the beginning of the playlist.
         args_has_song = request.args.has_key('artist') and request.args.has_key('album') and request.args.has_key('title')
         if args_has_song:
+            # Todo: check for SQL injection.
             # Check if the song in arguments in on DB.
             args_song =  DbFunct.song_data_get(request.args.get('artist'), request.args.get('album'), request.args.get('title'))
             if args_song is not None:
@@ -175,7 +180,10 @@ def nav_home():
 
 @app.route('/home', methods=['POST'])
 def nav_home_search():
-    """route to get the Home page of the application in case where a mood is set by the user """
+    """
+    Route for Search and music playlist recreation in the Home page.
+    Used when a Search is done in the nav bar, or a Mood is Searched.
+    """
     if 'username' in session:
         # Check if there was any search.
         if request.form['search'] is not None:
