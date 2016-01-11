@@ -48,20 +48,22 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
            <ul class="nav navbar-nav">
-            <li class="active"><a href="/home"><h6>Home</h6></a></li>
-            <li><a href="/top_music"><h6><span class="glyphicon glyphicon-star"  style="font-size:17px;" ></span>Top</h6></a></li>
-            <li><a href="/last_music"><h6><span class="glyphicon glyphicon-music"  style="font-size:17px;" ></span>Latest hits</h6></a></li>
+            <li><a href="/home"><h6>Home</h6></a></li>
+            <li><a href="/top_music"><h6><span class="glyphicon glyphicon-star"  style="font-size:17px;" ></span> Top</h6></a></li>
+            <li><a href="/last_music"><h6><span class="glyphicon glyphicon-music"  style="font-size:17px;" ></span> Latest hits</h6></a></li>
           </ul>
  	   <ul class="nav navbar-nav navbar-right">
-             <li><a href="/profile"><h6><span class="glyphicon glyphicon-user"  style="font-size:17px;" ></span>{{username}}</h6></a></li>
+             <li class="active"><a href="/profile"><h6><span class="glyphicon glyphicon-user"  style="font-size:17px;" ></span>{{username}}</h6></a></li>
              <li><a href="/logout"><h6><span class="glyphicon glyphicon-remove"  style="font-size:17px;" ></span>Log out</h6></a></li>
            </ul> 
           
           <form action="/home" method="POST" id="search" class="navbar-form inline-form">
-			<div class="form-group ">
-				<input name="search" type="search" class="input-lg form-control" placeholder="Music search" style="font-size:22px;">
-				<button type="submit" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-headphones"  style="font-size:17px;" ></span><h7>Search</h7></button>
-			</div>
+			<div class="form-group">
+                <input name="search" type="search" class="input-lg form-control" style="font-size:22px;" title="Music search">
+                <button type="submit" class="btn btn-primary btn-lg" title="Search and create a new playlist">
+                    <span class="glyphicon glyphicon-headphones"  style="font-size:17px;" ></span> Search
+                </button>
+            </div>
          </form>
            
         </div><!--/.nav-collapse -->

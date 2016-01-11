@@ -151,15 +151,23 @@ def nav_home():
         list = session['playlist']
         print "home list: {list}".format(list=list)
 
-        # TODO seems to be broken.. Get the first song from the list, or from the request arguments.
-        if (request.args.get('artist') or request.args.get('title')) is None:
-            music = DbFunct.song_data_get(list[0]['artist'], list[0]['album'],
-                                          list[0]['title'])
-        else:
-            music = DbFunct.song_data_get(request.args.get('artist'), request.args.get('album'),
-                                          request.args.get('title'))
+        # If a song was passed by arguments, add it at the beginning of the playlist.
+        args_has_song = request.args.has_key('artist') and request.args.has_key('album') and request.args.has_key('title')
+        if args_has_song:
+            # Check if the song in arguments in on DB.
+            args_song =  DbFunct.song_data_get(request.args.get('artist'), request.args.get('album'), request.args.get('title'))
+            if args_song is not None:
+                # this change is not picked up because a mutable object (here a list) is changed.
+                list.insert(0, {
+                    'artist': args_song.artist, 'album': args_song.album, 'title': args_song.title
+                })
+                # so mark it as modified yourself
+                session.modified = True
 
-        return render_template('home.html', music=music, music_list=list, username=session['username'])
+        # Get the first song from the list.
+        initial_song = DbFunct.song_data_get(list[0]['artist'], list[0]['album'], list[0]['title'])
+
+        return render_template('home.html', music=initial_song, music_list=list, username=session['username'])
 
     else:
         return redirect(url_for('nav_login'))
@@ -177,7 +185,7 @@ def nav_home_search():
             listKeyword = search.split()
             session['playlist'] = []
 
-            # Check if search was empty, redirect to home.
+            # Check if search was empty, redirect to home.return
             if not listKeyword:
                 return redirect("/home")
 

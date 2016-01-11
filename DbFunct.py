@@ -305,7 +305,7 @@ def song_data_get(artist, album, title, source = 'youtube'):
     Get a song with its data, from the specified artist, album, title, and source.
     Default source is 'youtube'.
 
-    :returns: Object as {idmusic, title, musicPath, album, label, year, artist, imagePath}.
+    :returns: Object as {idmusic, title, musicPath, album, label, year, artist, imagePath}. None if no match found.
     :rtype: sqlalchemy.engine.result.RowProxy
     """
     connection = init()
