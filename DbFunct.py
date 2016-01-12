@@ -119,9 +119,11 @@ def user_image_get(email):
 # Songs handling
 # ----------------------------------------
 
-def song_songs_get_all(source ='youtube'):
+def song_songs_get_all(random = None, limit = None, source ='youtube'):
     """
     Get an Array of all songs in DB matching the source.
+    If random is True, then ORDER BY Rand() is used, default is None.
+    If limit is not None (a number), then LIMIT is used, default is None.
     Default source is 'youtube'.
 
     :returns: An Object Array of matched songs, each as {artist, title, album}.
@@ -129,6 +131,12 @@ def song_songs_get_all(source ='youtube'):
     connection = init()
     list = []
     sql = "SELECT Music.artist, Music.title, Music.album FROM Music WHERE Music.source = '{s}'".format(s=source)
+
+    if random:
+        sql += " ORDER BY RAND()"
+
+    if limit is not None:
+        sql += " LIMIT {lim}".format(lim=limit)
 
     for music_result_row in connection.execute(sql):
         list.append(music_result_row)
