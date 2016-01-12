@@ -398,15 +398,15 @@
                             {% for song in music_list %}
                                 {% if music_list.index(song)==5 and music_list|length>5 %}
                                     <p>
-                                        <button id="titi" class="btn btn-primary" Title="See more music"
-                                                onclick="div_afficher_masque()">
+                                        <button id="showMoreBtn" class="btn btn-primary" Title="See more music"
+                                                onclick="showMoreSongs()">
                                             <span id="icon_pm" class="glyphicon glyphicon-plus" style="font-size:17px;"></span>
-                                            <h7>See more music</h7>
+                                            <h7 id="showMoreText">See more music</h7>
                                         </button>
                                     </p>
 
                                     <!-- The begining of the DIV container for items from 5 and up. -->
-                                    <div id="toto" style="display:none">
+                                    <div id="moreThanFiveDiv" style="display:none">
                                 {% endif %}
 
                                 {# Main "getMusic()" JavaScript function. #}

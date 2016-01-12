@@ -46,24 +46,22 @@ function setMood() {
     });
 }
 
-function div_afficher_masque() {
-    var toto = document.getElementById("toto");
-    var titi = document.getElementById("titi");
+function showMoreSongs() {
+    var moreThanFiveDiv = document.getElementById("moreThanFiveDiv");
+    var showMoreText = document.getElementById("showMoreText");
     var icon = document.getElementById("icon_pm");
 
 
-    if (toto.style.display == "none") {
-        toto.style.display = "block";
-        var text = titi.innerText || titi.textContent;
-        console.log(text);
-        titi.Title = "Voir moins de musiques";
-        titi.innerHTML = "Voir moins de musiques";
+    if (moreThanFiveDiv.style.display == "none") {
+        moreThanFiveDiv.style.display = "block";
+        //var text = showMoreText.innerText || showMoreText.textContent;
+        //console.log(text);
+        showMoreText.Title = showMoreText.innerHTML = "See less music";
         icon.classeName = "glyphicon glyphicon-minus";
     }
     else {
-        toto.style.display = "none";
-        titi.Title = "Voir plus de musiques";
-        titi.innerHTML = "Voir plus de musiques";
+        moreThanFiveDiv.style.display = "none";
+        showMoreText.Title = showMoreText.innerHTML = "See more music";
         icon.classeName = "glyphicon glyphicon-plus";
     }
 }
