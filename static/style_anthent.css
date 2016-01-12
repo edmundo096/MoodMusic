@@ -3,6 +3,7 @@
     max-width: 330px;
     padding: 15px;
     margin: 0 auto;
+    margin-bottom: 20px;
 }
 .form-signin .form-signin-heading, .form-signin .checkbox
 {
@@ -47,7 +48,8 @@ h13{
 .account-wall
 {
     margin-top: 20px;
-    padding: 40px 0px 20px 0px;
+    margin-bottom: 20px;
+    padding: 40px 20px 20px 20px;
     background-color: #f7f7f7;
     -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
@@ -82,7 +84,7 @@ h13{
 
 body{
 	background-image:linear-gradient(white,#8181F7);
-	height: 760px;
+	/*height: 760px;*/
 	/*color:black;
 	background-color:black;
 	background-image:url("images/ed_banger.jpg")*/
