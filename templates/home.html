@@ -13,8 +13,8 @@
     <!-- Bootstrap core CSS -->
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/player/player.css" rel="stylesheet">
-    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.no-icons.min.css"
-          type="text/css" rel="stylesheet">
+{#    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.no-icons.min.css"#}
+{#          type="text/css" rel="stylesheet">#}
     <link href="https://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" type="text/css"
           rel="stylesheet">
     <link href="/static/bootstrap/css/bootstrap-select.css" rel="stylesheet">
@@ -41,7 +41,7 @@
 <body>
 
     <!-- Navigation bar -->
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
@@ -75,8 +75,8 @@
 
                 <form action="/home" method="POST" id="search" class="navbar-form navbar-left">
                     <div class="form-group">
-                        <input name="search" type="search" class="input-lg form-control" style="font-size:22px;" title="Music search">
-                        <button type="submit" class="btn btn-primary btn-lg" title="Search and create a new playlist">
+                        <input name="search" type="search" class="form-control" style="font-size:22px;" title="Music search">
+                        <button type="submit" class="btn btn-primary" title="Search and create a new playlist">
                             <span class="glyphicon glyphicon-headphones"  style="font-size:17px;" ></span> Search
                         </button>
                     </div>
@@ -90,11 +90,11 @@
 
 
     <!-- <div class="container-fluid" style="background-color: black;"> -->
-    <div class="container-fluid" id="color_blue" style="padding-top: 30px;">
+    <div class="container-fluid" id="color_blue">
         <div class="raw">
 
             <!-- Mood list panel -->
-            <div class="col-sm-10 col-md-6">
+            <div class="col-sm-12 col-lg-6">
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -104,120 +104,117 @@
                     <div class="panel-body couleur-body">
 
                         <form id="current-mood" action="">
-                            <div class="raw" style="padding-top: 20px; ">
-
-                                <div class="col-sm-5 col-md-3">
+                            <div>
+                                <div class="col-xs-6 col-sm-3 col-md-3">
                                     <p>
                                         <input type="checkbox" id="test3" data-mood='Chill'>
-                                        <label for="test3"><h6>Chill</h6></label>
+                                        <label for="test3"><span class="mood">Chill</span></label>
                                     </p>
 
                                     <p class="spacer">
                                         <input type="checkbox" id="test4" data-mood='Sad'>
-                                        <label for="test4"><h6>Sad</h6></label>
+                                        <label for="test4"><span class="mood">Sad</span></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test5" data-mood='Nostalgic'>
-                                        <label for="test5"><h6>Nostalgic</h6></label>
+                                        <label for="test5"><span class="mood">Nostalgic</span></label>
                                     </p>
 
                                     <p class="spacer">
                                         <input type="checkbox" id="test22" data-mood='Gaming'>
-                                        <label for="test22"><h6>Gaming</h6></label>
+                                        <label for="test22"><span class="mood">Gaming</span></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test23" data-mood='Travel'>
-                                        <label for="test23"><h6>Travel</h6></label>
+                                        <label for="test23"><span class="mood">Travel</span></label>
                                     </p>
                                 </div>
-
-                                <div class="col-sm-5 col-md-3">
-                                    <p style="padding-top: 10px;">
+                                <div class="col-xs-6 col-sm-3 col-md-3">
+                                    <p>
                                         <input type="checkbox" id="test7" data-mood='Motivated'>
-                                        <label for="test7"><h6>Motivated</h6></label>
+                                        <label for="test7"><span class="mood">Motivated</span></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test8" data-mood='Enthusiastic'>
-                                        <label for="test8"><h6>Enthusiastic</h6></label>
+                                        <label for="test8"><span class="mood">Enthusiastic</span></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test9" data-mood='Upset'>
-                                        <label for="test9"><h6>Upset</h6></label>
+                                        <label for="test9"><span class="mood">Upset</span></label>
                                     </p>
 
                                     <p class="spacer">
                                         <input type="checkbox" id="test11" data-mood='Inspired'>
-                                        <label for="test11"><h6>Inspired</h6></label>
+                                        <label for="test11"><span class="mood">Inspired</span></label>
                                     </p>
 
                                     <p class="spacer">
                                         <input type="checkbox" id="test25" data-mood='Festive'>
-                                        <label for="test25"><h6>Festive</h6></label>
+                                        <label for="test25"><span class="mood">Festive</span></label>
                                     </p>
                                 </div>
-
-                                <div class="col-sm-5 col-md-3">
+                                <div class="col-xs-6 col-sm-3 col-md-3">
                                     <p>
-                                        <input type="checkbox" id="test14" data-mood='Hard worker'>
-                                        <label for="test14"><h6>Hard worker</h6></label>
+                                        <input type="checkbox" id="test14" data-mood='Energetic'>
+                                        <label for="test14"><span class="mood">Energetic</span></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test15" data-mood='Geek'>
-                                        <label for="test15"><h6>Geek</h6></label>
+                                        <label for="test15"><span class="mood">Geek</span></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test16" data-mood='Instrumental'>
-                                        <label for="test16"><h6>Instrumental</h6></label>
+                                        <label for="test16"><span class="mood">Instrumental</span></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test26" data-mood='Creative'>
-                                        <label for="test26"><h6>Creative</h6></label>
+                                        <label for="test26"><span class="mood">Creative</span></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test27" data-mood='Tropical'>
-                                        <label for="test27"><h6>Tropical</h6></label>
+                                        <label for="test27"><span class="mood">Tropical</span></label>
                                     </p>
                                 </div>
-                                <div class="col-sm-5 col-md-3">
-                                    <p style="padding-top: 10px;">
+                                <div class="col-xs-6 col-sm-3 col-md-3">
+                                    <p>
                                         <input type="checkbox" id="test17" data-mood='Studieux'>
-                                        <label for="test17"><h6>Studious</h6></label>
+                                        <label for="test17"><span class="mood">Studious</span></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test18" data-mood='Aggressive'>
-                                        <label for="test18"><h6>Aggressive</h6></label>
+                                        <label for="test18"><span class="mood">Aggressive</span></label>
                                     </p>
 
 
                                     <p class="spacer">
                                         <input type="checkbox" id="test21" data-mood='Calm'>
-                                        <label for="test21"><h6>Calm</h6></label>
+                                        <label for="test21"><span class="mood">Calm</span></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test28" data-mood='Adventurous'>
-                                        <label for="test28"><h6>Adventurous</h6></label>
+                                        <label for="test28"><span class="mood">Adventurous</span></label>
                                     </p>
                                     <p class="spacer">
                                         <input type="checkbox" id="test29" data-mood='Humorous'>
-                                        <label for="test29"><h6>Humorous</h6></label>
+                                        <label for="test29"><span class="mood">Humorous</span></label>
                                     </p>
                                 </div>
                             </div>
 
-                            <div>
-                                <button type="submit" class="btn btn-primary btn-lg"
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary"
                                         onClick="getCheckBox(this.form, 'mood'); return false;">
                                     <span class="glyphicon glyphicon-search" style=""></span>
                                     <h7>Search playlist</h7>
                                 </button>
-                                <button type="submit" class="btn btn-default btn-xs"
+                                <button type="submit" class="btn btn-default"
                                         onClick="getCheckBox(this.form, 'genre'); return false;"><span class="glyphicon glyphicon-search"></span>
                                     <h7>Search with their genres</h7>
                                 </button>
                             </div>
 
-                            <div class="top-spaced">
-                                <a href="/home?random" class="btn btn-default">Get Random songs</a>
+                            <div class="top-spaced text-center">
+                                <a href="/home?random" class="btn btn-default btn-sm">Get Random songs</a>
                             </div>
 
                         </form>
@@ -230,11 +227,11 @@
 
 
             <!-- Player panel -->
-            <div class="col-sm-5 col-md-3">
+            <div class="col-sm-6 col-lg-3">
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title"> Current Music </h3>
+                        <h3 class="panel-title">Current Song</h3>
                     </div>
 
                     <div class="panel-body couleur-body">
@@ -254,9 +251,9 @@
                                  data-info-year="{{ music.year }}">
 
                                 <!-- Toggle button -->
-                                <div class="playa-toggle-holder btn-group center-block row col-sm-12">
+                                <div class="playa-toggle-holder btn-group center-block row col-xs-12">
                                     <button id="button-toggle" title="Show or hide details"
-                                            class="btn btn-default btn-lg btn-block row col-sm-12" style="opacity:0.3"
+                                            class="btn btn-default btn-lg btn-block row col-xs-12" style="opacity:0.3"
                                             data-original-title="Details">
                                         <i class="glyphicon glyphicon-align-justify" style="top:-3px"></i>
                                     </button>
@@ -361,7 +358,7 @@
                                             <option value="Upset">Upset</option>
                                             <option value="Inspired">Inspired</option>
                                             <option value="Festive">Festive</option>
-                                            <option value="Hard worker">Hard worker</option>
+                                            <option value="Energetic">Energetic</option>
                                             <option value="Geek">Geek</option>
                                             <option value="Instrumental">Instrumental</option>
                                             <option value="Creative">Creative</option>
@@ -384,7 +381,7 @@
             <!-- \Player panel -->
 
             <!-- Playlist panel -->
-            <div class="col-sm-5 col-md-3">
+            <div class="col-sm-6 col-lg-3">
                 <div class="panel panel-primary">
 
                     <div class="panel-heading">
@@ -400,10 +397,10 @@
                             {% for song in music_list %}
                                 {% if music_list.index(song)==5 and music_list|length>5 %}
                                     <p>
-                                        <button id="titi" class="btn btn-primary btn-lg" Title="Voir plus de musiques"
+                                        <button id="titi" class="btn btn-primary" Title="See more music"
                                                 onclick="div_afficher_masque()">
                                             <span id="icon_pm" class="glyphicon glyphicon-plus" style="font-size:17px;"></span>
-                                            <h7> see more music</h7>
+                                            <h7>See more music</h7>
                                         </button>
                                     </p>
 
@@ -437,29 +434,29 @@
 
 
     <!-- Footer -->
-    <div class="container-fluid" id="end">
-        <div class="raw">
-            <div class="col-sm-6 col-md-4 col-md-offset-2">
+    <footer class="container-fluid" id="end">
+        <div class="row">
+            <div class="col-xs-5 col-xs-offset-1 col-md-3 col-md-offset-2">
                 <h3>About</h3>
                 <ul>
                     <!--<li style="text-align: left; margin-left: 70px;"><a href="#contact">Our Team</a></li>-->
                     <!--<li style="text-align: left; margin-left: 70px;"><a href="#contact">E-Mails</a></li>-->
                     <!--<li style="text-align: left; margin-left: 70px;"><a href="api">Api doc 1</a></li>-->
-                    <li style="text-align: left; margin-left: 70px;"><a href="http://moodmusicproject.blogspot.se/">Blog</a></li>
+                    <li><a href="http://moodmusicproject.blogspot.se/">Blog</a></li>
                 </ul>
             </div>
-            <div class="col-sm-6 col-md-4 ">
+            <div class="col-xs-5 col-md-3 col-md-offset-2 ">
                 <h3>More</h3>
                 <ul>
-                    <li style="text-align: left; margin-left: 120px;"><a href="/static/apidoc/index.html">Developers API</a></li>
-                    <li style="text-align: left; margin-left: 120px;"><a href="https://github.com/edmundo096/MoodMusic">GitHub</a></li>
+                    <li><a href="/static/apidoc/index.html">Developers API</a></li>
+                    <li><a href="https://github.com/edmundo096/MoodMusic">GitHub</a></li>
                     <!--<li style="text-align: left; margin-left: 120px;"><a href="/about_accueil">Home</a></li>-->
                     <!--<li style="text-align: left; margin-left: 120px;"><a href="/about_profil">profile</a></li>-->
                     <!--<li style="text-align: left; margin-left: 120px;"><a href="/about_schemas_base">Structure</a></li>-->
                 </ul>
             </div>
         </div>
-    </div>
+    </footer>
     <!-- \Footer -->
 
 
@@ -470,13 +467,10 @@
 
     <!--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/js/bootstrap-select.min.js"></script>-->
 
-
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-    <script src="/static/bootstrap/js/bootstrap-select.js"></script>
     <script src="/static/player/player.js"></script>
-    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/static/bootstrap/js/bootstrap-combobox.js"></script>
+
     <!--<script src="/static/bootstrap/js/my.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/static/bootstrap/js/ie10-viewport-bug-workaround.js"></script>

@@ -13,8 +13,8 @@
     <!-- Bootstrap core CSS -->
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/bootstrap-player/css/bootstrap-player.css" rel="stylesheet">
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.no-icons.min.css"
-          type="text/css" rel="stylesheet">
+{#    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.no-icons.min.css"#}
+{#          type="text/css" rel="stylesheet">#}
     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" type="text/css"
           rel="stylesheet">
     <link href="/static/bootstrap/css/bootstrap-select.css" rel="stylesheet">
@@ -35,7 +35,7 @@
 
 <body>
     <!-- Navigation bar -->
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
@@ -44,7 +44,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="/home">
                     <img style="max-width:120px; margin-top: -7px;"
                          src="/static/images/new/mmhead.png ">
                 </a>
@@ -68,20 +68,20 @@
 
                 <form action="/home" method="POST" id="search" class="navbar-form navbar-left">
                     <div class="form-group">
-                        <input name="search" type="search" class="input-lg form-control" style="font-size:22px;" title="Music search">
-                        <button type="submit" class="btn btn-primary btn-lg" title="Search and create a new playlist">
+                        <input name="search" type="search" class="form-control" style="font-size:22px;" title="Music search">
+                        <button type="submit" class="btn btn-primary" title="Search and create a new playlist">
                             <span class="glyphicon glyphicon-headphones"  style="font-size:17px;" ></span> Search
                         </button>
                     </div>
                 </form>
+            </div>
+        </div><!--/.nav-collapse -->
 
-            </div><!--/.nav-collapse -->
-        </div>
     </div>
     <!-- \Navigation bar -->
 
 
-    <div class="col-sm-8 col-md-6 playlist-milieux" id="color_blue">
+    <div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6 playlist-milieux" id="color_blue">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">TOP 10</h3>
@@ -90,7 +90,7 @@
 
             <div class="panel-body couleur-body">
 
-                <div class="playlist-top">
+                <div class="playlist-top text-center">
                     {% for music in list_music %}
 
                         <a href="{{ url_for('nav_home', artist=music.artist, album=music.album, title=music.title) }}"
@@ -111,6 +111,35 @@
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="container-fluid" id="end">
+        <div class="row">
+            <div class="col-xs-5 col-xs-offset-1 col-md-3 col-md-offset-2">
+                <h3>About</h3>
+                <ul>
+                    <!--<li style="text-align: left; margin-left: 70px;"><a href="#contact">Our Team</a></li>-->
+                    <!--<li style="text-align: left; margin-left: 70px;"><a href="#contact">E-Mails</a></li>-->
+                    <!--<li style="text-align: left; margin-left: 70px;"><a href="api">Api doc 1</a></li>-->
+                    <li><a href="http://moodmusicproject.blogspot.se/">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-5 col-md-3 col-md-offset-2 ">
+                <h3>More</h3>
+                <ul>
+                    <li><a href="/static/apidoc/index.html">Developers API</a></li>
+                    <li><a href="https://github.com/edmundo096/MoodMusic">GitHub</a></li>
+                    <!--<li style="text-align: left; margin-left: 120px;"><a href="/about_accueil">Home</a></li>-->
+                    <!--<li style="text-align: left; margin-left: 120px;"><a href="/about_profil">profile</a></li>-->
+                    <!--<li style="text-align: left; margin-left: 120px;"><a href="/about_schemas_base">Structure</a></li>-->
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <!-- \Footer -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 </body>
 </html>

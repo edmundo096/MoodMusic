@@ -14,7 +14,7 @@
 		<!-- Bootstrap core CSS -->
 		<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		<link href="bootstrap/bootstrap-player/css/bootstrap-player.css" rel="stylesheet">
-		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.no-icons.min.css" type="text/css" rel="stylesheet">
+{#		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.no-icons.min.css" type="text/css" rel="stylesheet">#}
 		<link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" type="text/css" rel="stylesheet">
 		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"> 
 		<link href="/static/profil.css" rel="stylesheet">
@@ -33,7 +33,7 @@
 		
 		
 <!---------------------------------- Barre de navigation ------------------------------------------------------------>
-<div class="navbar navbar-inverse navbar-fixed-top">
+<div class="navbar navbar-inverse navbar-static-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -41,7 +41,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-         <a class="navbar-brand" href="#">
+         <a class="navbar-brand" href="/home">
 			<img style="max-width:120px; margin-top: -7px;"
                          src="/static/images/new/mmhead.png ">
           </a>
@@ -59,8 +59,8 @@
           
           <form action="/home" method="POST" id="search" class="navbar-form navbar-left">
 			<div class="form-group">
-                <input name="search" type="search" class="input-lg form-control" style="font-size:22px;" title="Music search">
-                <button type="submit" class="btn btn-primary btn-lg" title="Search and create a new playlist">
+                <input name="search" type="search" class="form-control" style="font-size:22px;" title="Music search">
+                <button type="submit" class="btn btn-primary" title="Search and create a new playlist">
                     <span class="glyphicon glyphicon-headphones"  style="font-size:17px;" ></span> Search
                 </button>
             </div>
@@ -89,12 +89,12 @@
 						{% endif %}
 						   
     
-  		<form action="" method=post enctype=multipart/form-data>					<input type="file" name="file" style="width:200px; font-size:10px;" /> 
-									<button type=submit onclick="submitPicture()" class="btn btn-primary btn-lg">
-										<span style="font-size:17px;" >
-												<h7>Submit</h7>
-										</span>
-									</button>   </form>		
+  		<form action="" method=post enctype=multipart/form-data>
+            <input type="file" name="file" style="width:200px; font-size:10px;" />
+            <button type=submit onclick="submitPicture()" class="btn btn-primary">
+                <h7>Submit</h7>
+            </button>
+        </form>
 
 						</div>
 						<div class="info panel-info">
@@ -131,51 +131,75 @@
 								</div>
 								<div class="panel-body">						
 									<input type="password" id="submit_password" value="password" />
-									<button onclick="submitPassword()" class="btn btn-primary btn-lg"><span style="font-size:17px;" ><h7>Change password</h7></span></button>
+									<button onclick="submitPassword()" class="btn btn-primary"><h7>Change password</h7></button>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 				
-				<div class="col-lg-3 col-sm-6 panel panel-default panel-liste">
-					  <!-- Default panel contents -->
-					<div class="panel-heading">
-						<strong>Your favorite Songs</strong>
-					</div>
-					
+				<div class="col-lg-3 col-sm-6">
+                    <div class="panel panel-default panel-liste">
+					    <!-- Default panel contents -->
+                        <div class="panel-heading">
+                            <strong>Your favorite Songs</strong>
+                        </div>
 
-					  <!-- List group -->
-					<ul class="list-group">
-						{% for music in list_music %}
-						<li class="list-group-item"> {{ music.title }}</li>
-						{% endfor %}
-					 </ul>
+                        <!-- List group -->
+                        <ul class="list-group text-center">
+                            {% for music in list_music %}
+                            <li class="list-group-item"> {{ music.title }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
 				</div>
 				
-				<div class="col-lg-3 col-sm-6 panel panel-default panel-liste2">
-					  <!-- Default panel contents -->
-					<div class="panel-heading">
-						<strong>Your favorite Artists</strong>
-					</div>
-					  <!-- List group -->
-					<ul class="list-group">
-					{% for music in list_music %}
-						<li class="list-group-item"> {{music.artist}}</li>
-					{% endfor %}
-					 </ul>
+				<div class="col-lg-3 col-sm-6">
+                    <div class="panel panel-default panel-liste2">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">
+                            <strong>Your favorite Artists</strong>
+                        </div>
+                        <!-- List group -->
+                        <ul class="list-group text-center">
+                        {% for music in list_music %}
+                            <li class="list-group-item"> {{music.artist}}</li>
+                        {% endfor %}
+                         </ul>
+                    </div>
 				</div>
 				
 			</div>
 		</div>
 		
+        <!-- Footer -->
+        <footer class="container-fluid" id="end">
+            <div class="row">
+                <div class="col-xs-5 col-xs-offset-1 col-md-3 col-md-offset-2">
+                    <h3>About</h3>
+                    <ul>
+                        <!--<li style="text-align: left; margin-left: 70px;"><a href="#contact">Our Team</a></li>-->
+                        <!--<li style="text-align: left; margin-left: 70px;"><a href="#contact">E-Mails</a></li>-->
+                        <!--<li style="text-align: left; margin-left: 70px;"><a href="api">Api doc 1</a></li>-->
+                        <li><a href="http://moodmusicproject.blogspot.se/">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="col-xs-5 col-md-3 col-md-offset-2 ">
+                    <h3>More</h3>
+                    <ul>
+                        <li><a href="/static/apidoc/index.html">Developers API</a></li>
+                        <li><a href="https://github.com/edmundo096/MoodMusic">GitHub</a></li>
+                        <!--<li style="text-align: left; margin-left: 120px;"><a href="/about_accueil">Home</a></li>-->
+                        <!--<li style="text-align: left; margin-left: 120px;"><a href="/about_profil">profile</a></li>-->
+                        <!--<li style="text-align: left; margin-left: 120px;"><a href="/about_schemas_base">Structure</a></li>-->
+                    </ul>
+                </div>
+            </div>
+        </footer>
+        <!-- \Footer -->
 
-		
-		
-<!---------------------------------- Trucs de fin ------------------------------------------------------------>		
-		
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 		<script src="/static/submitPassword.js"></script>
 		<script src="/static/submitPicture.js"></script>
 	</body>

@@ -1,8 +1,17 @@
-body {
-  padding-top: 50px;
-  height: 1080px;
-	background-image:linear-gradient(#8181F7,white);	
+html {
+    /*For absolute footer position*/
+    position: relative;
+    min-height: 100%;
 }
+body {
+  /*padding-top: 50px;*/
+  /*height: 1080px;*/
+	background-image:linear-gradient(#8181F7,white);
+
+  /* Margin bottom by footer height */
+  padding-bottom: 120px;
+}
+
 .starter-template {
   padding: 40px 15px;
   text-align: center;
@@ -13,7 +22,7 @@ body {
    width: 100px;
 }
 
-[class*="col-"], footer {
+.panel-heading, ul.playlist {
  /* border: 2px solid black;
   border-radius: 6px;*/
 
@@ -26,13 +35,18 @@ body {
   text-align: center;
 }
 
-.playlist {
-	margin: 0px 0px -10px 0px;
+.playlist, .playlist-milieux ul {
+	/*margin: 0px 0px -10px 0px;*/
+    padding-left: 0px;
 }
 
 .playlist-milieux {
-	margin-left: 320px;
-	margin-top: 50px;
+    /*margin-top: 50px;*/
+    /*For footer*/
+    margin-bottom: 120px;
+}
+.playlist-milieux ul {
+    list-style-type: none;
 }
 
 .marge-bas {
@@ -47,9 +61,8 @@ body {
     margin-top: 15px;
 }
 
-p.spacer{
-  padding-top: 20px;
-}
+
+
 
 .couleur-body {
 	background-color: #E0E0F8;
@@ -85,9 +98,18 @@ p.spacer{
 	background-image:linear-gradient(#8181F7,white);	
 }
 
+
 #end{
+    color: rgb(157, 157, 157);
 	background-color:black;
-	height:181px;
+	height:120px;
+
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+#end ul {
+    list-style-type: none;
 }
 
 h3{
@@ -100,7 +122,29 @@ h3{
 }
 
 
-h6{
+#current-mood label {
+    min-width: 100%;
+
+    position: relative;
+    left: 0;
+}
+
+p.spacer{
+  padding-top: 20px;
+}
+p.spacer:last-child {
+    padding-bottom: 20px;
+}
+
+.mood {
+    display: block;
+    font-weight: bold;
+    line-height: 20px;
+    margin-top: 5px;
+    text-align: left;
+}
+
+h6, .mood {
    font-family: Aller, Verdana, Arial, "Arial Black";
    font-size: medium;
    padding-left: 30px;
@@ -108,7 +152,7 @@ h6{
 
 h7{
    font-family: Verdana, Arial, "Arial Black";
-   font-size: 17px;
+   /*font-size: 17px;*/
 }
 
 h8{
