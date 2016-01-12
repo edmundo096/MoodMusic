@@ -43,9 +43,8 @@ def user_user_insert(username_u, email_u, password_u):
     Insert a new User, using his username, email address, and password.
     """
     connection = init()
-    sql = "INSERT INTO users SET email='" + email_u.encode("utf-8") + "', password='" + password_u.encode(
-        "utf-8") + "', username='" + username_u.encode("utf-8") + "'"
-    connection.execute(sql)
+    sql = text("INSERT INTO users SET email=:email, password=:password, username=:username")
+    connection.execute(sql, email=email_u, password=password_u, username=username_u)
     connection.close()
 
 
@@ -59,12 +58,11 @@ def user_user_get(email, mdp):
     connection = init()
     users = []
     if mdp is None:
-        sql = "SELECT * FROM users WHERE users.email='" + email.encode("utf-8") + "'"
+        sql = text("SELECT * FROM users WHERE users.email=:email")
     else:
-        sql = "SELECT * FROM users WHERE users.email='" + email.encode("utf-8") + "' AND users.password='" + mdp.encode(
-            "utf-8") + "'"
+        sql = text("SELECT * FROM users WHERE users.email=:email AND users.password=:password")
 
-    results = connection.execute(sql)
+    results = connection.execute(sql, email=email, password=mdp)
 
     return results.first()
 
@@ -74,9 +72,8 @@ def user_password_update(password, email):
     Update the password, from an existing User.
     """
     connection = init()
-    sql = "UPDATE users SET password='" + password.encode("utf-8") + "' WHERE users.email='" + email.encode(
-        "utf-8") + "'"
-    connection.execute(sql)
+    sql = text("UPDATE users SET password=:password WHERE users.email=:email")
+    connection.execute(sql, password=password, email=email)
     connection.close()
 
 
@@ -85,8 +82,8 @@ def user_image_update(image_path, email):
     Update the profile image_path, from an existent User.
     """
     connection = init()
-    sql = "UPDATE users SET imagePath='" + image_path.encode("utf-8") + "' WHERE users.email='" + email.encode("utf-8") + "'"
-    connection.execute(sql)
+    sql = text("UPDATE users SET imagePath=:imagePath WHERE users.email=:email")
+    connection.execute(sql, imagePath=image_path, email=email)
     connection.close()
 
 
@@ -98,10 +95,10 @@ def user_image_get(email):
     :rtype: str
     """
     connection = init()
-    sql = "SELECT imagePath FROM users WHERE users.email='" + email.encode("utf-8") + "'"
+    sql = text("SELECT imagePath FROM users WHERE users.email=:email")
 
     # Since email is Primary key, should always return 1 row result.
-    results_img = connection.execute(sql)
+    results_img = connection.execute(sql, email=email)
 
     # Doc: http://docs.sqlalchemy.org/en/latest/core/connections.html#sqlalchemy.engine.ResultProxy
     # first() Returns None if no row is present.
@@ -130,15 +127,17 @@ def song_songs_get_all(random = None, limit = None, source ='youtube'):
     """
     connection = init()
     list = []
-    sql = "SELECT Music.artist, Music.title, Music.album FROM Music WHERE Music.source = '{s}'".format(s=source)
+    sql = "SELECT Music.artist, Music.title, Music.album FROM Music WHERE Music.source = :source"
 
     if random:
         sql += " ORDER BY RAND()"
 
     if limit is not None:
-        sql += " LIMIT {lim}".format(lim=limit)
+        sql += " LIMIT :limit"
 
-    for music_result_row in connection.execute(sql):
+    sql = text(sql)
+
+    for music_result_row in connection.execute(sql, source=source, limit=limit):
         list.append(music_result_row)
 
     connection.close()
@@ -155,8 +154,9 @@ def song_songs_get_latest(source = 'youtube'):
     connection = init()
     list = []
     i = 0
-    sql = "SELECT Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music WHERE Music.source = '{s}' ORDER BY Music.year DESC".format(s=source)
-    for m in connection.execute(sql):
+    sql = text("SELECT Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music WHERE Music.source = :source ORDER BY Music.year DESC")
+
+    for m in connection.execute(sql, source=source):
         if i == 10:
             break
         list.append(m)
@@ -176,8 +176,9 @@ def song_songs_get_top_global(source ='youtube'):
     connection = init()
     list = []
     i = 0
-    sql = "SELECT Music.title, Music.artist, Music.album, Music.imagePath, Music.musicPath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND Music.source = '{s}' ORDER BY rates.rating DESC".format(s=source)
-    for m in connection.execute(sql):
+    sql = text("SELECT Music.title, Music.artist, Music.album, Music.imagePath, Music.musicPath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND Music.source = :source ORDER BY rates.rating DESC")
+
+    for m in connection.execute(sql, source=source):
         if i == 10:
             break
         list.append(m)
@@ -196,9 +197,9 @@ def song_songs_get_top_personal(email, source = 'youtube'):
     connection = init()
     i = 0
     list = []
-    sql = "SELECT Music.title, Music.artist, Music.album, Music.imagePath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND rates.useremail = '" + email.encode(
-        "utf-8") + "' AND Music.source = '{s}' ORDER BY rates.rating DESC".format(s=source)
-    for m in connection.execute(sql):
+    sql = text("SELECT Music.title, Music.artist, Music.album, Music.imagePath FROM Music, rates WHERE rates.idmusic = Music.idmusic AND rates.useremail = :email AND Music.source = :source ORDER BY rates.rating DESC")
+
+    for m in connection.execute(sql, email=email, source=source):
         if i == 3:
             break
         list.append(m)
@@ -218,9 +219,9 @@ def song_songs_get_with_mood(selected_moods, email, source = 'youtube'):
     song_rows_list = []
 
     for mood in selected_moods:
-        sql = "SELECT Music.*, rates.rating FROM Music, rates WHERE Music.idmusic = rates.idmusic AND rates.useremail = '" + email.encode(
-            "utf-8") + "' AND rates.mood LIKE '%%" + mood.encode("utf-8") + "%%' AND Music.source = '{s}'".format(s=source)
-        for result_row_song in connection.execute(sql):
+        sql = text("SELECT Music.*, rates.rating FROM Music, rates WHERE Music.idmusic = rates.idmusic AND rates.useremail = :email AND rates.mood LIKE :mood AND Music.source = :source")
+
+        for result_row_song in connection.execute(sql, email=email, mood="%%{m}%%".format(m=mood), source=source):
             song_rows_list.append(result_row_song)
 
     connection.close()
@@ -240,10 +241,9 @@ def song_songs_get_with_mood_genres(selected_moods, email, source = 'youtube'):
     nbMusic = 0
 
     for mood in selected_moods:
-        sql = "SELECT Music.genre FROM Music, rates WHERE Music.idmusic = rates.idmusic AND rates.useremail = '" + email.encode(
-            "utf-8") + "' AND rates.mood LIKE '%%" + mood.encode("utf-8") + "%%' AND Music.source = '{s}'".format(s=source)
+        sql = text("SELECT Music.genre FROM Music, rates WHERE Music.idmusic = rates.idmusic AND rates.useremail = :email AND rates.mood LIKE :mood AND Music.source = :source")
 
-        for listSQLGenre in connection.execute(sql):
+        for listSQLGenre in connection.execute(sql, email=email, mood="%%{m}%%".format(m=mood), source=source):
             nbMusic += 1
             for genre in listSQLGenre.genre.split():
                 if genre in listGenre:
@@ -266,6 +266,8 @@ def song_songs_get_with_mood_genres(selected_moods, email, source = 'youtube'):
         i = 0
         while i + k <= len(listGenreImportant):
             sql = ""
+
+            # TODO: This query is NOT SQL injection checked (since can be multiple parameters)
             for genre in listGenreImportant[i:i + k]:
                 if sql == "":
                     sql = "SELECT Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music WHERE Music.genre LIKE '%%" + genre + "%%' AND Music.source = '{s}'".format(s=source)
@@ -296,14 +298,14 @@ def song_songs_get_with_search(listKeyword, source = 'youtube'):
     connection = init()
     listMusic = []
     for keyword in listKeyword:
-        sql = "SELECT Music.album, Music.artist, music.label, music.year, Music.title FROM Music WHERE (Music.title LIKE '%%" + keyword + "%%' OR Music.artist LIKE '%%" + keyword + "%%' OR Music.album LIKE '%%" + keyword + "%%' OR Music.label LIKE '%%" + keyword + "%%' OR Music.year LIKE '%%" + keyword + "%%') AND  Music.source = '{s}'".format(s=source)
-        for music in connection.execute(sql):
+        sql = text("SELECT Music.album, Music.artist, music.label, music.year, Music.title FROM Music WHERE (Music.title LIKE :keyword OR Music.artist LIKE :keyword OR Music.album LIKE :keyword OR Music.label LIKE :keyword OR Music.year LIKE :keyword) AND  Music.source = :source")
+        for music in connection.execute(sql, keyword="%%{k}%%".format(k=keyword), source=source):
             if music in listMusic:
                 pass
             else:
                 listMusic.append(music)
 
-    print "DB song_songs_get_with_search() results: " + str(music)
+    print "DB song_songs_get_with_search() results: " + str(listMusic)
 
     connection.close()
     return listMusic
@@ -339,23 +341,21 @@ def song_rate_set_mood(email, music, mood):
     rates = []
 
     # Check if an user with that email does Not exists.
-    sql = "SELECT * FROM users WHERE users.email='" + email.encode("utf-8") + "'"
-    if connection.execute(sql).first() == None:
+    sql = text("SELECT * FROM users WHERE users.email=:email")
+    if connection.execute(sql, email=email).first() == None:
         connection.close()
         return False
 
-    sql = "SELECT * FROM rates WHERE rates.useremail='" + email.encode("utf-8") + "' AND rates.idmusic = " + str(
-        music.idmusic)
-    for moodListResult in connection.execute(sql):
+    sql = text("SELECT * FROM rates WHERE rates.useremail=:email AND rates.idmusic = :idmusic")
+    for moodListResult in connection.execute(sql, email=email, idmusic=music.idmusic):
         rates.append(moodListResult)
 
     if not rates:
-        sql = "INSERT INTO rates SET useremail = '" + email.encode("utf-8") + "', idmusic = " + str(
-            music.idmusic) + ", mood = '" + mood.encode("utf-8") + "'"
-        connection.execute(sql)
+        sql = text("INSERT INTO rates SET useremail = :email, idmusic = :idmusic, mood = :mood")
+        connection.execute(sql, email=email, idmusic=music.idmusic, mood=mood)
     else:
-        sql = "UPDATE rates SET mood='" + mood.encode("utf-8") + "' WHERE id=" + str(rates[0].id)
-        connection.execute(sql)
+        sql = text("UPDATE rates SET mood=:mood WHERE id=:id")
+        connection.execute(sql, mood=mood, id=rates[0].id)
 
     connection.close()
     return True
@@ -372,23 +372,21 @@ def song_rate_set_rating(email, music, rating):
     rates = []
 
     # Check if an user with that email does Not exists.
-    sql = "SELECT * FROM users WHERE users.email='" + email.encode("utf-8") + "'"
-    if connection.execute(sql).first() == None:
+    sql = text("SELECT * FROM users WHERE users.email=:email")
+    if connection.execute(sql, email=email).first() == None:
         connection.close()
         return False
 
-    sql = "SELECT * FROM rates, users WHERE rates.useremail='" + email.encode(
-        "utf-8") + "' AND users.email = rates.useremail AND rates.idmusic=" + str(music.idmusic)
-    for rate in connection.execute(sql):
+    sql = text("SELECT * FROM rates, users WHERE rates.useremail=:email AND users.email = rates.useremail AND rates.idmusic=:idmusic")
+    for rate in connection.execute(sql, email=email, idmusic=music.idmusic):
         rates.append(rate)
 
     if not rates:
-        sql = "INSERT INTO rates SET useremail='" + email.encode("utf-8") + "', idmusic=" + str(
-            music.idmusic) + ", rating=" + rating
-        connection.execute(sql)
+        sql = text("INSERT INTO rates SET useremail=:email, idmusic=:idmusic, rating=:rating")
+        connection.execute(sql, email=email, idmusic=music.idmusic, rating=rating)
     else:
-        sql = "UPDATE rates SET rating=" + rating + " WHERE id=" + str(rates[0].id)
-        connection.execute(sql)
+        sql = text("UPDATE rates SET rating=" + rating + " WHERE id=:id")
+        connection.execute(sql, id=rates[0].id)
 
     connection.close()
     return True
