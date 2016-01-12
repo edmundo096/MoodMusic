@@ -49,6 +49,7 @@
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="#">
                     <img style="max-width:120px; margin-top: -7px;"
@@ -73,7 +74,7 @@
                         Log Out</h6></a></li>
                 </ul>
 
-                <form action="/home" method="POST" id="search" class="navbar-form navbar-left">
+                <form action="/home" method="POST" id="search" class="navbar-form navbar-right">
                     <div class="form-group">
                         <input name="search" type="search" class="form-control" style="font-size:22px;" title="Music search">
                         <button type="submit" class="btn btn-primary" title="Search and create a new playlist">
@@ -237,7 +238,7 @@
                     <div class="panel-body couleur-body">
 
 
-                        <div class="raw" style="padding-top: 30px;">
+                        <div class="raw">
 
                             <!-- Main Player -->
                             <div id="player" class="well container-fluid playa"
@@ -251,16 +252,16 @@
                                  data-info-year="{{ music.year }}">
 
                                 <!-- Toggle button -->
-                                <div class="playa-toggle-holder btn-group center-block row col-xs-12">
+                                <div class="playa-toggle-holder btn-group center-block row col-sm-12">
                                     <button id="button-toggle" title="Show or hide details"
-                                            class="btn btn-default btn-lg btn-block row col-xs-12" style="opacity:0.3"
+                                            class="btn btn-default btn-lg btn-block row col-sm-12" style="opacity:0.3"
                                             data-original-title="Details">
                                         <i class="glyphicon glyphicon-align-justify" style="top:-3px"></i>
                                     </button>
                                 </div>
 
                                 <!-- Data section -->
-                                <section id="section-data" class="playa-data-sec center-block row col-sm-12 collapse in" aria-expanded="true">
+                                <section id="section-data" class="playa-data-sec col-sm-12 collapse in" aria-expanded="true">
                                     <!-- <img class="thumbnail" src="https://farm9.staticflickr.com/8642/16106988340_058071cdbe_z.jpg"> -->
 
                                     <!-- Youtube player -->
@@ -295,7 +296,7 @@
                                 </section>
 
                                 <!-- Player Controls section -->
-                                <section id="section-player-controls" class="btn-group center-block row col-sm-12">
+                                <section id="section-player-controls" class="btn-group">
                                     <!-- Play/Pause button -->
                                     <button id="button-play-pause" class="btn btn-default col-sm-1"><i class="glyphicon glyphicon-play"></i></button>
 
@@ -332,7 +333,7 @@
                             <!-- / Main Player -->
 
 
-                            <div class="col-sm-12">
+                            <div class="col-sm-12 text-center">
                                 <h7>Rate your mood</h7>
 
                                 <div class="rating" id="global">

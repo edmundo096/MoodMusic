@@ -17,7 +17,8 @@
 /* sliders and buttons need a uniform height */
 .playa .btn-group .btn {
     display: inline-block;
-    float: none;
+    /*Commented out since broken in Bootstrap 3.3.4*/
+    /*float: none;*/
     height: 2.2em;
 }
 
