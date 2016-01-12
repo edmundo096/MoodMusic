@@ -301,8 +301,9 @@ def song_songs_get_with_search(listKeyword, source = 'youtube'):
             if music in listMusic:
                 pass
             else:
-                print music
                 listMusic.append(music)
+
+    print "DB song_songs_get_with_search() results: " + str(music)
 
     connection.close()
     return listMusic
@@ -318,12 +319,11 @@ def song_data_get(artist, album, title, source = 'youtube'):
     """
     connection = init()
 
-    sql = "SELECT Music.idmusic, Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music WHERE Music.title = '" + title.encode(
-        "utf-8") + "' AND Music.artist = '" + artist.encode(
-        "utf-8") + "' AND Music.album = '" + album.encode("utf-8") + "' AND Music.source = '{s}'".format(s=source)
+    sql = text("SELECT Music.idmusic, Music.title, Music.musicPath, Music.album, Music.label, Music.year, Music.artist, Music.imagePath FROM Music "
+               "WHERE Music.title = :title AND Music.artist = :artist AND Music.album = :album AND Music.source = :source")
 
     # TODO Currently returns the first result (DB or function should be modified to only permit only 1 result, i.e. using a PK).
-    results = connection.execute(sql)
+    results = connection.execute(sql, title=title, artist=artist, album=album, source=source)
 
     return results.first()
 

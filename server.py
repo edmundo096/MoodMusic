@@ -196,7 +196,7 @@ def nav_home_search():
         # Check if there was any search.
         if request.form['search'] is not None:
             search = escape(request.form['search']).encode("utf-8")
-            print search
+            print "Search: " + search
 
             listKeyword = search.split()
             session['playlist'] = []
@@ -218,8 +218,8 @@ def nav_home_search():
             # Cerate playlist.
             for music in listMusic:
                 session['playlist'].append({'artist': music.artist , 'album': music.album, 'title': music.title})
-            print "home POST - session['playlist']: "
-            print session['playlist']
+
+            print "nav_home_search() POST - session['playlist']: " + str(session['playlist'])
 
             # Check if there is a 1st song.
             listMusic = session['playlist']
@@ -301,6 +301,7 @@ def api_get_music():
         return jsonify({'result': -1})
 
     music = DbFunct.song_data_get(request.args.get('artist'), request.args.get('album'), request.args.get('title'))
+    print "api_get_music() result: " + str(music)
 
     # Check if there was any returned song from DB.
     if music == None:
