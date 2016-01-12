@@ -43,6 +43,10 @@ body {
 	margin: 0px 0px -10px 0px;
 }
 
+.top-spaced {
+    margin-top: 15px;
+}
+
 p.spacer{
   padding-top: 20px;
 }

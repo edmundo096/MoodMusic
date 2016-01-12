@@ -143,17 +143,19 @@ def nav_profile():
 def nav_home():
     """
     Main Home page route, shows the user playlist songs.
-    If user has no playlist, makes call to the either gets all songs with 'song_songs_get_all()',
-    If user selected one song (that is, a song data is on the query string), add it to the playlist.
+    If user has no playlist, show no songs nor initial songs.
+    If there is a 'random' key in the querystring, makes call to the either gets 10 random songs with 'song_songs_get_all()',
+    Then, If user selected one song (that is, a song data is on the query string), add it to the playlist.
     """
     if 'username' in session:
-        # Get a playlist from DB if client does NOT has one.
-        if not session['playlist']:
-            for music in DbFunct.song_songs_get_all():
+        # If there is a 'random' query string key, get the 10 random songs.
+        if request.args.has_key('random'):
+            session['playlist'] = []
+            for music in DbFunct.song_songs_get_all(random=True, limit=10):
                 session['playlist'].append({'artist': music.artist , 'album': music.album, 'title': music.title})
+            session.modified = True
 
         list = session['playlist']
-        print "home list: {list}".format(list=list)
 
         # If a song was passed by arguments, add it at the beginning of the playlist.
         args_has_song = request.args.has_key('artist') and request.args.has_key('album') and request.args.has_key('title')
@@ -169,8 +171,14 @@ def nav_home():
                 # so mark it as modified yourself
                 session.modified = True
 
-        # Get the first song from the list.
-        initial_song = DbFunct.song_data_get(list[0]['artist'], list[0]['album'], list[0]['title'])
+        print "home list: {list}".format(list=list)
+
+        # Check if there is a 1st song.
+        if not session['playlist']:
+            initial_song = None
+        else:
+            # Get the first song from the list.
+            initial_song = DbFunct.song_data_get(list[0]['artist'], list[0]['album'], list[0]['title'])
 
         return render_template('home.html', music=initial_song, music_list=list, username=session['username'])
 
@@ -182,7 +190,7 @@ def nav_home():
 def nav_home_search():
     """
     Route for Search and music playlist recreation in the Home page.
-    Used when a Search is done in the nav bar, or a Mood is Searched.
+    Used when a Search is done in the nav bar, or a Mood Search is done.
     """
     if 'username' in session:
         # Check if there was any search.
@@ -213,15 +221,15 @@ def nav_home_search():
             print "home POST - session['playlist']: "
             print session['playlist']
 
-            # Get the 1 st song from the DB for the client "music" variable (for metadata and src load).
+            # Check if there is a 1st song.
             listMusic = session['playlist']
             if not listMusic:
-                return redirect("/home")
+                initial_song = None
             else:
-                music = DbFunct.song_data_get(listMusic[0]['artist'], listMusic[0]['album'],
-                                              listMusic[0]['title'])
-                return render_template('home.html', music=music, music_list=listMusic,
-                                       username=session['username'])
+                # Get the 1st song from the DB for the client "music" variable (for metadata and src load).
+                initial_song = DbFunct.song_data_get(listMusic[0]['artist'], listMusic[0]['album'], listMusic[0]['title'])
+
+            return render_template('home.html', music=initial_song, music_list=listMusic, username=session['username'])
         else:
             return redirect("/home")
     else:

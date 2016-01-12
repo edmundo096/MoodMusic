@@ -65,6 +65,7 @@
                         <a href="/last_music"><h6><span class="glyphicon glyphicon-music" style="font-size:17px;"></span> Latest hits</h6></a>
                     </li>
                 </ul>
+
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/profile"><h6><span class="glyphicon glyphicon-user"
                                                      style="font-size:17px;"></span> {{ username }}</h6></a></li>
@@ -72,7 +73,7 @@
                         Log Out</h6></a></li>
                 </ul>
 
-                <form action="/home" method="POST" id="search" class="navbar-form inline-form">
+                <form action="/home" method="POST" id="search" class="navbar-form navbar-left">
                     <div class="form-group">
                         <input name="search" type="search" class="input-lg form-control" style="font-size:22px;" title="Music search">
                         <button type="submit" class="btn btn-primary btn-lg" title="Search and create a new playlist">
@@ -205,15 +206,18 @@
 
                             <div>
                                 <button type="submit" class="btn btn-primary btn-lg"
-                                        onClick="getCheckBox(this.form, 'mood'); return false;"><span
-                                        class="glyphicon glyphicon-search" style=""></span>
+                                        onClick="getCheckBox(this.form, 'mood'); return false;">
+                                    <span class="glyphicon glyphicon-search" style=""></span>
                                     <h7>Search playlist</h7>
                                 </button>
                                 <button type="submit" class="btn btn-default btn-xs"
-                                        onClick="getCheckBox(this.form, 'genre'); return false;"><span
-                                        class="glyphicon glyphicon-search"></span>
+                                        onClick="getCheckBox(this.form, 'genre'); return false;"><span class="glyphicon glyphicon-search"></span>
                                     <h7>Search with their genres</h7>
                                 </button>
+                            </div>
+
+                            <div class="top-spaced">
+                                <a href="/home?random" class="btn btn-default">Get Random songs</a>
                             </div>
 
                         </form>
@@ -389,6 +393,10 @@
 
                     <div class="panel-body couleur-body">
                         <ul class="playlist">
+                            {% if music_list|length==0 %}
+                                <p>Nothing here... Try searching something or click on Random!</p>
+                            {% endif %}
+
                             {% for song in music_list %}
                                 {% if music_list.index(song)==5 and music_list|length>5 %}
                                     <p>
