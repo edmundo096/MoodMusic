@@ -28,7 +28,12 @@ def init():
 
         metadata = MetaData(engine)
 
-    connection = engine.connect()
+    try:
+        connection = engine.connect()
+    except Exception, ex:
+        print "\n*** Could NOT connect to the Data Base! ***\n" \
+              "Check that the MySQL service is running and the 'db_url' is correct.\n"
+        raise ex
 
     #connection = engine.connect()
     return connection

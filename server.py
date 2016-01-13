@@ -443,7 +443,10 @@ appPath = os.path.dirname(os.path.realpath(__file__))
 context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 context.load_cert_chain(appPath + '/ssl.crt', appPath + '/ssl.key')
 
+use_https = False
 
 if __name__ == '__main__':
-    #app.run(debug=True, ssl_context=context, port=443)
-    app.run(debug=True, port=80)
+    if use_https:
+        app.run(debug=True, ssl_context=context, port=443)
+    else:
+        app.run(debug=True, port=80)
