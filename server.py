@@ -5,6 +5,7 @@ from werkzeug import secure_filename
 import os
 import DbFunct
 import hashlib
+from flask.ext.cors import cross_origin
 
 app = Flask(__name__)
 
@@ -256,6 +257,7 @@ def last_music():
 # ========================================
 
 @app.route('/api/getMusic', methods=['GET'])
+@cross_origin(allow_headers=['Content-Type'])
 def api_get_music():
     """
     @api {get} /api/getMusic Get song data
@@ -312,6 +314,7 @@ def api_get_music():
 
 
 @app.route('/api/rating', methods=['POST'])
+@cross_origin(allow_headers=['Content-Type'])
 def api_post_rating():
     """
     @api {post} /api/rating Post a song rating
@@ -378,6 +381,7 @@ def api_post_rating():
 
 
 @app.route('/api/mood', methods=['POST'])
+@cross_origin(allow_headers=['Content-Type'])
 def api_post_mood():
     """
     @api {post} /api/mood Post song mood

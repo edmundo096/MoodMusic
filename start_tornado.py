@@ -7,15 +7,21 @@ import server
 import os
 
 
-tornado.options.define("port_http", default=80, help="run http on the given port", type=int)
-tornado.options.define("port_https", default=443, help="run https on the given port", type=int)
+use_https = False
 
+
+if use_https:
+    default_port = 80
+else:
+    default_port = 443
+
+tornado.options.define("port", default=default_port, help="run on the given port", type=int)
+
+# Overwrite the port from the Heroku run from Procfile.
 tornado.options.parse_command_line()
 
 appPath = os.path.dirname(os.path.realpath(__file__))
 
-
-use_https = False
 
 if __name__ == '__main__':
     if use_https:
@@ -23,9 +29,9 @@ if __name__ == '__main__':
             "certfile": appPath + '/ssl.crt',
             "keyfile": appPath + '/ssl.key'
         })
-        http_server.listen(tornado.options.options.port_https)
     else:
         http_server = HTTPServer(WSGIContainer(server.app))
-        http_server.listen(tornado.options.options.port_http)
+
+    http_server.listen(tornado.options.options.port)
 
     IOLoop.instance().start()
