@@ -11,9 +11,9 @@ use_https = False
 
 
 if use_https:
-    default_port = 80
-else:
     default_port = 443
+else:
+    default_port = 80
 
 tornado.options.define("port", default=default_port, help="run on the given port", type=int)
 
