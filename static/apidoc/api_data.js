@@ -188,7 +188,7 @@ define({ "api": [
             "type": "<p>string</p> ",
             "optional": false,
             "field": "email",
-            "description": "<p>The email of the user that post the mood classification.</p> "
+            "description": "<p>The email of the user that post the mood classification. Note: If a valid cookie that identifies an user is sent, then this parameter is optional.</p> "
           }
         ]
       }
@@ -293,7 +293,7 @@ define({ "api": [
             "type": "<p>string</p> ",
             "optional": false,
             "field": "email",
-            "description": "<p>The email of the user that post the rating.</p> "
+            "description": "<p>The email of the user that post the rating. Note: If a valid cookie that identifies an user is sent, then this parameter is optional.</p> "
           }
         ]
       }

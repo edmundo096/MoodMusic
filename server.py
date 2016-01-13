@@ -326,6 +326,7 @@ def api_post_rating():
     @apiParam {string} title The exact song's title on the system.
     @apiParam {number{1}=1,2,3,4,5} rating The rating given to the song.
     @apiParam {string} email The email of the user that post the rating.
+              Note: If a valid cookie that identifies an user is sent, then this parameter is optional.
 
     @apiSuccess {number} result The result of the POST, being the sent Rating from <code>1</code> to <code>5</code> for Success.
     @apiError {number} result The result of the POST, being
@@ -350,15 +351,14 @@ def api_post_rating():
     if not request.json['rating'].isdigit():
         return jsonify({'result': -1})
 
-    # Check for an email.
+    # Check for an email in JSON.
     email = None
-    # TODO broken
-    #if request.json['email'] != None: and request.json['email'] != '':
-    #    email = request.json['email']
-    if session['email'] != None:
+    if request.json.has_key('email') and request.json['email'] != '':
+        email = request.json['email']
+    # Check if email on Session, and overwrite the one in JSON.
+    elif session.has_key('email'):
         email = session['email']
     else:
-        #email = request.json['email']
         return jsonify({'result': -1})
 
     rating = request.json['rating']
@@ -394,6 +394,7 @@ def api_post_mood():
     @apiParam {string=Chill,Sad,Nostalgic,Gaming,Travel,Motivated,Enthusiastic,Upset,Inspired,Festive,Hard,Geek,Instrumental,Creative,Tropical,Studious,Aggressive,Calm,Adventurous,Humorous} mood
               The mood classification given to the song.
     @apiParam {string} email The email of the user that post the mood classification.
+              Note: If a valid cookie that identifies an user is sent, then this parameter is optional.
 
     @apiSuccess {number} result The result of the POST, being <code>1</code> for Success.
     @apiError {number} result The result of the POST, being
@@ -415,15 +416,19 @@ def api_post_mood():
     if request.json['artist'] == '' or request.json['album'] == '' or request.json['title'] == '' or request.json['mood'] == '':
         return jsonify({'result': -1})
 
-    # Check for an email.
+    # Check for an email in JSON.
     email = None
-    # TODO broken
-    #if request.json['email'] != None and request.json['email'] != '':
-    #    email = request.json['email']
-    if session['email'] != None:
+    if request.json.has_key('email') and request.json['email'] != '':
+        email = request.json['email']
+    # Check if email on Session, and overwrite the one in JSON.
+    elif session.has_key('email'):
         email = session['email']
     else:
-        #email = request.json['email']
+        return jsonify({'result': -1})
+
+    # Check for the moods.
+    moods_hardcoded = ('Chill', 'Sad', 'Nostalgic', 'Gaming', 'Travel', 'Motivated', 'Enthusiastic', 'Upset', 'Inspired', 'Festive', 'Hard', 'Geek', 'Instrumental', 'Creative', 'Tropical', 'Studious', 'Aggressive', 'Calm', 'Adventurous', 'Humorous')
+    if request.json['mood'] not in moods_hardcoded:
         return jsonify({'result': -1})
 
     mood = request.json['mood']
