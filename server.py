@@ -8,6 +8,8 @@ import hashlib
 from flask.ext.cors import cross_origin
 from time import gmtime, strftime
 
+import config
+
 app = Flask(__name__)
 
 """The key for the application"""
@@ -456,7 +458,7 @@ appPath = os.path.dirname(os.path.realpath(__file__))
 context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 context.load_cert_chain(appPath + '/ssl.crt', appPath + '/ssl.key')
 
-use_https = False
+use_https = config.use_https
 
 if __name__ == '__main__':
     if use_https:
