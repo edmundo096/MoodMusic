@@ -351,6 +351,7 @@ def song_rate_set_mood(email, music, mood):
         connection.close()
         return False
 
+    # TODO: even if there are multiple ratings, only 1 rating (the 1st one returned by DB) is used and updated.
     sql = text("SELECT * FROM rates WHERE rates.useremail=:email AND rates.idmusic = :idmusic")
     for moodListResult in connection.execute(sql, email=email, idmusic=music.idmusic):
         rates.append(moodListResult)
@@ -382,6 +383,7 @@ def song_rate_set_rating(email, music, rating):
         connection.close()
         return False
 
+    # TODO: even if there are multiple ratings, only 1 rating (the 1st one returned by DB) is used and updated.
     sql = text("SELECT * FROM rates, users WHERE rates.useremail=:email AND users.email = rates.useremail AND rates.idmusic=:idmusic")
     for rate in connection.execute(sql, email=email, idmusic=music.idmusic):
         rates.append(rate)
