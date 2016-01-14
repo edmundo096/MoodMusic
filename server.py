@@ -123,7 +123,6 @@ def nav_profile():
         return render_template('profile.html', email=session['email'], username=session['username'], list_music=list,
                                image=img)
     # POST
-    # TODO: the older images will remain saved and accessible.
     file = request.files['file']
     if file and allowed_file(file.filename.lower()):
         filename = secure_filename(file.filename.lower())
