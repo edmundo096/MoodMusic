@@ -6,6 +6,7 @@ import os
 import DbFunct
 import hashlib
 from flask.ext.cors import cross_origin
+from time import gmtime, strftime
 
 app = Flask(__name__)
 
@@ -21,7 +22,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # ========================================
 # NAVIGATION
@@ -122,11 +123,12 @@ def nav_profile():
         return render_template('profile.html', email=session['email'], username=session['username'], list_music=list,
                                image=img)
     # POST
+    # TODO: the older images will remain saved and accessible.
     file = request.files['file']
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
+    if file and allowed_file(file.filename.lower()):
+        filename = secure_filename(file.filename.lower())
         extension = filename.rsplit('.', 1)[1]
-        filename = session['email'] + '.' + extension
+        filename = session['email'] + '_' + strftime("%Y-%m-%d-%H-%M-%S", gmtime()) + '.' + extension
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         filename = app.config['UPLOAD_FOLDER'].split(".")[1] + '/' + filename
 
