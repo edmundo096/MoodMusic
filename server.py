@@ -134,6 +134,9 @@ def nav_profile():
 
         DbFunct.user_image_update(filename, session['email'])
 
+        # Delete previous image
+        os.remove(os.path.dirname(os.path.realpath(__file__)) + img)
+
         return render_template('profile.html', email=session['email'], username=session['username'], list_music=list,
                                image=filename)
 
