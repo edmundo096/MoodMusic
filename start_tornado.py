@@ -6,8 +6,9 @@ import tornado.options
 import server
 import os
 
+import config
 
-use_https = False
+use_https = config.use_https
 
 
 if use_https:
