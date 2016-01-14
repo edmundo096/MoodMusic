@@ -158,7 +158,7 @@ def nav_home():
         # If there is a 'random' query string key, get the 10 random songs.
         if request.args.has_key('random'):
             session['playlist'] = []
-            for music in DbFunct.song_songs_get_all(random=True, limit=10):
+            for music in DbFunct.song_songs_get_all(random=True, limit=config.random_songs_number):
                 session['playlist'].append({'artist': music.artist , 'album': music.album, 'title': music.title})
             session.modified = True
 
