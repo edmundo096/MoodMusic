@@ -55,6 +55,35 @@ python -m pip install -r requirements.txt
 
 > * How to install Flask: http://flask.pocoo.org/docs/0.10/installation/
 
+### MySQL Database configuration
+
+#### Create the Database (a.k.a *Schema*)
+Having the MySQL service installed, to create the app Database do the following:
+
+1. Open a command line/terminal window.
+2. Navigate to the project root directory (i.e. MoodMusic) and execute:
+    * On Unix: `mysql web_db < db_dump.sql`.
+    * On windows: `mysql -u [user] -p < db_dump.sql`, otherwise `mysql -u [user] -p web_db < db_dump.sql`.
+    Where *user* is your MySQL DB user.
+3. If there is a password for the DB user, enter it.
+
+If you need more help, please check this StackOverflow question: [How to import an SQL file using the command line in MySQL?](http://stackoverflow.com/questions/17666249/how-to-import-an-sql-file-using-the-command-line-in-mysql).
+
+If you are still getting errors, execute the SQL statements inside the file manually, by opening the file and copy-pasting it, by using `mysql` commandline utility.  
+
+#### Configure the app URL connection string
+To use the app with your database, you need to set the connection string on the configuration file, by doing the following:
+
+1. Open `config.py`, and locate the line for the `db_url` variable.
+2. Change the value for `'mysql+pymysql://[user]:[password]@[host_direction]/web_db?charset=utf8'`
+    Where:
+    * *user*:           The MySQL user to connect as, commonly used is `root`.
+    * *password*:       The MySQL user password.
+    * *host_direction*: The direction of where the MySQL service is hosted and accessible. When running on the same machine, usually is `localhost`.
+3. Restart the app if it was already running on Normal (Tornado) mode.
+
+*Note*: Follow the file `config.py` comments for more information about the connection string and its structure.    
+
 
 ## Running
 
