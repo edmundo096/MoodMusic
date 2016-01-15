@@ -1,7 +1,21 @@
 
 # MusicMood
 
-*Note*: the commands listed here where used on a Windows system. May differ for Unix systems.
+This project was initially made for the Dynamic Web Systems course at Luleå University of Technology.
+
+The initial idea was, while having a collection of music from choosing from, to generate playlists 
+of songs depending  from the mood or moods searched, which ones were assigned previously by each user 
+(i.e. by manually text searching for songs, by searching by related genres of the current mood, or 
+by a random search).
+
+Right now, it’s possible to log in and to give the music you listen a certain kind of ’mood’.
+Then, you can play music in a certain ’mood’, such as ’chill’, ’sad, ’aggressive’, and many more. 
+This gives you a way to listen music and without thinking about it.
+
+**Project page:** http://moodmusicproject.blogspot.com/
+
+
+*Note*: The commands listed here where used on a Windows system. May differ for Unix systems.
 
 
 ## Requirements
@@ -68,13 +82,16 @@ python -m pip install -r requirements.txt
 ### pip Commands
 
 To freeze and dump the installed libraries from the **venv** with *pip* into *`requirements.txt`*:
+
 1. `cd venv\Scripts`
 2. `python -m pip freeze > requirements.txt`
 
 To install from it in another environment:
+
 1. `python -m pip install -r requirements.txt`
 
-### APIdoc (Requires node.js)
+
+### APIdoc (Requires NodeJS)
 
 #### Installation
 
