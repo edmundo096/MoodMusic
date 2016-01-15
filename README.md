@@ -58,6 +58,7 @@ python -m pip install -r requirements.txt
 ### MySQL Database configuration
 
 #### Create the Database (a.k.a *Schema*)
+
 Having the MySQL service installed, to create the app Database do the following:
 
 1. Open a command line/terminal window.
@@ -72,6 +73,7 @@ If you need more help, please check this StackOverflow question: [How to import 
 If you are still getting errors, execute the SQL statements inside the file manually, by opening the file and copy-pasting it, by using `mysql` commandline utility.  
 
 #### Configure the app URL connection string
+
 To use the app with your database, you need to set the connection string on the configuration file, by doing the following:
 
 1. Open `config.py`, and locate the line for the `db_url` variable.
@@ -90,6 +92,7 @@ To use the app with your database, you need to set the connection string on the 
 *Note*: both Flask and Tornado share the same variable, if it's set to use HTTPS, both will use it when launched respectively. 
 
 ### Debug mode (Flask):
+
 1. Open `server.py`.
 2. Set `use_https` at almost the end, to `False` for HTTP or `True` for HTTPS (e.g. `use_https = False`).
 3. Save and run on terminal/console:
@@ -98,6 +101,7 @@ To use the app with your database, you need to set the connection string on the 
     * Or for **HTTPS**: Running on https://127.0.0.1/ (or https://localhost/)
 
 ### Normal mode (Tornado):
+
 1. Open `start_tornado.py`.
 2. Set `use_https` at almost the end, to `False` for HTTP or `True` for HTTPS (e.g. `use_https = False`).
 3. Save and run on terminal/console:
